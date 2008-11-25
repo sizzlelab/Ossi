@@ -133,7 +133,8 @@ ossi.channel = Class.create(ossi.base,{
     }
 
     var author_string = (typeof(post.metadata.author) != 'undefined') ? 'by '+post.metadata.author+' ' : '';
-    var message_stub = post.metadata.body.truncate(40).replace(/<br \/>/g,'');
+    var stripped_message = post.metadata.body.replace(/\[quote\].*\[\/quote\]/g,'').replace(/<br \/>/g,'');
+    var message_stub = stripped_message.truncate(40);
 
     var h =   '\
           				<div class="post_button" id="post_id_'+post.id+'">\

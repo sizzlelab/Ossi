@@ -7,13 +7,34 @@ ossi.mypost = Class.create(ossi.base,{
 		this.options = Object.extend({
 		  channelId : false,
 		  owner : false,
+		  replyToId : false,
 		  postId : false,
       hostElement : false
 	  },options);
 	  this.pane = false;
     this._draw();
 	},
-	_update: function() {
+	update: function() {
+    var self = this;
+    // get the original post
+    if (this.options.replyToId) {
+      if (typeof(this.parent.userId) == 'undefined') return; // userId in the parent controller not set
+      var URL = BASE_URL+'/appdata/cWslSQyIyr3yiraaWPEYjL/@collections/'+self.options.replyToId; // ossi app Id hard-coded
+      self.parent.showLoading();
+      new Ajax.Request(URL,{
+        method : 'get',
+        requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
+        onSuccess : function(response) {
+          self.parent.hideLoading();
+          var json = response.responseJSON;
+          if (typeof(json.entry) != 'undefined') {
+            $('post_message').value = "[quote]" + self._parseBBCode(json.metadata.body) + "[/quote]\n" + $('post_message').value;
+            self.replyToUserName = json.updated_by_name; // save user id into instance
+            setTimeout(function() { $('mypost_form').focusFirstElement() },500); // .delay() did not seem to work on Firefox
+          }
+        }
+      });
+    }
   },
   _draw: function() {
     if (this.options.hostElement) {
@@ -27,7 +48,7 @@ ossi.mypost = Class.create(ossi.base,{
   _getHTML: function() {
     var h =   '\
           			<div id="mypostpane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
-                  <form>\
+                  <form name="mypost_form" id="mypost_form">\
             				<div style="height:33px; text-align:center; padding-top:20px;">\
             					Message:\
             				</div>\
@@ -39,12 +60,22 @@ ossi.mypost = Class.create(ossi.base,{
             					<a id="save_post_button" class="nav_button_text" href="javascript:void(null);">Save post</a>\
             				</div>\
             				<div class="nav_button">\
-            					<a id="post_back_button" class="nav_button_text" href="javascript:void(null);">Back</a>\
+            					<a id="mypost_back_button" class="nav_button_text" href="javascript:void(null);">Back</a>\
             				</div>\
                   </form>\
           			</div>\
           		';
     return h;
+  },
+  _parseBBCode: function(value) {
+    var search = new Array(
+                  /\<br \/\>/g);
+    var replace = new Array(
+                  "\n");
+    for(i = 0; i < search.length; i++) {
+      var value = value.replace(search[i],replace[i]);
+    }
+    return value;
   },
   _backHandler: function() {
     this.options.backCase.apply();
@@ -54,9 +85,9 @@ ossi.mypost = Class.create(ossi.base,{
     if (typeof(this.parent.userId) == 'undefined') return; // userId in the parent controller not set
     if (typeof(this.parent.channelsId) == 'undefined') return; // channelsId not set in main controller
     if (typeof(this.options.channelId) == 'undefined') return; // channelId not set
-    var message = $F('post_message').replace(/\n\n/g,'<br /><br />');
+    var message = $F('post_message').replace(/\n/g,'<br />');
     var params = {  tags : 'post',
-                    'metadata[body]' : message,
+                    'metadata[body]' : '@'+self.replyToUserName+": "+message,
                     'metadata[author]' : (typeof(self.parent.userName) != 'undefined') ? self.parent.userName : null
                  };
     if (self.options.owner) {
@@ -139,11 +170,11 @@ ossi.mypost = Class.create(ossi.base,{
   },
   _addListeners: function() {
     $('save_post_button').onclick = this._saveHandler.bindAsEventListener(this);
-    $('post_back_button').onclick = this._backHandler.bindAsEventListener(this);
+    $('mypost_back_button').onclick = this._backHandler.bindAsEventListener(this);
   },
   _removeListeners: function() {
     $('save_post_button').onclick = function() { return };
-    $('post_back_button').onclick = function() { return };
+    $('mypost_back_button').onclick = function() { return };
   },
   destroy: function () {
     this._removeListeners();

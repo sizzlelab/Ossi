@@ -31,7 +31,7 @@ ossi.status = Class.create(ossi.base,{
               $('status_textarea').value = json.status.message;
               
               // a bit convoluted, but works for the time being
-              setTimeout(function() { $('status_form').focusFirstElement() },1000); // .delay() did not seem to work on Firefox
+              setTimeout(function() { $('status_form').focusFirstElement() },500); // .delay() did not seem to work on Firefox
             }
           }
         }

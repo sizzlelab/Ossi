@@ -65,7 +65,7 @@ ossi.post = Class.create(ossi.base,{
           $('post_avatar').update('<img src="'+BASE_URL+'/people/'+json.updated_by+'/@avatar/small_thumbnail" width="50" height="50" border="0" />');
           $('post_author_text').update(author_string);
           $('post_updated_text').update('Updated '+updated_text);
-          $('post_content').update(json.metadata.body);
+          $('post_content').update(self._parseBBCode(json.metadata.body));
           if (typeof(json.metadata.author) != 'undefined') {
             $('post_profile_button').update(json.metadata.author+'\'s profile');
           }
@@ -97,6 +97,9 @@ ossi.post = Class.create(ossi.base,{
                   </div>\
                   <div id="post_content"></div>\
           				<div class="nav_button">\
+          					<a id="post_reply_button" class="nav_button_text" href="javascript:void(null);">Reply</a>\
+          				</div>\
+          				<div class="nav_button">\
           					<a id="post_profile_button" class="nav_button_text" href="javascript:void(null);">See profile</a>\
           				</div>\
           				<div class="nav_button">\
@@ -105,6 +108,21 @@ ossi.post = Class.create(ossi.base,{
           			</div>\
           		';
     return h;
+  },
+  _parseBBCode: function(value) {
+    var search = new Array(
+                  /\n/g,
+                  /\[quote\]/g,
+                  /\[\/quote\]/g);
+
+    var replace = new Array(
+                  "<br />",
+                  '<span class="quoted_block">',
+                  '</span>');
+    for(i = 0; i < search.length; i++) {
+      var value = value.replace(search[i],replace[i]);
+    }
+    return value;
   },
   _openProfileHandler: function() {
     var self = this;
@@ -151,26 +169,34 @@ ossi.post = Class.create(ossi.base,{
     this.update({ 'startIndex' : this.startIndex-this.count, 'count' : this.count });
     this.startIndex -= this.count;
   },
-  _addPostHandler: function() {
+  _replyHandler: function() {
     var self = this;
     self.parent.case21({
-      postId : self.options.postId,
-      owner : (typeof(self.owner) != 'undefined') ? self.owner : false,
-      backCase : self.parent.case20.bind(self.parent,{
-        postId : self.options.postId,
+      replyToId : self.options.postId,
+      channelId : self.options.channelId,
+      backCase : self.parent.case22.bind(self.parent,{
         out : true,
-        backCase : self.parent.case18.bind(self.parent,{
-          out:true,
-          backCase : self.parent.case3.bind(self.parent,{out:true})
-        }) 
+        channelId : self.options.channelId,
+        postId : self.options.postId,
+        backCase : self.parent.case20.bind(self.parent,{
+          out : true,
+          channelId : self.options.channelId,
+          postId : self.options.postId,
+          backCase : self.parent.case18.bind(self.parent,{
+            out : true,
+            backCase : self.parent.case3.bind(self.parent,{out:true}) 
+          })
+        })
       })
     });
   },
   _addListeners: function() {
+    $('post_reply_button').onclick = this._replyHandler.bindAsEventListener(this);
     $('post_profile_button').onclick = this._openProfileHandler.bindAsEventListener(this);
     $('post_back_button').onclick = this._backHandler.bindAsEventListener(this);
   },
   _removeListeners: function() {
+    $('post_reply_button').onclick = function() { return }
     $('post_profile_button').onclick = function() { return }
     $('post_back_button').onclick = function() { return }
   },

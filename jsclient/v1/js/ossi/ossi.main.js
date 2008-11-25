@@ -525,14 +525,15 @@ ossi.main = Class.create(ossi.base,{
       out : false,
       owner : false,
       channelId : false,
+      replyToId : false,
       postId : false,
       backCase : false
 	  },options);
-
     this.sub2 = this.sub1;
     this.sub1 = new ossi.mypost(this, {   'hostElement' : this.mainElement,
                                           'owner' : options.owner,
                                           'channelId' : options.channelId,
+                                          'replyToId' : options.replyToId,
                                           'postId' : options.postId,
                                           'backCase' : options.backCase});
     if (options.out) {
@@ -543,7 +544,7 @@ ossi.main = Class.create(ossi.base,{
     } else {
       this.utils.into(this.sub2.pane,this.sub1.pane,function() {
         this.sub2.destroy();
-        if (options.postId) this.sub1.update();
+        if (options.postId || options.replyToId) this.sub1.update();
       }.bind(this));
     }
 	},
