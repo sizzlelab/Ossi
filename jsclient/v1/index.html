@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta name="navigation" content="tabbed">
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Ossi</title>
+		<link type="text/css" rel="stylesheet" href="css/main.css" />
+		<script language="Javascript" src="js/bootstrap.js"></script>
+		<script language="Javascript">
+
+/* this one fires too early
+			document.observe("dom:loaded", function() {
+				alert('dom loaded event');
+				new ossi.main();
+			});
+*/
+			window.onload = function() { new ossi.main(); }
+/* for safari on iphone, not currently needed
+			window.onorientationchange = function(){
+				// 0=portrait, 90=landscape counter clockwise,
+				// -90=landscape clockwise, 180=upside down
+				window.location.reload();
+			}
+*/
+		</script>
+	</head>
+	<body>
+		<div id="splash_screen" style="position:absolute; top:0px; left:0px; width:100%; height:100%; background:#000; z-index:999">
+			<div id="loading_logo"></div>
+			<div id="loading_text">loading ...</div>
+		</div>
+		<div id="loading" style="display:none">
+		</div>
+		<div id="content_area"></div>
+	</body>
+</html>

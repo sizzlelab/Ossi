@@ -1,0 +1,468 @@
+* {
+    #border: 0;
+    margin: 0;
+    padding: 0;
+    color:#fff;
+}
+
+body {
+  /*  for iphone so it does not change font size on the fly
+      as it seemed to mess up our layout */
+  -webkit-text-size-adjust: none;
+  font-family: Verdana, Helvetica, sans-serif;
+  font-size: 12px;
+  padding: 0px;
+  background: black;
+  margin: 0px;
+  overflow-y:auto;
+  overflow-x:hidden;
+}
+
+body.widget {
+  background: url(../Default.png) no-repeat center fixed;
+  overflow-y:hidden;
+}
+
+#content_area {
+  display:block;
+  height:100%;
+  background: black;
+  overflow-y:hidden;
+  overflow-x:hidden;
+}
+
+#content_area.widget {
+  display:block;
+  position:absolute;
+  background:transparent;
+  top:9px;
+  left:9px;
+  width:313px;
+  height:428px;
+  overflow-y:auto;
+  overflow-x:hidden;
+}
+
+#loading_logo {
+  margin-top: 20%;
+  background: black url(../images/logo.png) no-repeat center;
+  width:100%; 
+  height:44px;
+  text-align:center;
+}
+
+#loading_text {
+  margin-top:15px;
+  margin-left: 5px;
+  width:100%; 
+  height:20px;
+  font-size:14px; 
+  font-weight:bold;
+  text-align:center;
+}
+
+#loading {
+  position:fixed;
+  top:0px;
+  left:0px;
+  width:100%;
+  font-weight:bold;
+  background: #fa4f00;
+  padding:7px 7px 7px 20px;
+  border-bottom: 2px solid #fff;
+  color: #fff;
+  z-index:999;
+	opacity: .8;
+	filter: alpha(opacity=50);
+}
+
+#loading.widget {
+  position:fixed;
+  top:10px;
+  left:11px;
+  width:282px;
+  padding:7px 7px 7px 20px;
+}
+
+#loading_animation {
+  margin-top: 20%;
+  background: #000;
+  width:100%; 
+  height:45px;
+  text-align:center;
+}
+
+#logo {
+  background: black url(../images/ossi_logo.png) no-repeat center;
+  margin: 15px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
+  height:60px;
+  text-align: center;
+}
+
+#logo_small {
+  background: black url(../images/logo_small.png) no-repeat center;
+  margin: 1px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
+  height:33px;
+  text-align: center;
+}
+
+#slogan {
+  margin-top:0px;
+  margin-bottom:14px;
+  text-align:center;
+}
+
+#slogan_text {
+  font-size:10px;
+  color:#C0C0C0;
+  text-decoration:none;
+  font-style: italic;
+}
+
+.login {
+  font-size:10px;
+  text-decoration:none;
+  text-align:center;
+  margin-bottom:4px;
+}
+
+.textinput {
+  font-size:10px;
+  text-decoration:none;
+  color:black;
+}
+
+#about_ossi {
+  font-size:10px;
+  text-decoration:none;
+  text-align:left;
+  padding: 10px;
+}
+
+#loggedin {
+  margin-top:10px;
+  text-align: center;
+}
+
+#loggedin_text {
+  font-size:10px;
+  color:#C0C0C0;
+  text-decoration:none;
+}
+
+.nav_button {
+  #display: block;
+  border: solid 1px black;
+  background: #323131 url(../images/button_bg.png) repeat-x top;
+  margin: 0px 0px 0px 0px;
+  padding: 0px 0px 0px 0px;
+  color: #CBD58B;
+  height:33px;
+  text-align: center;
+}
+
+.nav_button_text {
+  display:block;
+  #width:90%;
+  height:70%;
+  padding-top: 9px;
+  font-size:12px;
+  color:white;
+  vertical-align: middle;
+  text-decoration:none;
+}
+
+.feed_button_text {
+  display:block;
+  #width:90%;
+  height:90%;
+  padding-top: 5px;
+  font-size:12px;
+  color:white;
+  vertical-align: middle;
+  text-decoration:none;
+}
+
+.search_results_profile_button {
+  display:block;
+  #width:90%;
+  height:90%;
+  padding-top: 5px;
+  font-size:12px;
+  color:white;
+  vertical-align: middle;
+  text-decoration:none;
+}
+
+.channel_button {
+  position:relative;
+  border: solid 1px black;
+  background: #323131 url(../images/button_bg.png) repeat-x top;
+  margin: 0px 0px 0px 0px;
+  color: #CBD58B;
+  height:55px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.subscription_button_text {
+  display:block;
+  #width:90%;
+  height:90%;
+  padding-top: 0px;
+  font-size:12px;
+  color:white;
+  #vertical-align: middle;
+  text-decoration:none;
+}
+
+
+
+.nav_button:hover { 
+  background: #fa4f00 url(../images/button_bg_hover.png) repeat-x top;
+  color:#122E2E;
+}
+
+.button {
+  border: solid 1px black;
+  background: #323131 url(../images/button_bg.png) repeat-x top;
+  margin: 0px 0px 0px 0px;
+  padding: 0px 5px 0px 5px;
+  color: #CBD58B;
+  height:66px;
+  text-align: left;
+}
+
+.post_header {
+  position:relative;
+  margin:8px;
+  height:50px;
+  text-align: left;
+}
+
+#post_content {
+  font-size:11px;
+  margin:12px 8px 8px 8px;
+}
+
+.post_button {
+  position:relative;
+  border: solid 1px black;
+  background: #323131 url(../images/button_bg.png) repeat-x top;
+  margin: 0px 0px 0px 0px;
+  color: #CBD58B;
+  height:56px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.profile_button {
+  position:relative;
+  border: solid 1px black;
+  background: #323131 url(../images/button_bg.png) repeat-x top;
+  margin: 0px 0px 0px 0px;
+  color: #CBD58B;
+  height:56px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.message_button {
+  border: solid 1px black;
+  background: #323131 url(../images/button_bg.png) repeat-x top;
+  margin: 0px 0px 0px 0px;
+  padding: 0px 5px 0px 5px;
+  color: #CBD58B;
+  text-align: left;
+}
+
+.my_status_button {
+  #display: block;
+  border: solid 1px black;
+  background: #3db005 url(../images/status_button_bg.png) repeat-x top;
+  margin: 0px 0px 0px 0px;
+  padding: 0px 5px 0px 5px;
+  color: #CBD58B;
+  height:66px;
+  text-align: left;
+}
+
+.subscription_button {
+  #display: block;
+  border: solid 1px black;
+  background: #323131 url(../images/button_bg.png) repeat-x top;
+  margin: 0px 0px 0px 0px;
+  padding: 0px 5px 0px 5px;
+  color: #CBD58B;
+  height:44px;
+  text-align: left;
+}
+
+.button:hover, .channel_button:hover, .post_button:hover, .profile_button:hover { 
+  background: #fa4f00 url(../images/button_bg_hover.png) repeat-x top;
+  color:#122E2E;
+}
+
+.message_button:hover { 
+  background: #fa4f00 url(../images/button_bg_hover.png) repeat-x top;
+  color:#122E2E;
+}
+
+.my_status_button:hover { 
+  background: #fa4f00 url(../images/button_bg_hover.png) repeat-x top;
+  color:#122E2E;
+}
+
+.subscription_button:hover { 
+  background: #fa4f00 url(../images/button_bg_hover.png) repeat-x top;
+  color:#122E2E;
+}
+
+.button_pic {
+  #width:50px;
+  height:50px;
+  border: solid 1px white;
+}
+
+.button_icon {
+  #width:50px;
+  #height:50px;
+  border: solid 0px white;
+}
+
+.button_title {
+  font-size:11px;
+  color:white;
+  text-decoration:none;
+}
+
+.post_text {
+  font-size:11px;
+  color:white;
+  text-decoration:none;
+}
+
+.button_content_text {
+  font-size:10px;
+  color:white;
+  text-decoration:none;
+}
+
+.button_subtitle_text {
+  font-size:9px;
+  color:#C0C0C0;
+  text-decoration:none;
+}
+
+.myprofile_input {
+  width:180px;
+  font-size:10px;
+  text-decoration:none;
+  color:#000;
+}
+
+div.channel_button_left_column {
+  position:absolute;
+  top:0px;
+  left:0px;
+  height:55px;
+  width:5px;
+}
+
+div.post_button_left_column {
+  position:absolute;
+  top:0px;
+  left:0px;
+}
+
+div.channel_button_left_column.public {
+  background: #58bb3d;
+}
+
+div.channel_button_left_column.private {
+  background: #bb3d3d;
+}
+
+div.channel_button_text {
+  margin-left:8px;
+  heigth:55px;
+  padding:5px 5px 5px 5px;
+}
+
+div.post_button_text {
+  margin-left:56px;
+  heigth:56px;
+  padding:5px 5px 5px 5px;
+}
+
+td.button_sub_icon_td {
+  width:50px;
+  height:44px;
+  text-align:center;
+  border: solid 0px white;
+}
+
+td.button_text_td {
+  padding-left:2px;
+  border: solid 0px white;
+}
+
+#status_textarea {
+  width:80%;
+  color:#999;
+  margin-bottom:10px;
+  font-size:10px; 
+}
+
+#status_pic {
+  width:50px;
+  height:50px;
+  border: solid 1px white;
+  margin:10px;
+}
+
+a:link { 
+  color:white; 
+  text-decoration:none; 
+}
+
+a:visited { 
+  color:white; 
+  text-decoration:none; 
+}
+
+a:hover { 
+  color:white; 
+  text-decoration:none;
+  #background: #fc7e17 url(../images/button_bg_hover.png) repeat-x top;
+  background: transparent;
+}
+
+a:active {
+  color:white; 
+  text-decoration:none; 
+  background: #e46c0b;
+}
+
+option {
+  font-size: 10px;
+  color: #000;
+}
+
+h2 {
+  font-size: 13px;
+  font-weight: bold;
+  margin-bottom:10px;
+}
+
+h3 {
+  font-size: 12px;
+  margin-bottom:10px;
+}
+
+p {
+  font-size: 11px;
+  margin-bottom:10px;
+}
