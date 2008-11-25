@@ -244,7 +244,7 @@ body.widget {
 
 #post_content {
   font-size:11px;
-  margin:12px 8px 8px 8px;
+  margin:12px 8px 15px 8px;
 }
 
 .post_button {
@@ -361,6 +361,13 @@ body.widget {
   font-size:10px;
   text-decoration:none;
   color:#000;
+}
+
+.quoted_block {
+  display:block;
+  padding:8px;
+  border-left: 3px solid #666;
+  margin:5px 5px 5px 5px;
 }
 
 div.channel_button_left_column {
