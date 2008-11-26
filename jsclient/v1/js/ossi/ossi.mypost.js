@@ -86,8 +86,11 @@ ossi.mypost = Class.create(ossi.base,{
     if (typeof(this.parent.channelsId) == 'undefined') return; // channelsId not set in main controller
     if (typeof(this.options.channelId) == 'undefined') return; // channelId not set
     var message = $F('post_message').replace(/\n/g,'<br />');
+    if (typeof(self.replyToUserName) != 'undefined') {
+      message = '@'+self.replyToUserName+": "+message;
+    }
     var params = {  tags : 'post',
-                    'metadata[body]' : '@'+self.replyToUserName+": "+message,
+                    'metadata[body]' : message,
                     'metadata[author]' : (typeof(self.parent.userName) != 'undefined') ? self.parent.userName : null
                  };
     if (self.options.owner) {
