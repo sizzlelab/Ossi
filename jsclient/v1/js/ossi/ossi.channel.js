@@ -38,7 +38,8 @@ ossi.channel = Class.create(ossi.base,{
       onSuccess : function(response) {
         self.parent.hideLoading();
         var json = response.responseJSON;
-        if (json.owner != null) self.owner = json.owner; // if channel has an owner it is a private channel!
+        if (json.private != null) self.private = json.private; // if channel has an owner it is a private channel!
+//        if (json.owner != null) self.owner = json.owner; // if channel has an owner it is a private channel!
         if (typeof(json.entry) != 'undefined') {
           if (json.entry.length > 0) {
             self._drawContents(json.entry);
@@ -180,7 +181,7 @@ ossi.channel = Class.create(ossi.base,{
     var self = this;
     self.parent.case21({
       channelId : self.options.channelId,
-      owner : (typeof(self.owner) != 'undefined') ? self.owner : false,
+      private : (typeof(self.private) != 'undefined') ? self.private : false,
       backCase : self.parent.case20.bind(self.parent,{
         channelId : self.options.channelId,
         out : true,

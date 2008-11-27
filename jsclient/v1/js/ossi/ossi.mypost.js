@@ -90,12 +90,11 @@ ossi.mypost = Class.create(ossi.base,{
       message = '@'+self.replyToUserName+": "+message;
     }
     var params = {  tags : 'post',
+                    owner : self.parent.userId, // now each post has an owner
+                    private : self.options.private,
                     'metadata[body]' : message,
                     'metadata[author]' : (typeof(self.parent.userName) != 'undefined') ? self.parent.userName : null
                  };
-    if (self.options.owner) {
-      params.owner = self.parent.userId;
-    }
     self.parent.showLoading();
     var URL = BASE_URL+'/appdata/cWslSQyIyr3yiraaWPEYjL/@collections/'; // ossi app id hard coded
     new Ajax.Request(URL,{
