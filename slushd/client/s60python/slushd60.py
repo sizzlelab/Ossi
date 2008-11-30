@@ -50,6 +50,8 @@ def cb(event):
   if str(event['position']['longitude']) != 'NaN' and str(event['position']['latitude']) != 'NaN':
     print "sending to slushd server..."
     post_data = urllib.urlencode({  "location_area_code" : location_area_code,
+                          "mobile_country_code" : mobile_country_code,
+                          "mobile_network_code" : mobile_network_code,
                           "cell_id" : cell_id,
                           "latitude" : str(event['position']['latitude']),
                           "longitude" : str(event['position']['longitude'])})
