@@ -31,6 +31,11 @@ ossi.mainmenu = Class.create(ossi.base,{
         $('mainmenu_profile_name').update(name);
         var status_message = false;
         var status_time = false;
+
+        if (typeof(json.role)  != 'undefined' && json.role != null){
+          self.parent.userRole = json.role;
+        }
+
         if (typeof(json.status) != 'undefined') {
           if (json.status.message != 'undefined') {
             if (json.status.message != null) {

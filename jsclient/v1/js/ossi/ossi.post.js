@@ -85,6 +85,22 @@ ossi.post = Class.create(ossi.base,{
       alert('ossi.post._draw() failed! this.options.hostElement not defined!');
     }
   },
+
+  _getModeratorHTML: function(){
+    var m = '';
+    //moderator privileges
+    if(this.parent.userRole == 'moderator'){
+        m = '<div class="nav_button">\
+                <a id="post_allow_delete_button" class="nav_button_text" href="javascript:void(null);">Delete this post</a>\
+        </div>\
+        <div class="nav_button" id="post_delete_post" style="visibility: hidden;">\
+                <a id="post_delete_button" class="nav_button_text" href="javascript:void(null);">Delete for good.</a>\
+        </div>\
+        ';
+    }
+    return m;
+  },
+
   _getHTML: function() {
     var h =   '\
           			<div id="postpane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
@@ -102,7 +118,9 @@ ossi.post = Class.create(ossi.base,{
           				<div class="nav_button">\
           					<a id="post_profile_button" class="nav_button_text" href="javascript:void(null);">See profile</a>\
           				</div>\
-          				<div class="nav_button">\
+                ';
+        h += this._getModeratorHTML();
+        h += '          		<div class="nav_button">\
           					<a id="post_back_button" class="nav_button_text" href="javascript:void(null);">Back to channel</a>\
           				</div>\
           			</div>\
@@ -190,15 +208,64 @@ ossi.post = Class.create(ossi.base,{
       })
     });
   },
+
+
+  _deleteHandler: function() {
+    if (typeof(this.parent.userId) == 'undefined') return; // userId in the parent controller not set
+    var self = this;
+    // get contents
+    var URL = BASE_URL+'/appdata/cWslSQyIyr3yiraaWPEYjL/@collections/'+self.options.postId; // ossi app Id hard-coded
+    self.parent.showLoading();
+    new Ajax.Request(URL,{
+      method : 'delete',
+      requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
+      onSuccess : function(response) {
+        self.parent.hideLoading();
+        var json = response.responseJSON;
+
+        self.options.backCase.apply();
+
+
+        setTimeout(function() {
+          self.parent.hideLoading();
+        }, 600);
+      }
+    });
+
+  },
+  _allowDeleteHandler: function() {
+    if(!this.allowDelete) {
+      this.allowDelete = true;
+      $('post_allow_delete_button').update('Cancel delete');
+      $('post_delete_post').setStyle('visibility: visible');
+    } else {
+      this.allowDelete = false;
+      $('post_allow_delete_button').update('Delete this post');
+      $('post_delete_post').setStyle('visibility: hidden');
+    }
+
+  },
+
+
   _addListeners: function() {
     $('post_reply_button').onclick = this._replyHandler.bindAsEventListener(this);
     $('post_profile_button').onclick = this._openProfileHandler.bindAsEventListener(this);
     $('post_back_button').onclick = this._backHandler.bindAsEventListener(this);
+
+    if(this.parent.userRole == 'moderator'){
+      $('post_delete_button').onclick = this._deleteHandler.bindAsEventListener(this);
+      $('post_allow_delete_button').onclick = this._allowDeleteHandler.bindAsEventListener(this);
+    }
   },
   _removeListeners: function() {
     $('post_reply_button').onclick = function() { return }
     $('post_profile_button').onclick = function() { return }
     $('post_back_button').onclick = function() { return }
+
+    if(this.parent.userRole == 'moderator'){
+      $('post_delete_button').onclick = function() { return }
+      $('post_allow_delete_button').onclick = function() { return }
+    }
   },
   _addLinkListeners: function() { // for dynamic buttons
     $$('.post_button').each(function(button) {
