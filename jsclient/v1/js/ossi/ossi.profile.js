@@ -30,6 +30,24 @@ ossi.profile = Class.create(ossi.base,{
         var json = response.responseJSON;
         var h = self._getProfileHTML(json);
         $('profile_placeholder').replace(h);
+        if (typeof(json.connection) != 'undefined') {
+          switch (json.connection) {
+            case "none": // not friends with
+              // do nothing, default mode
+              break;
+            case "friend":
+              $('profile_add_as_friend_button_container').hide();
+              break;
+            case "requested":
+              $('profile_add_as_friend_button_container').hide();
+              // we could also tell user here that her friendship request has not been 
+              break;
+            case "pending":
+              $('profile_add_as_friend_button_container').hide();
+              // we could also tell user here that her friendship request has not been 
+              break;
+          }
+        }
         setTimeout(function() {
           self.parent.hideLoading();
         }, 600);
@@ -39,10 +57,10 @@ ossi.profile = Class.create(ossi.base,{
   _draw: function() {
     if (this.options.hostElement) {
       this.options.hostElement.insert(this._getHTML());
-      if (this.options.pendingNav) {
+/*      if (this.options.pendingNav) {
         $('profile_add_as_friend_button_container').hide();
         $('pending_nav').show();
-      }
+      }*/
       this._addListeners();
       this.pane = $('profilepane');
     } else {

@@ -92,7 +92,7 @@ ossi.pendingfriends = Class.create(ossi.base,{
   _openProfileHandler: function(event,button_id) {
     var uid = button_id.replace("pending_person_uid_","");
     this.parent.case13({
-      pendingNav : true,
+//      pendingNav : true, // no longer needed, status of user's relationship is now handled in ossi.profile.js
       userId : uid,
       backCase : this.parent.case14.bind(this.parent,{
         out : true,
