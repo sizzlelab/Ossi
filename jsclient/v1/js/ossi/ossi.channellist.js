@@ -91,6 +91,9 @@ ossi.channellist = Class.create(ossi.base,{
           				<div id="channels_previous_button_container" class="nav_button" style="display:none">\
           					<a id="channels_previous_button" class="nav_button_text" href="javascript:void(null);">Previous Page</a>\
           				</div>\
+          				<div id="about_channels_button_container" class="nav_button">\
+          					<a id="about_channels_button" class="nav_button_text" href="javascript:void(null);">About Channels</a>\
+          				</div>\
           				<div id="create_channel_button_container" class="nav_button">\
           					<a id="create_channel_button" class="nav_button_text" href="javascript:void(null);">Create New Channel</a>\
           				</div>\
@@ -188,8 +191,26 @@ ossi.channellist = Class.create(ossi.base,{
     this.update({ 'startIndex' : this.startIndex-this.count, 'count' : this.count });
     this.startIndex -= this.count;
   },
+  _aboutChannelsHandler: function() {
+    var m = '\
+                <div style="font-size:10px; padding:10px">\
+        				  <h2>About Channels</h2>\
+                  <p>You can create private (red) and public (green) channels on Ossi. Private channels are visible only to the creator\'s Sizl friends and public channels are visible to all Ossi users.</p>\
+                  <p>If you find any bugs or have some other comments about the functionalities of the channels or Ossi in general please post a comment on Ossi\'s "Features & Bugs" channel, or email us at <a href="mailto:helpdesk-otasizzle@hiit.fi">helpdesk-otasizzle@hiit.fi</a>.</p>\
+                </div>\
+    ';
+    this.parent.case6({
+      message : m,
+      buttonText : "Back",
+      backCase:this.parent.case18.bind(this.parent,{
+        out:true,
+        backCase:this.parent.case3.bind(this.parent,{out:true})
+      })
+    });            
+  },
   _addListeners: function() {
     $('create_channel_button').onclick = this._createChannelHandler.bindAsEventListener(this);
+    $('about_channels_button').onclick = this._aboutChannelsHandler.bindAsEventListener(this);
     $('channels_back_button').onclick = this._backHandler.bindAsEventListener(this);
     $('channels_next_button').onclick = this._nextHandler.bindAsEventListener(this);
     $('channels_previous_button').onclick = this._previousHandler.bindAsEventListener(this);
@@ -197,6 +218,7 @@ ossi.channellist = Class.create(ossi.base,{
   },
   _removeListeners: function() {
     $('create_channel_button').onclick = function() { return }
+    $('about_channels_button').onclick = function() { return };
     $('channels_back_button').onclick = function() { return }
     $('channels_next_button').onclick = function() { return }
     $('channels_previous_button').onclick = function() { return }
