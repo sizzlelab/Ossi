@@ -2,17 +2,18 @@
 * ossi channel class
 */
 ossi.channel = Class.create(ossi.base,{
-	initialize: function(parent,options) {
+    initialize: function(parent,options) {
     this.parent = parent;
-		this.options = Object.extend({
+    this.options = Object.extend({
       hostElement : false,
       channelId : false,
       startIndex : 1,
       count : false
-	  },options);
+    },options);
     this.count = 7;
-	  this.startIndex = 1;
-	  this.pane = false;
+    this.startIndex = 1;
+    this.private = true; // for moderator privilage check
+    this.pane = false;
     this._draw();
 	},
 	/**
@@ -38,6 +39,16 @@ ossi.channel = Class.create(ossi.base,{
       onSuccess : function(response) {
         self.parent.hideLoading();
         var json = response.responseJSON;
+
+        //for moderator privilage check
+        if (self.parent.userRole == 'moderator' && json.tags != null && json.tags.match('private') == 'private') {
+          self.private = true;
+        } else {
+          self.private = false;
+          self._setModeratorHTML();
+          self._addModeListeners();
+        }
+
         if (json.private != null) self.private = json.private; // if channel has an owner it is a private channel!
 //        if (json.owner != null) self.owner = json.owner; // if channel has an owner it is a private channel!
         if (typeof(json.entry) != 'undefined') {
@@ -76,6 +87,22 @@ ossi.channel = Class.create(ossi.base,{
       alert('ossi.channel._draw() failed! this.options.hostElement not defined!');
     }
   },
+  _setModeratorHTML: function(){
+    var m = '';
+    //moderator privileges
+    if(this.parent.userRole == 'moderator' && this.private != true){
+        m = '<div class="nav_button">\
+                <a id="channel_allow_delete_button" class="nav_button_text" href="javascript:void(null);">Delete this channel</a>\
+        </div>\
+        <div class="nav_button" id="channel_delete_channel" style="visibility: hidden;">\
+                <a id="channel_delete_button" class="nav_button_text" href="javascript:void(null);">Delete for good.</a>\
+        </div>\
+        ';
+    }
+    $('moderator_placeholder').replace(m);
+	// return m;
+  },
+
   _getHTML: function() {
     var h =   '\
           			<div id="channelpane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
@@ -93,7 +120,9 @@ ossi.channel = Class.create(ossi.base,{
           				<div id="channel_previous_button_container" class="nav_button" style="display:none">\
           					<a id="channel_previous_button" class="nav_button_text" href="javascript:void(null);">Previous Page</a>\
           				</div>\
-          				<div class="nav_button">\
+                <div id="moderator_placeholder">\
+                </div>\
+					<div class="nav_button">\
           					<a id="channel_back_button" class="nav_button_text" href="javascript:void(null);">Back to Channel List</a>\
           				</div>\
           			</div>\
@@ -192,6 +221,47 @@ ossi.channel = Class.create(ossi.base,{
       })
     });
   },
+  _deleteHandler: function() {
+    if (typeof(this.parent.userId) == 'undefined') return; // userId in the pa$
+    var self = this;
+
+    // get contents
+    var URL = BASE_URL+'/appdata/cWslSQyIyr3yiraaWPEYjL/@collections/'+self.options.channelId; // this page. ossi app Id hard-coded
+    self.parent.showLoading();
+    new Ajax.Request(URL,{
+      method : 'delete',
+      requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
+      onSuccess : function(response) {
+        self.parent.hideLoading();
+        var json = response.responseJSON;
+
+        self.options.backCase.apply();
+
+        setTimeout(function() {
+          self.parent.hideLoading();
+        }, 600);
+      }
+      // on403 and on404
+    });
+
+  },
+  _allowDeleteHandler: function() {
+    if(!this.allowDelete) {
+      this.allowDelete = true;
+      $('channel_allow_delete_button').update('Cancel delete');
+      $('channel_delete_channel').setStyle('visibility: visible');
+    } else {
+      this.allowDelete = false;
+      $('channel_allow_delete_button').update('Delete this post');
+      $('channel_delete_channel').setStyle('visibility: hidden');
+    }
+  },
+
+  _addModeListeners: function(){
+    $('channel_delete_button').onclick = this._deleteHandler.bindAsEventListener(this);
+    $('channel_allow_delete_button').onclick = this._allowDeleteHandler.bindAsEventListener(this);
+  },
+
   _addListeners: function() {
     $('add_post_button').onclick = this._addPostHandler.bindAsEventListener(this);
     $('channel_back_button').onclick = this._backHandler.bindAsEventListener(this);
@@ -205,6 +275,12 @@ ossi.channel = Class.create(ossi.base,{
     $('channel_next_button').onclick = function() { return };
     $('channel_previous_button').onclick = function() { return };
     $('channel_back_button2').onclick = function() { return }
+
+    if(this.parent.userRole == 'moderator' && this.private != true){
+      $('channel_delete_button').onclick = function() { return }
+      $('channel_allow_delete_button').onclick = function() { return }
+    }
+
   },
   _addLinkListeners: function() { // for dynamic buttons
     $$('.post_button').each(function(button) {
