@@ -20,11 +20,11 @@
 ## OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 ## THE SOFTWARE.
 
-## slushd client for harvesting and matching cell information data to GPS
-## location info
+## ossi python daemon for s60 3rd edition devices
+## queries for gps location and sends it to Common Services
 ##
 ## written for OtaSizzle / Ossi
-## 27/11/2008
+## 2/12/2008
 ## version 0.1
 
 import e32
@@ -39,19 +39,19 @@ def cb(event):
   print "" 
   print "---" 
   # getting GSM info
-  gsm_location = location.gsm_location()
-  if gsm_location:
-    mobile_country_code, mobile_network_code, location_area_code, cell_id = gsm_location
-  else:
-    print "ERROR in GSM location: "+str(gsm_location)
-    return False
-  print "GPS: "+str(event['position']['latitude'])+", "+str(event['position']['longitude'])
-  print "MCC: "+str(mobile_country_code)
-  print "MNC: "+str(mobile_network_code)
-  print "LAC: "+str(location_area_code)
-  print "CellID: "+str(cell_id)
+#  gsm_location = location.gsm_location()
+#  if gsm_location:
+#    mobile_country_code, mobile_network_code, location_area_code, cell_id = gsm_location
+#  else:
+#    print "ERROR in GSM location: "+str(gsm_location)
+#    return False
+#  print "GPS: "+str(event['position']['latitude'])+", "+str(event['position']['longitude'])
+#  print "MCC: "+str(mobile_country_code)
+#  print "MNC: "+str(mobile_network_code)
+#  print "LAC: "+str(location_area_code)
+#  print "CellID: "+str(cell_id)
   if str(event['position']['longitude']) != 'NaN' and str(event['position']['latitude']) != 'NaN':
-    print "sending to slushd server..."
+    print "sending location to COS"
     post_data = urllib.urlencode({  "location_area_code" : location_area_code,
                                     "mobile_country_code" : mobile_country_code,
                                     "mobile_network_code" : mobile_network_code,
@@ -79,5 +79,5 @@ set_default_access_point(apo) #Sets apo as the default access point
 
 # start positioning
 positioning.set_requestors([{"type":"service", "format":"application", "data":"test_app"}]) 
-positioning.position(course=0, satellites=0, callback=cb, interval=5000000, partial=1)
+positioning.position(course=0, satellites=0, callback=cb, interval=10000000, partial=1)
 

@@ -5,7 +5,7 @@ from models import *
 class Points(webapp.RequestHandler):
   def get(self):
     self.response.out.write('<html><head></head><body>')
-    points = Point.all()
+    points = Point.all().order('-date_created')
 
     if points:
       self.response.out.write('<table cellpadding="2" cellspacing="1" border="0">')
@@ -239,7 +239,7 @@ class NewPoint(webapp.RequestHandler):
 
             # see if mobile_network_code is known
             if self.request.get('mobile_network_code'):
-              mobile_network = MobileNetwork.gql("WHERE mobile_country_code = :1 LIMIT 1", self.request.get('mobile_network_code'))
+              mobile_network = MobileNetwork.gql("WHERE mobile_network_code = :1 LIMIT 1", self.request.get('mobile_network_code'))
               if mobile_network.count() == 0: # unknown area code
                 mobile_network = MobileNetwork()
                 mobile_network.mobile_network_code = self.request.get('mobile_network_code')
@@ -256,9 +256,28 @@ class NewPoint(webapp.RequestHandler):
               point.mobile_country = mobile_country
               point.mobile_network = mobile_network
               point.put()
+              self.response.out.write("ok")
 
-application = webapp.WSGIApplication([  ('/cells.*', Cells),
-                                        ('/cell.*', ViewCell),
+class Dump(webapp.RequestHandler):
+  def get(self):
+    start = int(self.request.get('start',0))
+    points = Point.all().order('-date_created').fetch(200,start)
+
+    if points:
+      for point in points:
+#        mobile_country_code = str(point.mobile_country.mobile_country_code or 244)
+#        mobile_network_code = str(point.mobile_network.mobile_network_code or 5)
+        self.response.out.write('INSERT INTO Point (MCC,MNC,LAC,CellId,Latitude,Longitude) VALUES (244,5,'+str(point.location_area.location_area_code)+','+str(point.cell.cell_id)+','+str(point.gps_location.lat)+','+str(point.gps_location.lon)+');')
+        self.response.out.write('\n')
+
+
+    
+
+
+application = webapp.WSGIApplication([  
+#                                        ('/cells.*', Cells),
+#                                        ('/cell.*', ViewCell),
+#                                        ('/dump.*', Dump),
                                         ('/new.*', NewPoint)],
                                      debug=True)
 

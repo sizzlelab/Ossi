@@ -10,14 +10,20 @@ indexes:
 # automatically uploaded to the admin console when you next deploy
 # your application using appcfg.py.
 
-# Used 24 times in query history.
+# Unused in query history -- copied from input.
 - kind: Cell
   properties:
   - name: date_created
     direction: desc
 
-# Used 328 times in query history.
+# Unused in query history -- copied from input.
 - kind: Point
   properties:
   - name: cell
   - name: date_created
+
+# Used 25 times in query history.
+- kind: Point
+  properties:
+  - name: date_created
+    direction: desc
