@@ -43,11 +43,11 @@ ossi.channel = Class.create(ossi.base,{
         //for moderator privilage check
         if (self.parent.userRole == 'moderator' && json.tags != null && json.tags.match('private') == 'private') {
           self.private = true;
-        } else {
+        } else if(self.parent.userRole == 'moderator'){
           self.private = false;
           self._setModeratorHTML();
           self._addModeListeners();
-        }
+        } 
 
         if (json.private != null) self.private = json.private; // if channel has an owner it is a private channel!
 //        if (json.owner != null) self.owner = json.owner; // if channel has an owner it is a private channel!
