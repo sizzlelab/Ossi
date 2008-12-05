@@ -27,7 +27,7 @@ ossi.dialog = Class.create(ossi.base,{
   _getHTML: function() {
     var h =   '\
           			<div id="dialogpane" style="display:none; position:absolute; top:0px; left:0px; width:100%; height:100%; background: black;">\
-          				<div id="dialog_message" style="font-size:12px; text-align:left; margin-top:30px; margin-bottom:10px">\
+          				<div id="dialog_message" style="font-size:12px; text-align:left; margin:30px 10px 10px 10px;">\
           					Error!<br/><br/>\
           				</div>\
           				<div class="nav_button">\

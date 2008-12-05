@@ -40,11 +40,11 @@ ossi.profile = Class.create(ossi.base,{
               break;
             case "requested":
               $('profile_add_as_friend_button_container').hide();
-              // we could also tell user here that her friendship request has not been 
+              // we could also tell the user here that this user has already been requested to become friends with 
               break;
-            case "pending":
+            case "pending": // this user has requested to become friends with you
+              $('pending_nav').show();
               $('profile_add_as_friend_button_container').hide();
-              // we could also tell user here that her friendship request has not been 
               break;
           }
         }
@@ -57,10 +57,6 @@ ossi.profile = Class.create(ossi.base,{
   _draw: function() {
     if (this.options.hostElement) {
       this.options.hostElement.insert(this._getHTML());
-/*      if (this.options.pendingNav) {
-        $('profile_add_as_friend_button_container').hide();
-        $('pending_nav').show();
-      }*/
       this._addListeners();
       this.pane = $('profilepane');
     } else {
@@ -253,21 +249,15 @@ ossi.profile = Class.create(ossi.base,{
   },
   _addListeners: function() {
     $('profile_back_button').onclick = this._backHandler.bindAsEventListener(this);
-    if (this.options.pendingNav) {
-      $('profile_accept_friendship_request_button').onclick = this._acceptRequestHandler.bindAsEventListener(this);
-      $('profile_reject_friendship_request_button').onclick = this._rejectRequestHandler.bindAsEventListener(this);
-    } else {
-      $('profile_add_as_friend_button').onclick = this._addFriendHandler.bindAsEventListener(this);
-    }
+    $('profile_accept_friendship_request_button').onclick = this._acceptRequestHandler.bindAsEventListener(this);
+    $('profile_reject_friendship_request_button').onclick = this._rejectRequestHandler.bindAsEventListener(this);
+    $('profile_add_as_friend_button').onclick = this._addFriendHandler.bindAsEventListener(this);
   },
   _removeListeners: function() {
     $('profile_back_button').onclick = function() { return };
-    if (this.options.pendingNav) {
-      $('profile_accept_friendship_request_button').onclick = function() { return };
-      $('profile_reject_friendship_request_button').onclick = function() { return };
-    } else {
-      $('profile_add_as_friend_button').onclick = function() { return };
-    }
+    $('profile_accept_friendship_request_button').onclick = function() { return };
+    $('profile_reject_friendship_request_button').onclick = function() { return };
+    $('profile_add_as_friend_button').onclick = function() { return };
   },
   destroy: function () {
     this._removeListeners();
