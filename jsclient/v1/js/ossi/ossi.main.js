@@ -523,7 +523,7 @@ ossi.main = Class.create(ossi.base,{
 	case21: function(options) {
 		var options = Object.extend({
       out : false,
-      private : false,
+      priv : false,
       channelId : false,
       replyToId : false,
       postId : false,
@@ -531,7 +531,7 @@ ossi.main = Class.create(ossi.base,{
 	  },options);
     this.sub2 = this.sub1;
     this.sub1 = new ossi.mypost(this, {   'hostElement' : this.mainElement,
-                                          'private' : options.private,
+                                          'private' : options.priv,
                                           'channelId' : options.channelId,
                                           'replyToId' : options.replyToId,
                                           'postId' : options.postId,
