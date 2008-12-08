@@ -46,12 +46,9 @@ ossi.avatar = Class.create(ossi.base,{
                       <p>Please note that avatar upload does not work in iPhone. On N95 it will open a new window, which you can then close after upload to return to Ossi.</p>\
                     </div>\
                     <div id="upload_container" style="position:relative; margin:12px auto 12px auto; width:200px;">\
-                      <div style="position: relative; text-align: center; top: 0px; z-index: 2; -moz-opacity:0; filter:alpha(opacity: 0); opacity: 0;">\
-                        <input name="file" type="file" id="avatar_file" style="width: 100%; height: 35px; text-align: center;" />\
+                      <div style="position: relative; text-align: center; top: 0px; z-index: 2;">\
+                        <input name="file" type="file" id="avatar_file" />\
                       </div>\
-              				<div style="position: absolute; border:solid #555 1px; background: #323131 url(../images/button_bg.png) repeat-x top; top: 0px; width: 100%; height: 35px; text-align: center; cursor: pointer;">\
-              					<a id="file_button" class="nav_button_text" href="javascript:void(null);">Choose file</a>\
-              				</div>\
                     </div>\
             				<div class="nav_button">\
             					<a id="upload_button" class="nav_button_text" href="javascript:void(null);">Upload</a>\
