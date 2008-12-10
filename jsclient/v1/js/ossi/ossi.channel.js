@@ -2,7 +2,7 @@
 * ossi channel class
 */
 ossi.channel = Class.create(ossi.base,{
-    initialize: function(parent,options) {
+  initialize: function(parent,options) {
     this.parent = parent;
     this.options = Object.extend({
       hostElement : false,
@@ -12,7 +12,7 @@ ossi.channel = Class.create(ossi.base,{
     },options);
     this.count = 7;
     this.startIndex = 1;
-    this.private = true; // for moderator privilage check
+    this.priv = true; // for moderator privilage check
     this.pane = false;
     this._draw();
 	},
@@ -42,14 +42,13 @@ ossi.channel = Class.create(ossi.base,{
 
         //for moderator privilage check
         if (self.parent.userRole == 'moderator' && json.tags != null && json.tags.match('private') == 'private') {
-          self.private = true;
+          self.priv = true;
         } else if(self.parent.userRole == 'moderator'){
-          self.private = false;
+          self.priv = false;
           self._setModeratorHTML();
           self._addModeListeners();
         } 
-
-        if (json.private != null) self.private = json.private; // if channel has an owner it is a private channel!
+        if (json.private != null) self.priv = json.private; // if channel has an owner it is a private channel!
 //        if (json.owner != null) self.owner = json.owner; // if channel has an owner it is a private channel!
         if (typeof(json.entry) != 'undefined') {
           if (json.entry.length > 0) {
@@ -90,7 +89,7 @@ ossi.channel = Class.create(ossi.base,{
   _setModeratorHTML: function(){
     var m = '';
     //moderator privileges
-    if(this.parent.userRole == 'moderator' && this.private != true){
+    if(this.parent.userRole == 'moderator' && this.priv != true){
         m = '<div class="nav_button">\
                 <a id="channel_allow_delete_button" class="nav_button_text" href="javascript:void(null);">Delete this channel</a>\
         </div>\
@@ -210,7 +209,7 @@ ossi.channel = Class.create(ossi.base,{
     var self = this;
     self.parent.case21({
       channelId : self.options.channelId,
-      private : (typeof(self.private) != 'undefined') ? self.private : false,
+      priv : (typeof(self.priv) != 'undefined') ? self.priv : false,
       backCase : self.parent.case20.bind(self.parent,{
         channelId : self.options.channelId,
         out : true,
@@ -276,7 +275,7 @@ ossi.channel = Class.create(ossi.base,{
     $('channel_previous_button').onclick = function() { return };
     $('channel_back_button2').onclick = function() { return }
 
-    if(this.parent.userRole == 'moderator' && this.private != true){
+    if(this.parent.userRole == 'moderator' && this.priv != true){
       $('channel_delete_button').onclick = function() { return }
       $('channel_allow_delete_button').onclick = function() { return }
     }
