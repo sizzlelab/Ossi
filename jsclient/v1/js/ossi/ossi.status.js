@@ -84,9 +84,6 @@ ossi.status = Class.create(ossi.base,{
             				<div class="nav_button">\
             					<a id="done_button" class="nav_button_text" href="javascript:void(null);">Done</a>\
             				</div>\
-            				<div class="nav_button" style="display:none">\
-            					<a id="change_photo_button" class="nav_button_text" href="javascript:void(null);">Change Photo</a>\
-            				</div>\
             				<div class="nav_button">\
             					<a id="cancel_button" class="nav_button_text" href="javascript:void(null);">Cancel</a>\
             				</div>\
@@ -106,14 +103,12 @@ ossi.status = Class.create(ossi.base,{
   _addListeners: function() {
     $('done_button').onclick = this._putStatus.bindAsEventListener(this);
     $('cancel_button').onclick = this._cancelHandler.bindAsEventListener(this);
-    $('change_photo_button').onclick = this._changePhotoHandler.bindAsEventListener(this);
     $('status_form').onsubmit = this._putStatus.bindAsEventListener(this);
     $('status_textarea').observe('focus', this._focusHandler); // removed when entered
   },
   _removeListeners: function() {
     $('done_button').onclick = function() { return }
     $('cancel_button').onclick = function() { return }
-    $('change_photo_button').onclick = function() { return }
     $('status_form').onsubmit = function() { return }
   },
   destroy: function () {
