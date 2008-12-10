@@ -41,7 +41,7 @@ ossi.status = Class.create(ossi.base,{
       }
     });
 	},
-	_putStatus: function() {
+	_putStatus: function(e) {
     var self = this;
     var s = $F('status_textarea');
     var URL = BASE_URL+'/people/'+this.parent.userId+'/@self';
@@ -63,6 +63,7 @@ ossi.status = Class.create(ossi.base,{
         self.parent.hideLoading();
       }
     });
+    Event.stop(e);
 	},
   _draw: function() {
     if (this.options.hostElement) {
