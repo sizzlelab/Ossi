@@ -103,8 +103,6 @@ ossi.status = Class.create(ossi.base,{
   _cancelHandler: function() {
     this.options.backCase.apply();
   },
-  _changePhotoHandler: function() {
-  },
   _addListeners: function() {
     $('done_button').onclick = this._putStatus.bindAsEventListener(this);
     $('cancel_button').onclick = this._cancelHandler.bindAsEventListener(this);
