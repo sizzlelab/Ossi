@@ -531,7 +531,7 @@ ossi.main = Class.create(ossi.base,{
 	  },options);
     this.sub2 = this.sub1;
     this.sub1 = new ossi.mypost(this, {   'hostElement' : this.mainElement,
-                                          'private' : options.priv,
+                                          'priv' : options.priv,
                                           'channelId' : options.channelId,
                                           'replyToId' : options.replyToId,
                                           'postId' : options.postId,

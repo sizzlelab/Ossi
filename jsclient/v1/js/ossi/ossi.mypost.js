@@ -7,6 +7,7 @@ ossi.mypost = Class.create(ossi.base,{
 		this.options = Object.extend({
 		  channelId : false,
 		  owner : false,
+		  priv : false,
 		  replyToId : false,
 		  postId : false,
       hostElement : false
@@ -91,7 +92,7 @@ ossi.mypost = Class.create(ossi.base,{
     }
     var params = {  tags : 'post',
                     owner : self.parent.userId, // now each post has an owner
-                    private : self.options.private,
+                    'private' : self.options.priv,
                     'metadata[body]' : message,
                     'metadata[author]' : (typeof(self.parent.userName) != 'undefined') ? self.parent.userName : null
                  };
