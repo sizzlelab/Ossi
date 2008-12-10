@@ -23,7 +23,7 @@ ossi.login = Class.create(ossi.base,{
   _getHTML: function() {
     var h =   '\
           			<div id="loginpane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
-          			  <form>\
+          			  <form id="login_form">\
             				<div id="logo"></div>\
             				<div id="slogan">\
             					<span id="slogan_text">\
@@ -52,7 +52,7 @@ ossi.login = Class.create(ossi.base,{
           		';
     return h;
   },
-  _loginHandler: function() {
+  _loginHandler: function(e) {
     var self = this;
     var u = $F('username');
     var p = $F('password');
@@ -108,6 +108,7 @@ ossi.login = Class.create(ossi.base,{
         });
       }
     });
+    Event.stop(e);
   },
   _signupHandler: function() {
     this.parent.case16({ backCase : this.parent.case2.bind(this.parent,{out:true}) });
@@ -116,28 +117,16 @@ ossi.login = Class.create(ossi.base,{
     this.parent.case4({ backCase : this.parent.case2.bind(this.parent,{out:true}) });
   },
   _addListeners: function() {
-//    Element.observe does not work in Nokia Minimap browser when tabbed navigation is enabled,
-//    thus old skool
-
     $('login_button').onclick = this._loginHandler.bindAsEventListener(this);
     $('signup_button').onclick = this._signupHandler.bindAsEventListener(this);
     $('about_button').onclick = this._aboutHandler.bindAsEventListener(this);
-
-//    $('login_button').observe('click',this._loginHandler.bindAsEventListener(this));
-//    $('signup_button').observe('click',this._signupHandler.bindAsEventListener(this));
-//    $('about_button').observe('click',this._aboutHandler.bindAsEventListener(this));
+    $('login_form').onsubmit = this._loginHandler.bindAsEventListener(this);
   },
   _removeListeners: function() {
-//    Element.observe does not work in Nokia Minimap browser when tabbed navigation is enabled,
-//    thus old skool
-
     $('login_button').onclick = function() { return }
     $('signup_button').onclick = function() { return }
     $('about_button').onclick = function() { return }
-
-//    $('login_button').stopObserving('click',this._loginHandler.bindAsEventListener(this));
-//    $('signup_button').stopObserving('click',this._signupHandler.bindAsEventListener(this));
-//    $('about_button').stopObserving('click',this._aboutHandler.bindAsEventListener(this));
+    $('login_form').onsubmit = function() { return }
   },
   destroy: function () {
     this._removeListeners();
