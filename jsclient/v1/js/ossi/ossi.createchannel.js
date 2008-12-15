@@ -57,7 +57,7 @@ ossi.createchannel = Class.create(ossi.base,{
     var userName = (typeof(self.parent.userName) != 'undefined') ? self.parent.userName : 'N/A'; 
     var params = options.priv ? { 
                                       owner : this.parent.userId, 
-                                      'private' : 'true', 
+                                      priv : 'true', 
                                       title : $F('channel_title'), 
                                       tags : 'channel,private',
                                       'metadata[creator]' : userName 
