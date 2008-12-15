@@ -49,13 +49,13 @@ ossi.createchannel = Class.create(ossi.base,{
   },
   _createHandler: function(event,options) {
 		var options = Object.extend({
-      private : false
+      priv : false
 	  },options);
     var self = this;
     if (typeof(this.parent.userId) == 'undefined') return; // userId in the parent controller not set
     if (typeof(this.parent.channelsId) == 'undefined') return; // userId in the parent controller not set
     var userName = (typeof(self.parent.userName) != 'undefined') ? self.parent.userName : 'N/A'; 
-    var params = options.private ? { 
+    var params = options.priv ? { 
                                       owner : this.parent.userId, 
                                       'private' : 'true', 
                                       title : $F('channel_title'), 
@@ -75,7 +75,7 @@ ossi.createchannel = Class.create(ossi.base,{
       parameters : params,
       onSuccess : function(response) { // now post the new channel's collection ID and title to channel list collection
         var channel = response.responseJSON;
-        if (options.private) {
+        if (options.priv) {
           params = {  owner : this.parent.userId,
                       content_type : 'collection',
                       collection_id : channel.id
@@ -141,8 +141,8 @@ ossi.createchannel = Class.create(ossi.base,{
 
   },
   _addListeners: function() {
-    $('create_channel_create_public_button').onclick = this._createHandler.bindAsEventListener(this,{'private':false});
-    $('create_channel_create_private_button').onclick = this._createHandler.bindAsEventListener(this,{'private':true});
+    $('create_channel_create_public_button').onclick = this._createHandler.bindAsEventListener(this,{'priv':false});
+    $('create_channel_create_private_button').onclick = this._createHandler.bindAsEventListener(this,{'priv':true});
     $('create_channel_back_button').onclick = this._backHandler.bindAsEventListener(this);
   },
   _removeListeners: function() {
