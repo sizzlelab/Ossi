@@ -1,5 +1,5 @@
 var ossi = {
-  Version: '0.2',
+  Version: '1.0',
   bootstrap: {
     load: function(libraryName) {
       // inserting via DOM fails in Safari 2.0, so brute force approach
