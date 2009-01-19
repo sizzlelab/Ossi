@@ -64,9 +64,12 @@ ossi.signup = Class.create(ossi.base,{
       alert('passwords do not match!')
       return;
     }
+
+    //19.1.2009 ADDED CONSENT parameter.
     var params =  { 'person[username]' : u,
                     'person[password]' : p,
-                    'person[email]' : e
+                    'person[email]' : e,
+		    'person[consent]' : 'EN1.0'
                   };
     self.parent.showLoading();
     new Ajax.Request(BASE_URL+'/people', {
