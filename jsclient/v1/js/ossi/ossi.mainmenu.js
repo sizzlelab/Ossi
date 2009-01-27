@@ -103,13 +103,13 @@ ossi.mainmenu = Class.create(ossi.base,{
           			<div id="mainmenupane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
           				<div id="logo_small"></div>\
           				<div id="microblog_button" class="post_button">\
-                    <div class="post_button_left_column"><a href="javascript:void(null);"><img style="margin:2px 0px 0px 2px; border:solid #eee 1px;" src="'+BASE_URL+'/people/'+this.parent.userId+'/@avatar/small_thumbnail?'+Math.random()*9999+'" width="50" height="50" border="0" /></a></div>\
+                    <div class="post_button_left_column"><img style="margin:2px 0px 0px 2px; border:solid #eee 1px;" src="'+BASE_URL+'/people/'+this.parent.userId+'/@avatar/small_thumbnail?'+Math.random()*9999+'" width="50" height="50" border="0" /></div>\
                     <div class="post_button_text">\
-        						  <div id="mainmenu_profile_name" class="button_title">n/a</div>\
+        						  <div class="button_title"><a id="mainmenu_profile_name" href="javascript:void(null);">n/a</a></div>\
         						  <div id="mainmenu_status_text" class="button_title" style="font-size:10px;">n/a</div>\
         						  <div id="mainmenu_status_time" class="button_subtitle_text">n/a</div>\
                     </div>\
-          				</div>\
+        				  </div>\
           				<div class="nav_button" style="display:none">\
           					<a id="feeds_button" class="nav_button_text" href="javascript:void(null);">Feeds</a>\
           				</div>\
