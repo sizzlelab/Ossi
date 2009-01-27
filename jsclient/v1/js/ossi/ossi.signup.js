@@ -69,7 +69,7 @@ ossi.signup = Class.create(ossi.base,{
     var params =  { 'person[username]' : u,
                     'person[password]' : p,
                     'person[email]' : e,
-		    'person[consent]' : 'EN1.0'
+		                'person[consent]' : 'EN1.0'
                   };
     self.parent.showLoading();
     new Ajax.Request(BASE_URL+'/people', {
