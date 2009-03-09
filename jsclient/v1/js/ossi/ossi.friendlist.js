@@ -35,6 +35,25 @@ ossi.friendlist = Class.create(ossi.base,{
             $('friends_placeholder').update(h);
             self._addLinkListeners();
             if (json.entry.length > 5) $('friend_list_back_button_2_container').show(); // show second back button at top of screen if more than 5 channels
+
+            // now loop through results again and fetch user location (this is a temporary measure)
+            json.entry.each(function(user) {
+              var URL = BASE_URL+'/people/'+user.id+'/@location';
+              new Ajax.Request(URL,{
+                method : 'get',
+                requestHeaders : (client.is_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
+                onSuccess : function(response) {
+                  var json = response.responseJSON;
+                  if (Object.isNumber(json.latitude) && Object.isNumber(json.longitude)) {
+                    $('friend_uid_link_'+user.id).insert(' @ ' + self.parent.utils.roundNumber(json.latitude,4) + ' / ' + self.parent.utils.roundNumber(json.longitude,4) + ' ' + self.parent.utils.agoString(json.updated_at));
+                  }
+                  setTimeout(function() {
+                    self.parent.hideLoading();
+                  }, 600);
+                }
+              });
+            },self);
+            
           } else {
             $('friends_placeholder').replace('<div style="padding:10px; text-align:center">Your friend list is currently empty. Click on "Find Friends" to search for people in the network and add them onto your list.</div>');
           }
@@ -104,31 +123,7 @@ ossi.friendlist = Class.create(ossi.base,{
       }
       if (user.status.changed != 'undefined') {
         if (user.status.changed != null) {
-          // timestamp to epoch
-          var d = user.status.changed;
-          var a = Date.UTC(d.substring(0,4),d.substring(5,7),d.substring(8,10),d.substring(11,13),d.substring(14,16),d.substring(17,19));
-
-          // now to epoch
-          var e = new Date();
-          var b = Date.UTC(e.getUTCFullYear(),(e.getUTCMonth()+1),e.getUTCDate(),e.getUTCHours(),e.getUTCMinutes(),e.getUTCSeconds());
-
-          // set string data
-          var s = (b-a) / 1000;
-          if (s < 60) {
-            status_time = 'a moment ago';
-          } else if (s >= 60 && s < 3600) {
-            s = Math.floor(s/60);
-            status_time = s+' mins ago';
-          } else if (s >= 3600 && s < 86400) {
-            s = Math.floor(s/3600);
-            status_time = s+' hours ago';
-          } else if (s >= 86400 && s < 2592000) {
-            s = Math.floor(s/86400);
-            status_time = s+' days ago';
-          } else if (s >= 2592000) {
-            s = Math.floor(s/2592000);
-            status_time = s+' months ago';
-          }
+          status_time = this.parent.utils.agoString(user.status.changed);
         }
       }
     }
@@ -137,7 +132,7 @@ ossi.friendlist = Class.create(ossi.base,{
           				<div class="profile_button" id="person_uid_'+user.id+'" href="javascript:void(null);">\
                     <div class="post_button_left_column"><img style="margin:2px 0px 0px 2px; border:solid #eee 1px;" src="'+BASE_URL+'/people/'+user.id+'/@avatar/small_thumbnail?'+Math.random()*9999+'" width="50" height="50" border="0" /></div>\
                     <div class="post_button_text">\
-        						  <div class="button_title"><a href="javascript:void(null);">'+name+'</a></div>\
+        						  <div class="button_title"><a id="friend_uid_link_'+user.id+'" href="javascript:void(null);">'+name+'</a></div>\
         						  <div class="button_content_text"><a href="javascript:void(null);">'+status_message+'</a></div>\
         						  <div class="button_subtitle_text" style="padding-top:3px">'+status_time+'</div>\
                     </div>\
