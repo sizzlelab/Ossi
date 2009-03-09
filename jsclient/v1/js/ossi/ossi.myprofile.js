@@ -56,9 +56,22 @@ ossi.myprofile = Class.create(ossi.base,{
             } 
           }
         }
-        setTimeout(function() {
-          self.parent.hideLoading();
-        }, 600);
+
+        // get location
+        URL = BASE_URL+'/people/'+self.parent.userId+'/@location';
+        new Ajax.Request(URL,{
+          method : 'get',
+          requestHeaders : (client.is_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
+          onSuccess : function(response) {
+            var json = response.responseJSON;
+
+            // print location here
+
+            setTimeout(function() {
+              self.parent.hideLoading();
+            }, 600);
+          }
+        });
       }
     });
 	},

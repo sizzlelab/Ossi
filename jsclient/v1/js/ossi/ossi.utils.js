@@ -88,5 +88,41 @@ ossi.utils = Class.create(ossi.base,{
       throw $break; // temporary, only get the first name-value pair, e.g. session id
     });
     return o;
-  }
+  },
+  roundNumber: function(num, dec) {
+  	return Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
+  },
+  agoString: function(UTC_string) {
+    
+    // return string
+    var h = '';
+    
+    // argument date to epoch
+    var d = UTC_string;
+    var a = Date.UTC(d.substring(0,4),d.substring(5,7),d.substring(8,10),d.substring(11,13),d.substring(14,16),d.substring(17,19));
+
+    // now to epoch
+    var e = new Date();
+    var b = Date.UTC(e.getUTCFullYear(),(e.getUTCMonth()+1),e.getUTCDate(),e.getUTCHours(),e.getUTCMinutes(),e.getUTCSeconds());
+
+    // set string data
+    var s = (b-a) / 1000;
+    if (s < 60) {
+//      h = s+' sec ago';
+      h = 'a moment ago';
+    } else if (s >= 60 && s < 3600) {
+      s = Math.floor(s/60);
+      h = s+' mins ago';
+    } else if (s >= 3600 && s < 86400) {
+      s = Math.floor(s/3600);
+      h = s+' hours ago';
+    } else if (s >= 86400 && s < 2592000) {
+      s = Math.floor(s/86400);
+      h = s+' days ago';
+    } else if (s >= 2592000) {
+      s = Math.floor(s/2592000);
+      h = s+' months ago';
+    }
+    return h;
+  }  
 });

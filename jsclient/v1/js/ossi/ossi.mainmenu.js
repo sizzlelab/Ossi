@@ -44,32 +44,7 @@ ossi.mainmenu = Class.create(ossi.base,{
           }
           if (json.status.changed != 'undefined') {
             if (json.status.changed != null) {
-              // timestamp to epoch
-              var d = json.status.changed;
-              var a = Date.UTC(d.substring(0,4),d.substring(5,7),d.substring(8,10),d.substring(11,13),d.substring(14,16),d.substring(17,19));
-
-              // now to epoch
-              var e = new Date();
-              var b = Date.UTC(e.getUTCFullYear(),(e.getUTCMonth()+1),e.getUTCDate(),e.getUTCHours(),e.getUTCMinutes(),e.getUTCSeconds());
-
-              // set string data
-              var s = (b-a) / 1000;
-              if (s < 60) {
-//                $('mainmenu_status_time').update(s+' sec ago');
-                $('mainmenu_status_time').update('a moment ago');
-              } else if (s >= 60 && s < 3600) {
-                s = Math.floor(s/60);
-                $('mainmenu_status_time').update(s+' mins ago');
-              } else if (s >= 3600 && s < 86400) {
-                s = Math.floor(s/3600);
-                $('mainmenu_status_time').update(s+' hours ago');
-              } else if (s >= 86400 && s < 2592000) {
-                s = Math.floor(s/86400);
-                $('mainmenu_status_time').update(s+' days ago');
-              } else if (s >= 2592000) {
-                s = Math.floor(s/2592000);
-                $('mainmenu_status_time').update(s+' months ago');
-              }
+              $('mainmenu_status_time').update(self.parent.utils.agoString(json.status.changed));
             }
           }
         }
@@ -81,10 +56,23 @@ ossi.mainmenu = Class.create(ossi.base,{
           onSuccess : function(response) {
             var json = response.responseJSON;
             if (json.entry.length > 0) Element.insert($('friends_button'),' <span style="font-size:10px; font-weight:bold;">('+json.entry.length+' new)</span>');
-            setTimeout(function() {
-              self.parent.hideLoading();
-            }, 600);
-          }
+
+              // get location
+              URL = BASE_URL+'/people/'+self.parent.userId+'/@location';
+              new Ajax.Request(URL,{
+                method : 'get',
+                requestHeaders : (client.is_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
+                onSuccess : function(response) {
+                  var json = response.responseJSON;
+                  if (Object.isNumber(json.latitude) && Object.isNumber(json.longitude)) {
+                    $('mainmenu_profile_name').insert(' @ ' + self.parent.utils.roundNumber(json.latitude,4) + ' / ' + self.parent.utils.roundNumber(json.longitude,4) + ' ' + self.parent.utils.agoString(json.updated_at));
+                  }
+                  setTimeout(function() {
+                    self.parent.hideLoading();
+                  }, 600);
+                }
+              });
+            }
         });
       }
     });
