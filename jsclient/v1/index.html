@@ -9,14 +9,22 @@
 		<link type="text/css" rel="stylesheet" href="css/main.css" />
 		<script language="Javascript" src="js/bootstrap.js"></script>
 		<script language="Javascript">
-
+		function gup( name ) {
+			name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+			var regexS = "[\\?&]"+name+"=([^&#]*)";
+			var regex = new RegExp( regexS );
+			var results = regex.exec( window.location.href );
+			if( results == null ) return "";
+			else return results[1];
+		}
 /* this one fires too early
 			document.observe("dom:loaded", function() {
 				alert('dom loaded event');
 				new ossi.main();
 			});
 */
-			window.onload = function() { new ossi.main(); }
+			window.onload = function() { new ossi.main(); };
+			
 /* for safari on iphone, not currently needed
 			window.onorientationchange = function(){
 				// 0=portrait, 90=landscape counter clockwise,

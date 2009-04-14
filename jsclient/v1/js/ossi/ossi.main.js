@@ -2,7 +2,15 @@
 * ossi main class
 */
 ossi.main = Class.create(ossi.base,{
-	initialize: function() {
+	initialize: function(options) {
+	this.options = Object.extend({
+      channelId : false,
+      refreshChannel : false,
+      wall : false
+    },options);
+
+//this.options = {'channelId' : 'btO622SxGr3Ai_aaWPEYjL'};
+
     WIDGET_VIEWPORT = { height : 428, width : 313 }; // set these to same values as for #content_area.widget in main.css
     this.mainElement = $('content_area'); // hardcoded for now
     this.channelsId = 'd8-W0MMEir3yhJaaWPEYjL'; // hardcoded id on alpha.sizl.org!
@@ -19,43 +27,42 @@ ossi.main = Class.create(ossi.base,{
     BASE_URL = (client.is_widget) ? 'http://cos.alpha.sizl.org' : '/cos'; // where to go asking for COS
     MAX_REQUEST_LENGTH = 20; // in seconds
     this.tmp = []; // for timers etc. May be deleted at any time.
-	  this.case1(); // go to first use case
+	this.case1(); // go to first use case
 	},
-	/**
+		/**
 	* application start
 	*/
 	case1: function(options) {
-	  var self = this;
+		var self = this;
 		var options = Object.extend({
-      out : false
-	  },options);
-    this.splash.hide();
-    this.mainElement.update('');
-  	this.mainElement.show();
-  	this.mainElement.makeClipping(); // make clipping for main element
-    this.showLoading();
+			out : false
+		},options);
+	    this.splash.hide();
+	    this.mainElement.update('');
+	  	this.mainElement.show();
+	  	this.mainElement.makeClipping(); // make clipping for main element
+	    this.showLoading();
 
-    // first do a POST to /session to get cookie info for widget
-    // i.e. logging in without user
-    var params =  { app_name : 'ossi',
-                    app_password : 'Z0ks51r'
-                  };
-    new Ajax.Request(BASE_URL+'/session', {
-      method : 'post',
-      parameters : params,
-      on409 : function(response) { // server returns 409 error, meaning session already exists
-//        self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
-        self._case1b();
-      },
-      onSuccess : function(response) {
-//        self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
-        self._case1b();
-      },
-      onFailure : function(response) {
-        this.case2({start : true}); // call login
-      }
-    });
-      
+	    // first do a POST to /session to get cookie info for widget
+	    // i.e. logging in without user
+	    var params =  { app_name : 'ossi',
+	                    app_password : 'Z0ks51r'
+	                  };
+	    new Ajax.Request(BASE_URL+'/session', {
+		      method : 'post',
+		      parameters : params,
+		      on409 : function(response) { // server returns 409 error, meaning session already exists
+	//        self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
+		        self._case1b();
+		      },
+		      onSuccess : function(response) {
+		//        self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
+		        self._case1b();
+		      },
+		      onFailure : function(response) {
+		        this.case2({start : true}); // call login
+		      }
+		});
 	},
 	/**
 	* to remove duplication within closures
@@ -84,41 +91,69 @@ ossi.main = Class.create(ossi.base,{
       user_id : null,
       app_id : null
     },response.responseJSON);
-    if (json.user_id != null) {
-      this.userId = json.user_id;
-      this.case3({start : true});
-    } else {
-      this.case2({start : true}); // call login
+	if (json.user_id != null) {
+		this.userId = json.user_id;
+		if(this.options.channelId) { //go to specified channel
+			this.case20({start : true, channelId : this.options.channelId,
+				backCase : this.case18.bind(this,{ out : true, backCase : this.case3.bind(this,{out:true})
+				})
+			});
+
+		} else { // go to main
+			this.case3({start : true});
+		}
+    } else { // user not identified
+		if(this.options.channelId && this.options.wall) { 
+			this.case24({channelId : this.options.channelId }); // go to wall
+		} else if(this.options.channelId && !this.options.wall) {
+			this.case2({start : true, channelId : this.options.channelId}); // go to login and then channel
+		} else {
+			this.case2({start : true }); // go to login
+		}
     }
   },
+
 	/**
 	* login
 	*/
 	case2: function(options) {
 		var options = Object.extend({
-      out : false,
-      backCase : false,
-      start : false
-	  },options);
+	      out : false,
+	      backCase : false,
+	      channelId : false,
+	      start : false
+		  },options);
     
-    if (options.start) {
-      this.sub1 = new ossi.login(this, {  'hostElement' : this.mainElement,
-                                          'backCase' : options.backCase});
-      this.sub1.pane.show();
-    } else {
-      this.sub2 = this.sub1;
-      this.sub1 = new ossi.login(this, {  'hostElement' : this.mainElement,
-                                          'backCase' : options.backCase});
-      if (options.out) {
-        this.utils.out(this.sub2.pane,this.sub1.pane,function() {
-          this.sub2.destroy();
-        }.bind(this));
-      } else {
-        this.utils.into(this.sub2.pane,this.sub1.pane,function() {
-          this.sub2.destroy();
-        }.bind(this));
-      }
-    }
+	    if (options.start) { // login without effects (first time)
+			if (options.channelId) {
+				this.sub1 = new ossi.login(this, {	'hostElement' : this.mainElement,
+	      											'channelId' : options.channelId,
+	        	                                  	'backCase' : options.backCase});
+			} else {
+				this.sub1 = new ossi.login(this, {	'hostElement' : this.mainElement,
+													'backCase' : options.backCase});
+			}
+		    this.sub1.pane.show();
+	    } else { // login page emerges with fx
+			this.sub2 = this.sub1;
+			if (options.channelId) {
+				this.sub1 = new ossi.login(this, {	'hostElement' : this.mainElement,
+	      											'channelId' : options.channelId,
+	        	                                  	'backCase' : options.backCase});
+			} else {
+				this.sub1 = new ossi.login(this, {	'hostElement' : this.mainElement,
+	        	                                  	'backCase' : options.backCase});
+			}
+	      if (options.out) {
+	        this.utils.out(this.sub2.pane,this.sub1.pane,function() {
+	          this.sub2.destroy();
+	        }.bind(this));
+	      } else {
+	        this.utils.into(this.sub2.pane,this.sub1.pane,function() {
+	          this.sub2.destroy();
+	        }.bind(this));
+	      }
+	    }
 	},
 	/**
 	* main screen
@@ -496,26 +531,32 @@ ossi.main = Class.create(ossi.base,{
 	*/
 	case20: function(options) {
 		var options = Object.extend({
-      out : false,
-      channelId : false,
-      backCase : false
-	  },options);
-
-    this.sub2 = this.sub1;
-    this.sub1 = new ossi.channel(this, {  'hostElement' : this.mainElement,
-                                          'channelId' : options.channelId,
-                                          'backCase' : options.backCase});
-    if (options.out) {
-      this.utils.out(this.sub2.pane,this.sub1.pane,function() {
-        this.sub2.destroy();
-        this.sub1.update();
-      }.bind(this));
-    } else {
-      this.utils.into(this.sub2.pane,this.sub1.pane,function() {
-        this.sub2.destroy();
-        this.sub1.update();
-      }.bind(this));
-    }
+    	  start : false,
+    	  out : false,
+    	  channelId : false,
+    	  backCase : false
+		},options);
+		this.sub2 = this.sub1;
+    	this.sub1 = new ossi.channel(this, {  'hostElement' : this.mainElement,
+            	                              'channelId' : options.channelId,
+                    	                      'backCase' : options.backCase
+											});
+		if(options.start) {
+			this.sub1.pane.show();
+			this.sub1.update();
+		} else {
+		    if (options.out) {
+		      this.utils.out(this.sub2.pane,this.sub1.pane,function() {
+		        this.sub2.destroy();
+		        this.sub1.update();
+		      }.bind(this));
+		    } else {
+		      this.utils.into(this.sub2.pane,this.sub1.pane,function() {
+		        this.sub2.destroy();
+		        this.sub1.update();
+		      }.bind(this));
+		    }
+		}
 	},
   /**
 	* add new post
@@ -599,6 +640,41 @@ ossi.main = Class.create(ossi.base,{
       }.bind(this));
     }
 	},
+	
+
+	/**
+	* show channel contents without session
+	*/
+	case24: function(options) {
+		var options = Object.extend({
+			out : false,
+			channelId : false,
+			backCase : false
+		},options);
+    this.sub1 = new ossi.channel(this, {	'hostElement' : this.mainElement,
+											'wall' : true,
+											'count' : 7,
+											'channelId' : options.channelId
+										});
+	this.sub1.pane.show();
+	
+//	this.sub1.update();
+	//if refresh is passed use timer
+	if(this.options.refreshChannel)	this._timer4wall(this.sub1);
+	else this.sub1.update();
+
+	},
+	/**
+	* update function for wall. refreshrate is passed to ossi.main with refreshChannel-parameter
+	*/
+	_timer4wall: function(c){
+		this.sub1.update();
+          //self._timer4wall(self);
+		setTimeout(function(c) {
+			if(c == this.sub1) this._timer4wall(c);
+        }.bind(this, c), this.options.refreshChannel);
+	},
+
 	/**
 	* _getClient
 	*

@@ -257,6 +257,14 @@ body.widget {
   text-align: left;
   cursor: pointer;
 }
+.post_wall {
+  position:relative;
+  border: solid 1px black;
+  border-bottom: solid 1px #150900;
+  margin: 0px 0px 0px 0px;
+  color: #CBD58B;
+  text-align: left;
+}
 
 .profile_button {
   position:relative;

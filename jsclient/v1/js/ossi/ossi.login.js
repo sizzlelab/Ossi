@@ -5,6 +5,8 @@ ossi.login = Class.create(ossi.base,{
 	initialize: function(parent,options) {
     this.parent = parent;
 		this.options = Object.extend({
+      channelId : false,
+      postId : false,
       hostElement : false
 	  },options);
 	  this.pane = false;
@@ -89,7 +91,22 @@ ossi.login = Class.create(ossi.base,{
         self.parent.sessionCookie = self.parent.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
         self.parent.hideLoading();
         self.parent.userId = json.user_id;
-        self.parent.case3();
+        
+        if(self.options.channelId){ // if channelId exists, go there
+        	self.parent.case20({
+        		out : true,
+        		channelId : self.options.channelId,
+        		backCase : self.parent.case18.bind(self.parent,{
+        			out : true,
+        			backCase : self.parent.case3.bind(self.parent,{
+        				out : true
+        			})
+        		})
+        	});
+
+        } else {
+	        self.parent.case3();
+        }
       },
       on401 : function() {
         self.parent.hideLoading();
@@ -108,7 +125,9 @@ ossi.login = Class.create(ossi.base,{
         });
       }
     });
-    Event.stop(e);
+    if(typeof(e) != 'undefined'){
+	    Event.stop(e); //Might be problem with Firefox
+    }
   },
   _signupHandler: function() {
     this.parent.case16({ backCase : this.parent.case2.bind(this.parent,{out:true}) });
