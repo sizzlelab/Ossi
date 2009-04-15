@@ -93,12 +93,12 @@ ossi.channel = Class.create(ossi.base,{
     var m = '';
     //moderator privileges
     if(this.parent.userRole == 'moderator' && this.priv != true){
-        m = '<div class="nav_button">\
+        m = '<div id="moderator_placeholder"><div class="nav_button">\
                 <a id="channel_allow_delete_button" class="nav_button_text" href="javascript:void(null);">Delete this channel</a>\
         </div>\
         <div class="nav_button" id="channel_delete_channel" style="visibility: hidden;">\
                 <a id="channel_delete_button" class="nav_button_text" href="javascript:void(null);">Delete for good.</a>\
-        </div>\
+        </div></div>\
         ';
     }
     $('moderator_placeholder').replace(m);
@@ -199,7 +199,7 @@ ossi.channel = Class.create(ossi.base,{
                     </div>\
           				</div>\
           			';    	
-    } else { // wall content
+    } else {
 		stripped_message = stripped_message.replace(/<\/?[^>]+(>|$)/g, ""); //clean html-tags away
 		stripped_message = stripped_message.replace(/\[quote\].*\[\/quote\]/g,'').replace(/<br \/>/g,'');
 	    var message_stub = stripped_message.replace(/(ftp|http|https|file):\/\/[\S]+(\b|$)/gim,
