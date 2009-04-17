@@ -77,6 +77,7 @@ ossi.utils = Class.create(ossi.base,{
     return t;    
   },
   makeCookie: function(headerText) {
+    if (headerText == null) return headerText;
     var h = headerText;
     var o = []
     h = h.split(';');
