@@ -640,8 +640,6 @@ ossi.main = Class.create(ossi.base,{
       }.bind(this));
     }
 	},
-	
-
 	/**
 	* show channel contents without session
 	*/
@@ -663,6 +661,30 @@ ossi.main = Class.create(ossi.base,{
 	if(this.options.refreshChannel)	this._timer4wall(this.sub1);
 	else this.sub1.update();
 
+	},
+	/**
+	* show groups page
+	*/
+	case25: function(options) {
+		var options = Object.extend({
+      out : false,
+      backCase : false
+	  },options);
+
+    this.sub2 = this.sub1;
+    this.sub1 = new ossi.grouplist(this, {  'hostElement' : this.mainElement,
+                                            'backCase' : options.backCase});
+    if (options.out) {
+      this.utils.out(this.sub2.pane,this.sub1.pane,function() {
+        this.sub2.destroy();
+        this.sub1.update();
+      }.bind(this));
+    } else {
+      this.utils.into(this.sub2.pane,this.sub1.pane,function() {
+        this.sub2.destroy();
+        this.sub1.update();
+      }.bind(this));
+    }
 	},
 	/**
 	* update function for wall. refreshrate is passed to ossi.main with refreshChannel-parameter

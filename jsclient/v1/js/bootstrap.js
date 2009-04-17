@@ -26,6 +26,7 @@ var ossi = {
                   'ossi/ossi.consent.js',
                   'ossi/ossi.information.js',
                   'ossi/ossi.channellist.js',
+                  'ossi/ossi.grouplist.js',
                   'ossi/ossi.createchannel.js',
                   'ossi/ossi.channel.js',
                   'ossi/ossi.mypost.js',

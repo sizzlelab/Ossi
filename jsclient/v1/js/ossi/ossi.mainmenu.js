@@ -108,6 +108,9 @@ ossi.mainmenu = Class.create(ossi.base,{
           					<a id="channels_button" class="nav_button_text" href="javascript:void(null);">Channels</a>\
           				</div>\
           				<div class="nav_button">\
+          					<a id="groups_button" class="nav_button_text" href="javascript:void(null);">Groups</a>\
+          				</div>\
+          				<div class="nav_button">\
           					<a id="profile_button" class="nav_button_text" href="javascript:void(null);">My Profile</a>\
           				</div>\
           				<div class="nav_button">\
@@ -141,6 +144,9 @@ ossi.mainmenu = Class.create(ossi.base,{
   _channelsHandler: function() {
     this.parent.case18({ backCase : this.parent.case3.bind(this.parent,{out:true}) });
   },
+  _groupsHandler: function() {
+    this.parent.case25({ backCase : this.parent.case3.bind(this.parent,{out:true}) });
+  },
   _friendsHandler: function() {
     this.parent.case9({ backCase : this.parent.case3.bind(this.parent,{out:true}) });
   },
@@ -158,6 +164,7 @@ ossi.mainmenu = Class.create(ossi.base,{
 
     $('logout_button').onclick = this._logoutHandler.bindAsEventListener(this);
     $('channels_button').onclick = this._channelsHandler.bindAsEventListener(this);
+    $('groups_button').onclick = this._groupsHandler.bindAsEventListener(this);
     $('friends_button').onclick = this._friendsHandler.bindAsEventListener(this);
     $('feeds_button').onclick = this._feedsHandler.bindAsEventListener(this);
     $('profile_button').onclick = this._profileHandler.bindAsEventListener(this);
@@ -176,6 +183,7 @@ ossi.mainmenu = Class.create(ossi.base,{
 
     $('logout_button').onclick = function() { return }
     $('channels_button').onclick = function() { return }
+    $('groups_button').onclick = function() { return }
     $('friends_button').onclick = function() { return }
     $('feeds_button').onclick = function() { return }
     $('profile_button').onclick = function() { return }
