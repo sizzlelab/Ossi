@@ -27,6 +27,8 @@ var ossi = {
                   'ossi/ossi.information.js',
                   'ossi/ossi.channellist.js',
                   'ossi/ossi.grouplist.js',
+                  'ossi/ossi.creategroup.js',
+                  'ossi/ossi.group.js',
                   'ossi/ossi.createchannel.js',
                   'ossi/ossi.channel.js',
                   'ossi/ossi.mypost.js',

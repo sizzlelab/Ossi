@@ -91,25 +91,24 @@ ossi.main = Class.create(ossi.base,{
       user_id : null,
       app_id : null
     },response.responseJSON);
-	if (json.user_id != null) {
-		this.userId = json.user_id;
-		if(this.options.channelId) { //go to specified channel
-			this.case20({start : true, channelId : this.options.channelId,
-				backCase : this.case18.bind(this,{ out : true, backCase : this.case3.bind(this,{out:true})
-				})
-			});
-
-		} else { // go to main
-			this.case3({start : true});
-		}
+	  if (json.user_id != null) {
+  		this.userId = json.user_id;
+  		if (this.options.channelId) { //go to specified channel
+  			this.case20({start : true, channelId : this.options.channelId,
+  				backCase : this.case18.bind(this,{ out : true, backCase : this.case3.bind(this,{out:true})
+  				})
+  			});
+  		} else { // go to main
+  			this.case3({start : true});
+  		}
     } else { // user not identified
-		if(this.options.channelId && this.options.wall) { 
-			this.case24({channelId : this.options.channelId }); // go to wall
-		} else if(this.options.channelId && !this.options.wall) {
-			this.case2({start : true, channelId : this.options.channelId}); // go to login and then channel
-		} else {
-			this.case2({start : true }); // go to login
-		}
+  		if(this.options.channelId && this.options.wall) { 
+  			this.case24({channelId : this.options.channelId }); // go to wall
+  		} else if(this.options.channelId && !this.options.wall) {
+  			this.case2({start : true, channelId : this.options.channelId}); // go to login and then channel
+  		} else {
+  			this.case2({start : true }); // go to login
+  		}
     }
   },
 
@@ -674,6 +673,53 @@ ossi.main = Class.create(ossi.base,{
     this.sub2 = this.sub1;
     this.sub1 = new ossi.grouplist(this, {  'hostElement' : this.mainElement,
                                             'backCase' : options.backCase});
+    if (options.out) {
+      this.utils.out(this.sub2.pane,this.sub1.pane,function() {
+        this.sub2.destroy();
+        this.sub1.update();
+      }.bind(this));
+    } else {
+      this.utils.into(this.sub2.pane,this.sub1.pane,function() {
+        this.sub2.destroy();
+        this.sub1.update();
+      }.bind(this));
+    }
+	},
+	/**
+	* create group
+	*/
+	case26: function(options) {
+		var options = Object.extend({
+      out : false,
+      backCase : false
+	  },options);
+
+    this.sub2 = this.sub1;
+    this.sub1 = new ossi.creategroup(this, {  'hostElement' : this.mainElement,
+                                              'backCase' : options.backCase});
+    if (options.out) {
+      this.utils.out(this.sub2.pane,this.sub1.pane,function() {
+        this.sub2.destroy();
+      }.bind(this));
+    } else {
+      this.utils.into(this.sub2.pane,this.sub1.pane,function() {
+        this.sub2.destroy();
+      }.bind(this));
+    }
+	},
+  /**
+	* group profile page
+	*/
+	case27: function(options) {
+		var options = Object.extend({
+    	  out : false,
+    	  groupId : false,
+    	  backCase : false
+		},options);
+		this.sub2 = this.sub1;
+  	this.sub1 = new ossi.group(this, {  'hostElement' : this.mainElement,
+          	                              'groupId' : options.groupId,
+                  	                      'backCase' : options.backCase });
     if (options.out) {
       this.utils.out(this.sub2.pane,this.sub1.pane,function() {
         this.sub2.destroy();

@@ -32,7 +32,6 @@ ossi.grouplist = Class.create(ossi.base,{
       parameters : params,
       requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
       onSuccess : function(response) {
-        console.log(response);
         var json = response.responseJSON;
         if (typeof(json.entry) != 'undefined') {
           if (json.entry.length > 0) {
@@ -93,7 +92,7 @@ ossi.grouplist = Class.create(ossi.base,{
           				<div id="about_groups_button_container" class="nav_button">\
           					<a id="about_groups_button" class="nav_button_text" href="javascript:void(null);">About Groups</a>\
           				</div>\
-          				<div id="create_group_button_container" class="nav_button" style="display:none">\
+          				<div id="create_group_button_container" class="nav_button">\
           					<a id="create_group_button" class="nav_button_text" href="javascript:void(null);">Create New Group</a>\
           				</div>\
           				<div class="nav_button">\
@@ -104,6 +103,7 @@ ossi.grouplist = Class.create(ossi.base,{
     return h;
   },
   _getButtonHTML: function(group) {
+    var group = group.group;
     var updated_text = '';
     if (group.updated_at != 'undefined') {
       if (group.updated_at != null) {
@@ -143,16 +143,19 @@ ossi.grouplist = Class.create(ossi.base,{
     }
 
     var ident_class = '';
-    if (group.tags != null) {
-      ident_class = (group.tags.match('private')) ? 'private' : 'public';
+    if (! Object.isUndefined(group.group_type)) {
+      ident_class = (group.group_type == 'open') ? 'public' : 'private';
     }
     
+    var members_html = '';
+    if (! Object.isUndefined(group.members)) members_html += group.members+' members.'; 
+    
     var h =   '\
-          				<div class="group_button" id="group_id_'+group.id+'">\
-                    <div class="group_button_left_column '+ident_class+'"></div>\
-                    <div class="group_button_text">\
+          				<div class="channel_button" id="group_id_'+group.id+'">\
+                    <div class="channel_button_left_column '+ident_class+'"></div>\
+                    <div class="channel_button_text">\
         						  <div class="button_title"><a href="javascript:void(null);">'+group.title+'</a></div>\
-        						  <div class="button_subtitle_text" style="padding-top:3px">'+group.totalResults+' messages. Updated '+updated_text+'</div>\
+        						  <div class="button_subtitle_text" style="padding-top:3px">'+members_html+' Updated '+updated_text+'</div>\
         						  '+creator_html+'\
                     </div>\
           				</div>\
@@ -164,8 +167,8 @@ ossi.grouplist = Class.create(ossi.base,{
   },
   _createGroupHandler: function() {
     var self = this;
-    self.parent.case19({
-      backCase : self.parent.case18.bind(self.parent,{
+    self.parent.case26({
+      backCase : self.parent.case25.bind(self.parent,{
         out : true,
         backCase : self.parent.case3.bind(self.parent,{out:true}) 
       })
@@ -174,9 +177,9 @@ ossi.grouplist = Class.create(ossi.base,{
   _openGroupHandler: function(event,button_id) {
     var self = this;
     var group_id = button_id.replace("group_id_","");
-    self.parent.case20({
+    self.parent.case27({
       groupId : group_id,
-      backCase : self.parent.case18.bind(self.parent,{
+      backCase : self.parent.case15.bind(self.parent,{
         out : true,
         backCase : self.parent.case3.bind(self.parent,{out:true}) 
       })
@@ -195,7 +198,7 @@ ossi.grouplist = Class.create(ossi.base,{
                 <div style="font-size:10px; padding:10px">\
         				  <h2>About Groups</h2>\
                   <p>Information is not yet available.</p>\
-                  <p>If you find any bugs or have some other comments about the functionalities of the groups or Ossi in general please post a comment on Ossi\'s "Features & Bugs" group, or email us at <a href="mailto:helpdesk-otasizzle@hiit.fi">helpdesk-otasizzle@hiit.fi</a>.</p>\
+                  <p>If you find any bugs or have some other comments about the functionalities of the groups or Ossi in general please post a comment on Ossi\'s "Features & Bugs" channel, or email us at <a href="mailto:helpdesk-otasizzle@hiit.fi">helpdesk-otasizzle@hiit.fi</a>.</p>\
                 </div>\
     ';
     this.parent.case6({
@@ -224,12 +227,12 @@ ossi.grouplist = Class.create(ossi.base,{
     $('groups_back_button2').onclick = function() { return }
   },
   _addLinkListeners: function() { // for dynamic buttons
-    $$('.group_button').each(function(button) {
+    $$('.channel_button').each(function(button) {
       button.onclick = this._openGroupHandler.bindAsEventListener(this,button.id);
     },this);
   },
   _removeLinkListeners: function() {
-    $$('.group_button').each(function(button) {
+    $$('.channel_button').each(function(button) {
       button.onclick = function() { return };
     },this);
   },
