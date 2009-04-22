@@ -718,8 +718,33 @@ ossi.main = Class.create(ossi.base,{
 		},options);
 		this.sub2 = this.sub1;
   	this.sub1 = new ossi.group(this, {  'hostElement' : this.mainElement,
-          	                              'groupId' : options.groupId,
-                  	                      'backCase' : options.backCase });
+        	                              'groupId' : options.groupId,
+                	                      'backCase' : options.backCase });
+    if (options.out) {
+      this.utils.out(this.sub2.pane,this.sub1.pane,function() {
+        this.sub2.destroy();
+        this.sub1.update();
+      }.bind(this));
+    } else {
+      this.utils.into(this.sub2.pane,this.sub1.pane,function() {
+        this.sub2.destroy();
+        this.sub1.update();
+      }.bind(this));
+    }
+	},
+  /**
+	* group members
+	*/
+	case28: function(options) {
+		var options = Object.extend({
+    	  out : false,
+    	  groupId : false,
+    	  backCase : false
+		},options);
+		this.sub2 = this.sub1;
+  	this.sub1 = new ossi.groupmembers(this, { 'hostElement' : this.mainElement,
+      	                                      'groupId' : options.groupId,
+              	                              'backCase' : options.backCase });
     if (options.out) {
       this.utils.out(this.sub2.pane,this.sub1.pane,function() {
         this.sub2.destroy();

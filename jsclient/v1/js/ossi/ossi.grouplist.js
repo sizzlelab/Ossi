@@ -179,7 +179,7 @@ ossi.grouplist = Class.create(ossi.base,{
     var group_id = button_id.replace("group_id_","");
     self.parent.case27({
       groupId : group_id,
-      backCase : self.parent.case15.bind(self.parent,{
+      backCase : self.parent.case25.bind(self.parent,{
         out : true,
         backCase : self.parent.case3.bind(self.parent,{out:true}) 
       })

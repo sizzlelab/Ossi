@@ -29,6 +29,7 @@ var ossi = {
                   'ossi/ossi.grouplist.js',
                   'ossi/ossi.creategroup.js',
                   'ossi/ossi.group.js',
+                  'ossi/ossi.groupmembers.js',
                   'ossi/ossi.createchannel.js',
                   'ossi/ossi.channel.js',
                   'ossi/ossi.mypost.js',
