@@ -264,6 +264,7 @@ body.widget {
   margin: 0px 0px 0px 0px;
   color: #CBD58B;
   text-align: left;
+  cursor: pointer;
 }
 
 .profile_button {
@@ -326,6 +327,14 @@ body.widget {
 .subscription_button:hover { 
   background: #fa4f00 url(../images/button_bg_hover.png) repeat-x top;
   color:#122E2E;
+}
+.post_wall:hover {
+	background-color: #222222;
+	color:#122E2E;
+/*
+	background-color: #fa4f00;
+	color:#122E2E;
+*/
 }
 
 .button_pic {

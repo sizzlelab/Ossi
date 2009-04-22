@@ -95,7 +95,7 @@ ossi.login = Class.create(ossi.base,{
         self.parent.hideLoading();
         self.parent.userId = json.user_id;
         
-        if(self.options.channelId){ // if channelId exists, go there
+        if(!Object.isUndefined(self.options.channelId) && self.options.channelId){ // if channelId exists, go there
         	self.parent.case20({
         		out : true,
         		channelId : self.options.channelId,

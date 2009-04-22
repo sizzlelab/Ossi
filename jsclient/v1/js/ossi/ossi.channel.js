@@ -13,7 +13,7 @@ ossi.channel = Class.create(ossi.base,{
       count : 7
     },options);
     this.count = this.options.count;
-    this.updateInterval = 15000;
+    this.updateInterval = 15000; //this.parent.options.refreshChannel;
     this.updateOptions = {};
     this.startIndex = 1;
     this.priv = true; // for moderator privilage check
@@ -28,9 +28,9 @@ ossi.channel = Class.create(ossi.base,{
 	*/
 	update: function() {
 		var options = Object.extend({
-      startIndex : 1,
-      count : this.count
-	  },this.updateOptions);
+			startIndex : 1,
+			count : this.count
+		},this.updateOptions);
     if (!this.options.wall && typeof(this.parent.userId) == 'undefined') return; // userId in the parent controller not set
     var self = this;
     // get contents
@@ -46,10 +46,12 @@ ossi.channel = Class.create(ossi.base,{
         if(!self.options.wall) self.parent.hideLoading();
         var json = response.responseJSON;
 
-        //for moderator privilage check
-        if (!self.options.wall && self.parent.userRole == 'moderator' && json.tags != null && json.tags.match('private') == 'private') {
-          self.priv = true;
-        } else if(!self.options.wall && self.parent.userRole == 'moderator'){
+        //for moderator privilage check. there must be userId - also now wall view, atm
+        if ((!Object.isUndefined(self.parent.userId) || !self.options.wall) &&
+          self.parent.userRole == 'moderator' && json.tags != null && json.tags.match('private') == 'private') {
+        	self.priv = true;
+        } else if((!Object.isUndefined(self.parent.userId) || !self.options.wall) &&
+          self.parent.userRole == 'moderator'){
           self.priv = false;
           self._setModeratorHTML();
           self._addModeListeners();
@@ -60,7 +62,8 @@ ossi.channel = Class.create(ossi.base,{
           if (json.entry.length > 0) {
             self._drawContents(json.entry);
             // show second back button at top of screen if more than 5 channels
-            if (!self.options.wall && json.entry.length > 5) $('channel_back_button_2_container').show();
+            if ((!Object.isUndefined(self.parent.userId) || !self.options.wall) && json.entry.length > 5)
+            	$('channel_back_button_2_container').show();
             if (options.startIndex + options.count < json.totalResults) $('channel_next_button_container').show();
             else $('channel_next_button_container').hide()
             if (options.startIndex > 1) $('channel_previous_button_container').show();
@@ -119,7 +122,7 @@ ossi.channel = Class.create(ossi.base,{
                   	</div>\
                   ';
 
-	if(!this.options.wall) { 
+	if(!Object.isUndefined(this.parent.userId)) { 
 		
 		h += '	  	<div id="add_post_button_container" class="nav_button">\
           					<a id="add_post_button" class="nav_button_text" href="javascript:void(null);">Add Post</a>\
@@ -133,7 +136,7 @@ ossi.channel = Class.create(ossi.base,{
           				<a id="channel_previous_button" class="nav_button_text" href="javascript:void(null);">Previous Page</a>\
           		  	</div>\
           		';
-	if(!this.options.wall) { 
+	if(!Object.isUndefined(this.parent.userId)) { 
 		h += '		<div id="moderator_placeholder">\
                 	</div>\
 					<div class="nav_button">\
@@ -141,7 +144,7 @@ ossi.channel = Class.create(ossi.base,{
           				</div>\
           			</div>\
           		';
-	} else {
+	} else if(Object.isUndefined(this.parent.userId) && this.options.wall) {
 		h += '		<div class="nav_button">\
           					<a id="channel_login_button" class="nav_button_text" href="javascript:void(null);">Log in</a>\
           				</div>\
@@ -331,10 +334,10 @@ ossi.channel = Class.create(ossi.base,{
     $('channel_next_button').onclick = this._nextHandler.bindAsEventListener(this);
     $('channel_previous_button').onclick = this._previousHandler.bindAsEventListener(this);
 
-	if(!this.options.wall) {
+	if(!Object.isUndefined(this.parent.userId) || !this.options.wall) {
 	    $('channel_back_button').onclick = this._backHandler.bindAsEventListener(this);
-	    $('add_post_button').onclick = this._addPostHandler.bindAsEventListener(this);
 	    $('channel_back_button2').onclick = this._backHandler.bindAsEventListener(this);
+		$('add_post_button').onclick = this._addPostHandler.bindAsEventListener(this);
 	} else {
 		$('channel_login_button').onclick = this._loginHandler.bindAsEventListener(this);
 	}
@@ -343,7 +346,7 @@ ossi.channel = Class.create(ossi.base,{
     $('channel_next_button').onclick = function() { return };
     $('channel_previous_button').onclick = function() { return };
 
-	if(!this.options.wall) {
+	if(!Object.isUndefined(this.parent.userId) || !this.options.wall) {
 	    $('channel_back_button').onclick = function() { return }
 	    $('add_post_button').onclick = function() { return }
     	$('channel_back_button2').onclick = function() { return }
@@ -357,14 +360,26 @@ ossi.channel = Class.create(ossi.base,{
 	}
   },
   _addLinkListeners: function() { // for dynamic buttons
-    $$('.post_button').each(function(button) {
-      button.onclick = this._openPostHandler.bindAsEventListener(this,button.id);
-    },this);
+  	if(!Object.isUndefined(this.parent.userId) && !this.options.wall){
+	    $$('.post_button').each(function(button) {
+	      button.onclick = this._openPostHandler.bindAsEventListener(this,button.id);
+	    },this);
+  	} else if(!Object.isUndefined(this.parent.userId)){
+	    $$('.post_wall').each(function(button) {
+	      button.onclick = this._openPostHandler.bindAsEventListener(this,button.id);
+	    },this);  		
+  	}
   },
   _removeLinkListeners: function() {
-    $$('.post_button').each(function(button) {
-      button.onclick = function() { return };
-    },this);
+  	if(!Object.isUndefined(this.parent.userId) && !this.options.wall){
+	    $$('.post_button').each(function(button) {
+	      button.onclick = function() { return };
+	    },this);
+  	} else if(!Object.isUndefined(this.parent.userId)) {
+	    $$('.post_wall').each(function(button) {
+	      button.onclick = function() { return };
+	    },this);
+  	}
   },
   _resetInterval: function() {
     if (this.options.selfUpdate) {

@@ -537,10 +537,11 @@ ossi.main = Class.create(ossi.base,{
     	  backCase : false
 		},options);
 		this.sub2 = this.sub1;
-    	this.sub1 = new ossi.channel(this, {  'hostElement' : this.mainElement,
+    	this.sub1 = new ossi.channel(this, {'hostElement' : this.mainElement,
                                             'selfUpdate' : true,
-            	                              'channelId' : options.channelId,
-                    	                      'backCase' : options.backCase
+            	                           	'channelId' : options.channelId,
+								            'wall' : this.options.wall,
+                    	                  	'backCase' : options.backCase
 											});
 		if(options.start) {
 			this.sub1.pane.show();
@@ -652,15 +653,12 @@ ossi.main = Class.create(ossi.base,{
 		},options);
     this.sub1 = new ossi.channel(this, {	'hostElement' : this.mainElement,
 											'wall' : true,
+											'selfUpdate' : true,
 											'count' : 7,
 											'channelId' : options.channelId
 										});
 	this.sub1.pane.show();
-	
-//	this.sub1.update();
-	//if refresh is passed use timer
-	if(this.options.refreshChannel)	this._timer4wall(this.sub1);
-	else this.sub1.update();
+	this.sub1.update();
 
 	},
 	/**
@@ -759,16 +757,6 @@ ossi.main = Class.create(ossi.base,{
         this.sub1.update();
       }.bind(this));
     }
-	},
-	/**
-	* update function for wall. refreshrate is passed to ossi.main with refreshChannel-parameter
-	*/
-	_timer4wall: function(c){
-		this.sub1.update();
-          //self._timer4wall(self);
-		setTimeout(function(c) {
-			if(c == this.sub1) this._timer4wall(c);
-        }.bind(this, c), this.options.refreshChannel);
 	},
 
 	/**
