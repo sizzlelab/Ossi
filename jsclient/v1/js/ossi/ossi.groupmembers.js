@@ -6,10 +6,15 @@ ossi.groupmembers = Class.create(ossi.base,{
     this.parent = parent;
 		this.options = Object.extend({
       groupId : false,
+      selfUpdate : false,
       hostElement : false
 	  },options);
+    this.updateInterval = 10000;
 	  this.pane = false;
     this._draw();
+    if (this.options.selfUpdate) {
+      this.interval = setInterval(this.update.bind(this), this.updateInterval);
+    }
 	},
 	/**
 	* _update
@@ -59,25 +64,7 @@ ossi.groupmembers = Class.create(ossi.base,{
           }
         } else {
           $('friends_placeholder').replace('<div style="padding:10px; text-align:center">Error occurred. Try again later.</div>');
-          $('add_friend_button_container').hide();
         }
-        
-        // now check if any pending friend requests
-        URL = BASE_URL+'/people/'+self.parent.userId+'/@pending_friend_requests'
-        new Ajax.Request(URL,{
-          method : 'get',
-          requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
-          onSuccess : function(response) {
-            var json = response.responseJSON;
-            if (json.entry.length > 0) {
-              $('new_friend_requests_button_container').show();
-              $('new_friend_requests_button').update(json.entry.length+' New Friend Requests!')
-            }
-            setTimeout(function() {
-              self.parent.hideLoading();
-            }, 600);
-          }
-        });
       }
     });
 	},
@@ -100,9 +87,6 @@ ossi.groupmembers = Class.create(ossi.base,{
                   </div>\
           				<div id="new_friend_requests_button_container" class="nav_button" style="display:none;">\
           					<a id="new_friend_requests_button" class="nav_button_text" href="javascript:void(null);"></a>\
-          				</div>\
-          				<div id="add_friend_button_container" class="nav_button">\
-          					<a id="add_friend_button" class="nav_button_text" href="javascript:void(null);">Find Friends</a>\
           				</div>\
           				<div class="nav_button">\
           					<a id="friend_list_back_button" class="nav_button_text" href="javascript:void(null);">Back</a>\
@@ -169,13 +153,11 @@ ossi.groupmembers = Class.create(ossi.base,{
     $('new_friend_requests_button').onclick = this._friendRequestsHandler.bindAsEventListener(this);
     $('friend_list_back_button').onclick = this._backHandler.bindAsEventListener(this);
     $('friend_list_back_button2').onclick = this._backHandler.bindAsEventListener(this);
-    $('add_friend_button').onclick = this._addFriendHandler.bindAsEventListener(this);
   },
   _removeListeners: function() {
     $('new_friend_requests_button').onclick = function() { return };
     $('friend_list_back_button').onclick = function() { return };
     $('friend_list_back_button2').onclick = function() { return };
-    $('add_friend_button').onclick = function() { return };
   },
   _addLinkListeners: function() { // for dynamic buttons
     $$('.profile_button').each(function(button) {
@@ -188,6 +170,9 @@ ossi.groupmembers = Class.create(ossi.base,{
     },this);
   },
   destroy: function () {
+    if (this.options.selfUpdate) {
+      clearInterval(this.interval);
+    }
     this._removeListeners();
     this._removeLinkListeners();
     this.pane.remove();

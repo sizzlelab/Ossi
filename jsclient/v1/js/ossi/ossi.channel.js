@@ -7,15 +7,20 @@ ossi.channel = Class.create(ossi.base,{
     this.options = Object.extend({
       hostElement : false,
       channelId : false,
+      selfUpdate : false,
       wall : false,
       startIndex : 1,
       count : 7
     },options);
     this.count = this.options.count;
+    this.updateInterval = 10000; // 10 seconds
     this.startIndex = 1;
     this.priv = true; // for moderator privilage check
     this.pane = false;
     this._draw();
+    if (this.options.selfUpdate) {
+      this.interval = setInterval(this.update.bind(this), this.updateInterval);
+    }
 	},
 	/**
 	* _update
@@ -190,7 +195,7 @@ ossi.channel = Class.create(ossi.base,{
           				<div class="post_button" id="post_id_'+post.id+'">\
                     <div class="post_button_left_column">\
                     	<img style="margin:2px 0px 0px 2px; border:solid #eee 1px;"\
-                    	src="'+BASE_URL+'/people/'+post.updated_by+'/@avatar/small_thumbnail?'+Math.random()*9999+'"\
+                    	src="'+BASE_URL+'/people/'+post.updated_by+'/@avatar/small_thumbnail"\
                     	width="50" height="50" border="0" />\
                     	</div>\
                     <div class="post_button_text">\
@@ -359,6 +364,9 @@ ossi.channel = Class.create(ossi.base,{
     },this);
   },
   destroy: function () {
+    if (this.options.selfUpdate) {
+      clearInterval(this.interval);
+    }
     this._removeListeners();
     this._removeLinkListeners();
     this.pane.remove();

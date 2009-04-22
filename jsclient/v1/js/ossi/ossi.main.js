@@ -537,6 +537,7 @@ ossi.main = Class.create(ossi.base,{
 		},options);
 		this.sub2 = this.sub1;
     	this.sub1 = new ossi.channel(this, {  'hostElement' : this.mainElement,
+                                            'selfUpdate' : true,
             	                              'channelId' : options.channelId,
                     	                      'backCase' : options.backCase
 											});
@@ -743,6 +744,7 @@ ossi.main = Class.create(ossi.base,{
 		},options);
 		this.sub2 = this.sub1;
   	this.sub1 = new ossi.groupmembers(this, { 'hostElement' : this.mainElement,
+      	                                      'selfUpdate' : true,
       	                                      'groupId' : options.groupId,
               	                              'backCase' : options.backCase });
     if (options.out) {

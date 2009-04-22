@@ -40,6 +40,14 @@ ossi.myprofile = Class.create(ossi.base,{
               break;
           }
         }
+        
+        // for wappu experiment
+        if (! Object.isUndefined(json.username)) {
+          if (json.username == 'wappu') {
+            $('password_container').hide();
+          }
+        }
+        
         if (typeof(json.birthdate) != 'undefined') {
           if (json.birthdate != null) {
             var dob = json.birthdate.split('-');
@@ -143,10 +151,12 @@ ossi.myprofile = Class.create(ossi.base,{
                               <option value="">------</option>\
                   					</select>\
                           </dd>\
-                        <dt style="color:#666; margin:0px 0px 5px 0px;">Password:</dt>\
-                          <dd style=" margin:0px 0px 10px 15px;"><input id="profile_password" class="myprofile_input" maxlength="30" name="profile_password" type="password"/></dd>\
-                        <dt style="color:#666; margin:0px 0px 5px 0px;">Confirm password:</dt>\
-                          <dd style=" margin:0px 0px 10px 15px;"><input id="profile_password_confirm" class="myprofile_input" maxlength="30" name="profile_password_confirm" type="password"/></dd>\
+                        <div id="password_container">\
+                          <dt style="color:#666; margin:0px 0px 5px 0px;">Password:</dt>\
+                            <dd style=" margin:0px 0px 10px 15px;"><input id="profile_password" class="myprofile_input" maxlength="30" name="profile_password" type="password"/></dd>\
+                          <dt style="color:#666; margin:0px 0px 5px 0px;">Confirm password:</dt>\
+                            <dd style=" margin:0px 0px 10px 15px;"><input id="profile_password_confirm" class="myprofile_input" maxlength="30" name="profile_password_confirm" type="password"/></dd>\
+                        </div>\
                       </dl>\
             				</div>\
             				<div style="height:14px"></div>\
