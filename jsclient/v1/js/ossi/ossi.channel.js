@@ -13,25 +13,24 @@ ossi.channel = Class.create(ossi.base,{
       count : 7
     },options);
     this.count = this.options.count;
-    this.updateInterval = 10000; // 10 seconds
+    this.updateInterval = 15000;
+    this.updateOptions = {};
     this.startIndex = 1;
     this.priv = true; // for moderator privilage check
     this.pane = false;
     this._draw();
-    if (this.options.selfUpdate) {
-      this.interval = setInterval(this.update.bind(this), this.updateInterval);
-    }
+    this._resetInterval(); // this resets the intervalled update call, if selfUpdate is enabled
 	},
 	/**
 	* _update
 	*
 	* does not handle XHR failure yet!
 	*/
-	update: function(options) {
+	update: function() {
 		var options = Object.extend({
       startIndex : 1,
       count : this.count
-	  },options);
+	  },this.updateOptions);
     if (!this.options.wall && typeof(this.parent.userId) == 'undefined') return; // userId in the parent controller not set
     var self = this;
     // get contents
@@ -261,11 +260,15 @@ ossi.channel = Class.create(ossi.base,{
     this.options.backCase.apply();
   },
   _nextHandler: function() {
-    this.update({ 'startIndex' : this.startIndex+this.count, 'count' : this.count });
+    this.updateOptions = { 'startIndex' : this.startIndex+this.count, 'count' : this.count };
+    this.update();
+    this._resetInterval(); // reset the interval as we just updated
     this.startIndex += this.count;
   },
   _previousHandler: function() {
-    this.update({ 'startIndex' : this.startIndex-this.count, 'count' : this.count });
+    this.updateOptions = { 'startIndex' : this.startIndex-this.count, 'count' : this.count };
+    this.update();
+    this._resetInterval(); // reset the interval as we just updated
     this.startIndex -= this.count;
   },
   _addPostHandler: function() {
@@ -362,6 +365,12 @@ ossi.channel = Class.create(ossi.base,{
     $$('.post_button').each(function(button) {
       button.onclick = function() { return };
     },this);
+  },
+  _resetInterval: function() {
+    if (this.options.selfUpdate) {
+      clearInterval(this.interval);
+      this.interval = setInterval(this.update.bind(this), this.updateInterval);
+    }
   },
   destroy: function () {
     if (this.options.selfUpdate) {

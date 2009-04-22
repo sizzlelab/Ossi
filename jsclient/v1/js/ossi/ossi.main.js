@@ -490,6 +490,7 @@ ossi.main = Class.create(ossi.base,{
 
     this.sub2 = this.sub1;
     this.sub1 = new ossi.channellist(this, {  'hostElement' : this.mainElement,
+                                              'selfUpdate' : true,
                                               'backCase' : options.backCase});
     if (options.out) {
       this.utils.out(this.sub2.pane,this.sub1.pane,function() {

@@ -5,23 +5,27 @@ ossi.channellist = Class.create(ossi.base,{
 	initialize: function(parent,options) {
     this.parent = parent;
 		this.options = Object.extend({
+      selfUpdate : false,
       hostElement : false
 	  },options);
+    this.updateInterval = 15000;
+    this.updateOptions = {};
     this.count = 8;
 	  this.startIndex = 1;
 	  this.pane = false;
     this._draw();
+    this._resetInterval(); // this resets the intervalled update call, if selfUpdate is enabled
 	},
 	/**
 	* _update
 	*
 	* does not handle XHR failure yet!
 	*/
-	update: function(options) {
+	update: function() {
 		var options = Object.extend({
       startIndex : 1,
       count : this.count
-	  },options);
+	  },this.updateOptions);
     if (typeof(this.parent.userId) == 'undefined') return; // userId in the parent controller not set
     if (typeof(this.parent.channelsId) == 'undefined') return; // userId in the parent controller not set
     var self = this;
@@ -184,11 +188,15 @@ ossi.channellist = Class.create(ossi.base,{
     });
   },
   _nextHandler: function() {
-    this.update({ 'startIndex' : this.startIndex+this.count, 'count' : this.count });
+    this.updateOptions = { 'startIndex' : this.startIndex+this.count, 'count' : this.count };
+    this.update();
+    this._resetInterval(); // reset the interval as we just updated
     this.startIndex += this.count;
   },
   _previousHandler: function() {
-    this.update({ 'startIndex' : this.startIndex-this.count, 'count' : this.count });
+    this.updateOptions = { 'startIndex' : this.startIndex-this.count, 'count' : this.count };
+    this.update();
+    this._resetInterval(); // reset the interval as we just updated
     this.startIndex -= this.count;
   },
   _aboutChannelsHandler: function() {
@@ -234,7 +242,16 @@ ossi.channellist = Class.create(ossi.base,{
       button.onclick = function() { return };
     },this);
   },
+  _resetInterval: function() {
+    if (this.options.selfUpdate) {
+      clearInterval(this.interval);
+      this.interval = setInterval(this.update.bind(this), this.updateInterval);
+    }
+  },
   destroy: function () {
+    if (this.options.selfUpdate) {
+      clearInterval(this.interval);
+    }
     this._removeListeners();
     this._removeLinkListeners();
     this.pane.remove();
