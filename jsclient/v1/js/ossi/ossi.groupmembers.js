@@ -9,12 +9,10 @@ ossi.groupmembers = Class.create(ossi.base,{
       selfUpdate : false,
       hostElement : false
 	  },options);
-    this.updateInterval = 10000;
+    this.updateInterval = 15000;
 	  this.pane = false;
     this._draw();
-    if (this.options.selfUpdate) {
-      this.interval = setInterval(this.update.bind(this), this.updateInterval);
-    }
+    this._resetInterval(); // this resets the intervalled update call, if selfUpdate is enabled
 	},
 	/**
 	* _update
@@ -168,6 +166,12 @@ ossi.groupmembers = Class.create(ossi.base,{
     $$('.profile_button').each(function(button) {
       button.onclick = function() { return };
     },this);
+  },
+  _resetInterval: function() {
+    if (this.options.selfUpdate) {
+      clearInterval(this.interval);
+      this.interval = setInterval(this.update.bind(this), this.updateInterval);
+    }
   },
   destroy: function () {
     if (this.options.selfUpdate) {
