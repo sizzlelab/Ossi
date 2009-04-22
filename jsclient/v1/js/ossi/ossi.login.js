@@ -152,7 +152,7 @@ ossi.login = Class.create(ossi.base,{
           requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
           onSuccess : function() {
             self.parent.sessionCookie = false;
-            self._loginHandler();
+            self._wappuHandler();
           },
           onFailure : function() {
             self.parent.hideLoading();
