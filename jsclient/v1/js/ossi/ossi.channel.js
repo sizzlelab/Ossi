@@ -215,15 +215,15 @@ ossi.channel = Class.create(ossi.base,{
 
 	    var h =   '\
           		<div class="post_wall" id="post_id_'+post.id+'">\
-                    <div class="post_button_left_column">\
+                    <div class="wall_post_button_left_column">\
                     	<img style="margin:2px 0px 0px 2px; border:solid #eee 1px;"\
                     	src="'+BASE_URL+'/people/'+post.updated_by+'/@avatar/small_thumbnail"\
                     	width="50" height="50" border="0" />\
                     </div>\
                     <div  style="height:55px; float:left;">&nbsp;</div>\
-                    <div class="post_button_text">\
-        						  <div class="button_title"><a href="javascript:void(null);">'+message_stub+'</a></div>\
-        						  <div class="button_subtitle_text" style="padding-top:3px">'+author_string+' '+updated_text+'</div>\
+                    <div class="wall_post_button_text">\
+        						  <div class="wall_button_title"><a href="javascript:void(null);">'+message_stub+'</a></div>\
+        						  <div class="wall_button_subtitle_text" style="padding-top:3px">'+author_string+' '+updated_text+'</div>\
                     </div><div style="clear:both;"></div>\
           		</div>\
           			';

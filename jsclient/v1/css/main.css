@@ -257,7 +257,8 @@ body.widget {
   text-align: left;
   cursor: pointer;
 }
-.post_wall {
+
+/*.post_wall {
   position:relative;
   border: solid 1px black;
   border-bottom: solid 1px #150900;
@@ -266,7 +267,7 @@ body.widget {
   text-align: left;
   cursor: pointer;
 }
-
+*/
 .profile_button {
   position:relative;
   border: solid 1px black;
@@ -328,14 +329,15 @@ body.widget {
   background: #fa4f00 url(../images/button_bg_hover.png) repeat-x top;
   color:#122E2E;
 }
-.post_wall:hover {
+/*.post_wall:hover {
 	background-color: #222222;
 	color:#122E2E;
-/*
+/ *
 	background-color: #fa4f00;
 	color:#122E2E;
-*/
+* /
 }
+*/
 
 .button_pic {
   #width:50px;

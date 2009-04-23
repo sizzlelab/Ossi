@@ -17,17 +17,33 @@
 			if( results == null ) return "";
 			else return results[1];
 		}
+		function loadCSS(cssFile) {
+			var s = cssFile
+			if(s == '') s = 'css/ossiWallStyles.css';
+			var headID = document.getElementsByTagName("head")[0];         
+			var cssNode = document.createElement('link');
+			cssNode.type = 'text/css';
+			cssNode.rel = 'stylesheet';
+			cssNode.href = s;
+			cssNode.media = 'screen';
+			headID.appendChild(cssNode);
+		}
+		
 /* this one fires too early
 			document.observe("dom:loaded", function() {
 				alert('dom loaded event');
 				new ossi.main();
 			});
 */
-//			window.onload = function() { new ossi.main(); };
 			var channelId = gup('channel');
 			var wall = gup('wall');
 			var refresh = gup('refresh');
-			var postcount = gup('pc');
+			var styles = gup('css');
+			if(wall != ''){
+				loadCSS(styles);
+			}
+//			var postcount = gup('pc');
+			
 			window.onload = function() {
 				new ossi.main({	'channelId' : (channelId != '') ? channelId : false, 
 								'wall' : (wall != '') ? true : false,
@@ -41,6 +57,7 @@
 			}
 */
 		</script>
+		<style></style>
 	</head>
 	<body>
 		<div id="splash_screen" style="position:absolute; top:0px; left:0px; width:100%; height:100%; background:#000; z-index:999">
