@@ -103,6 +103,9 @@ ossi.login = Class.create(ossi.base,{
 				var json = response.responseJSON;
 				var name = (json.name != null) ? json.name['unstructured'] : json.username; // if name has not been set
 				self.parent.userName = name;
+				if (typeof(json.role)  != 'undefined' && json.role != null){
+					self.parent.userRole = json.role;
+				}
 			},
 			onFailure : function() {
 				self.parent.hideLoading();
@@ -186,8 +189,27 @@ ossi.login = Class.create(ossi.base,{
       onSuccess : function(response) {
         var json = response.responseJSON;
         self.parent.sessionCookie = self.parent.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
-        self.parent.hideLoading();
         self.parent.userId = json.user_id;
+
+		// we also need name for that id
+		var URL = BASE_URL+'/people/'+self.parent.userId+'/@self';
+		new Ajax.Request(URL, {
+			method : 'get',
+			requestHeaders : (client.is_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
+			onSuccess : function(response) {
+				var json = response.responseJSON;
+				var name = (json.name != null) ? json.name['unstructured'] : json.username; // if name has not been set
+				self.parent.userName = name;
+			},
+			onFailure : function() {
+				self.parent.hideLoading();
+				self.parent.case6({
+					backCase : self.parent.case3.bind(self.parent,{out:true}),
+				});
+			}
+		});
+
+		self.parent.hideLoading();
         
         if(self.options.channelId){ // if channelId exists, go there
         	self.parent.case20({

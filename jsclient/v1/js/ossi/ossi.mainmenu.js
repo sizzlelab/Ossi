@@ -128,7 +128,11 @@ ossi.mainmenu = Class.create(ossi.base,{
       requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
       onSuccess : function() {
         self.parent.sessionCookie = false;
+
         delete self.parent.userId; //deleted so that attribute could be indicator of valid session.
+        delete self.parent.userName; 
+        delete self.parent.userRole;
+
         self.parent.loadingpane.hide();
   	    self.parent.case1({out : true});
       },
