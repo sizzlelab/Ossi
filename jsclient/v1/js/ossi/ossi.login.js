@@ -95,8 +95,7 @@ ossi.login = Class.create(ossi.base,{
         self.parent.userId = json.user_id;
 
 		// we also need name for that id
-		var URL = BASE_URL+'/people/'+self.parent.userId+'/@self';
-		new Ajax.Request(URL, {
+		new Ajax.Request(BASE_URL+'/people/'+self.parent.userId+'/@self', {
 			method : 'get',
 			requestHeaders : (client.is_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
 			onSuccess : function(response) {
@@ -109,9 +108,7 @@ ossi.login = Class.create(ossi.base,{
 			},
 			onFailure : function() {
 				self.parent.hideLoading();
-				self.parent.case6({
-					backCase : self.parent.case3.bind(self.parent,{out:true}),
-				});
+				self.parent.case3();
 			}
 		});
 
@@ -192,8 +189,7 @@ ossi.login = Class.create(ossi.base,{
         self.parent.userId = json.user_id;
 
 		// we also need name for that id
-		var URL = BASE_URL+'/people/'+self.parent.userId+'/@self';
-		new Ajax.Request(URL, {
+		new Ajax.Request(BASE_URL+'/people/'+self.parent.userId+'/@self', {
 			method : 'get',
 			requestHeaders : (client.is_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
 			onSuccess : function(response) {
@@ -203,9 +199,7 @@ ossi.login = Class.create(ossi.base,{
 			},
 			onFailure : function() {
 				self.parent.hideLoading();
-				self.parent.case6({
-					backCase : self.parent.case3.bind(self.parent,{out:true}),
-				});
+				self.parent.case3();
 			}
 		});
 
