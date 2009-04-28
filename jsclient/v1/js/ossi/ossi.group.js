@@ -17,7 +17,6 @@ ossi.group = Class.create(ossi.base,{
 	* does not handle XHR failure yet!
 	*/
 	update: function() {
-    if (typeof(this.parent.userId) == 'undefined') return; // userId in the parent controller not set
     var self = this;
     var URL = BASE_URL+'/groups/'+this.options.groupId;
     self.parent.showLoading();
@@ -87,8 +86,35 @@ ossi.group = Class.create(ossi.base,{
     return h;
   },
   _joinHandler: function() {
-    alert('join');
-    return;
+    var self = this;
+    if (typeof(this.parent.userId) == 'undefined') return; // userId in the parent controller not set
+    var URL = BASE_URL+'/people/'+this.parent.userId+'/@groups';
+    var params = { group_id : this.options.groupId };
+    self.parent.showLoading();
+    new Ajax.Request(URL, {
+      method : 'post',
+      parameters : params,
+      requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
+      onSuccess : function(response) { // does not handle invalid responses
+        var json = response.responseJSON;
+        self.parent.case6({
+          message : "You have successfully joined this group!",
+          buttonText : "Back",
+          backCase:self.parent.case27.bind(self.parent,{
+            groupId : self.options.groupId,
+            out:true,
+            backCase:self.parent.case25.bind(self.parent,{
+              out:true,
+              backCase:self.parent.case3.bind(self.parent,{out:true})
+            })
+          })
+        });
+        self.parent.hideLoading();
+      },
+      onFailure : function() {
+        alert('could not add user to group!');
+      }
+    });
   },
   _backHandler: function() {
     this.options.backCase.apply();
