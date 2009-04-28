@@ -14,6 +14,7 @@ ossi.main = Class.create(ossi.base,{
     WIDGET_VIEWPORT = { height : 428, width : 313 }; // set these to same values as for #content_area.widget in main.css
     this.mainElement = $('content_area'); // hardcoded for now
     this.channelsId = 'd8-W0MMEir3yhJaaWPEYjL'; // hardcoded id on alpha.sizl.org!
+//    this.channelsId = 'bzFvEETj8r3yz7aaWPfx7J'; // hardcoded id on alpha.sizl.org!
     this.sub1 = false; // pointers for case classes
     this.sub2 = false; // pointers for case classes
     this.sessionCookie = false; // for widget's cookie
