@@ -67,7 +67,7 @@ body.widget {
   left:0px;
   width:100%;
   font-weight:bold;
-  background: #fa4f00;
+  background: #fc7e17;
   padding:7px 7px 7px 20px;
   border-bottom: 2px solid #fff;
   color: #fff;
@@ -221,7 +221,7 @@ body.widget {
 
 
 .nav_button:hover { 
-  background: #fa4f00 url(../images/button_bg_hover.png) repeat-x top;
+  background: #fc7e17 url(../images/button_bg_hover.png) repeat-x top;
   color:#122E2E;
 }
 
@@ -311,29 +311,29 @@ body.widget {
 }
 
 .button:hover, .channel_button:hover, .post_button:hover, .profile_button:hover { 
-  background: #fa4f00 url(../images/button_bg_hover.png) repeat-x top;
+  background: #fc7e17 url(../images/button_bg_hover.png) repeat-x top;
   color:#122E2E;
 }
 
 .message_button:hover { 
-  background: #fa4f00 url(../images/button_bg_hover.png) repeat-x top;
+  background: #fc7e17 url(../images/button_bg_hover.png) repeat-x top;
   color:#122E2E;
 }
 
 .my_status_button:hover { 
-  background: #fa4f00 url(../images/button_bg_hover.png) repeat-x top;
+  background: #fc7e17 url(../images/button_bg_hover.png) repeat-x top;
   color:#122E2E;
 }
 
 .subscription_button:hover { 
-  background: #fa4f00 url(../images/button_bg_hover.png) repeat-x top;
+  background: #fc7e17 url(../images/button_bg_hover.png) repeat-x top;
   color:#122E2E;
 }
 /*.post_wall:hover {
 	background-color: #222222;
 	color:#122E2E;
 / *
-	background-color: #fa4f00;
+	background-color: #fc7e17;
 	color:#122E2E;
 * /
 }
