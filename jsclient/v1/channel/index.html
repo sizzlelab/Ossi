@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+	<head>
+		<meta name="navigation" content="tabbed">
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>Ossi</title>
+		<link type="text/css" rel="stylesheet" href="../css/main.css" />
+		<script language="Javascript" src="../js/bootstrap.js"></script>
+		<script language="Javascript">
+  		function gup( name ) {
+  			name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+  			var regexS = "[\\?&]"+name+"=([^&#]*)";
+  			var regex = new RegExp( regexS );
+  			var results = regex.exec( window.location.href);
+  			if( results == null ) return "";
+  			else return results[1];
+  		}
+
+  		function loadCSS(cssFile) {
+  			var s = cssFile
+  			if(s == '') s = '../css/ossiWallStyles.css';
+  			var headID = document.getElementsByTagName("head")[0];         
+  			var cssNode = document.createElement('link');
+  			cssNode.type = 'text/css';
+  			cssNode.rel = 'stylesheet';
+  			cssNode.href = s;
+  			cssNode.media = 'screen';
+  			headID.appendChild(cssNode);
+  		}
+		
+			var channelId = hex_md5(gup('channel')).substr(0,22);
+//			var wall = gup('wall');
+			var refresh = gup('refresh');
+			var styles = gup('css');
+			loadCSS(styles);
+//			var postcount = gup('pc');
+			
+			window.onload = function() {
+				new ossi.main({ 'channelId' : (channelId != '') ? channelId : false, 
+								        'wall' : true,
+								        'refreshChannel' : (refresh != '') ? refresh : false}); 
+			};
+			
+		</script>
+		<style></style>
+	</head>
+	<body>
+		<div id="splash_screen" style="position:absolute; top:0px; left:0px; width:100%; height:100%; background:#000; z-index:999">
+			<div id="loading_logo"></div>
+			<div id="loading_text">loading ...</div>
+		</div>
+		<div id="loading" style="display:none">
+		</div>
+		<div id="content_area"></div>
+	</body>
+</html>

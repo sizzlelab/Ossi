@@ -202,7 +202,7 @@ ossi.channel = Class.create(ossi.base,{
     return h;
   },
   _getButtonHTML: function(post) {
-    var anonymous_icon = 'images/icons/standard/001_54.png';
+    var anonymous_icon = '../images/icons/standard/001_54.png'; // FIX THIS! SHOULD NOT BE RELATIVE PATH!
     var updated_text = '';
     if (post.updated_at != 'undefined') {
       if (post.updated_at != null) {
