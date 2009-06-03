@@ -30,7 +30,7 @@ ossi.mypost = Class.create(ossi.base,{
           var json = response.responseJSON;
           if (typeof(json.entry) != 'undefined') {
             $('post_message').value = "[quote]" + self._parseBBCode(json.metadata.body) + "[/quote]\n" + $('post_message').value;
-            self.replyToUserName = json.updated_by_name; // save user id into instance
+            self.replyToUserName = (json.owner != null) ? json.updated_by_name : 'Anonymous'; // save user id into instance
             setTimeout(function() { $('mypost_form').focusFirstElement() },500); // .delay() did not seem to work on Firefox
           }
         }

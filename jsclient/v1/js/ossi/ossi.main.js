@@ -3,18 +3,15 @@
 */
 ossi.main = Class.create(ossi.base,{
 	initialize: function(options) {
-	this.options = Object.extend({
+	  this.options = Object.extend({
       channelId : false,
       refreshChannel : false,
       wall : false
     },options);
-
-//this.options = {'channelId' : 'btO622SxGr3Ai_aaWPEYjL'};
-
     WIDGET_VIEWPORT = { height : 428, width : 313 }; // set these to same values as for #content_area.widget in main.css
     this.mainElement = $('content_area'); // hardcoded for now
     this.channelsId = 'd8-W0MMEir3yhJaaWPEYjL'; // hardcoded id on alpha.sizl.org!
-//    this.channelsId = 'bzFvEETj8r3yz7aaWPfx7J'; // hardcoded id on alpha.sizl.org!
+//    this.channelsId = 'bzFvEETj8r3yz7aaWPfx7J'; // hardcoded id on beta.sizl.org!
     this.sub1 = false; // pointers for case classes
     this.sub2 = false; // pointers for case classes
     this.sessionCookie = false; // for widget's cookie
@@ -28,7 +25,7 @@ ossi.main = Class.create(ossi.base,{
     BASE_URL = (client.is_widget) ? 'http://cos.alpha.sizl.org' : '/cos'; // where to go asking for COS
     MAX_REQUEST_LENGTH = 20; // in seconds
     this.tmp = []; // for timers etc. May be deleted at any time.
-	this.case1(); // go to first use case
+	  this.case1(); // go to first use case
 	},
 		/**
 	* application start
@@ -38,31 +35,31 @@ ossi.main = Class.create(ossi.base,{
 		var options = Object.extend({
 			out : false
 		},options);
-	    this.splash.hide();
-	    this.mainElement.update('');
-	  	this.mainElement.show();
-	  	this.mainElement.makeClipping(); // make clipping for main element
-	    this.showLoading();
+    this.splash.hide();
+    this.mainElement.update('');
+  	this.mainElement.show();
+  	this.mainElement.makeClipping(); // make clipping for main element
+    this.showLoading();
 
-	    // first do a POST to /session to get cookie info for widget
-	    // i.e. logging in without user
-	    var params =  { app_name : 'ossi',
-	                    app_password : 'Z0ks51r'
-	                  };
-	    new Ajax.Request(BASE_URL+'/session', {
-		      method : 'post',
-		      parameters : params,
-		      on409 : function(response) { // server returns 409 error, meaning session already exists
-	//        self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
-		        self._case1b();
-		      },
-		      onSuccess : function(response) {
-		//        self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
-		        self._case1b();
-		      },
-		      onFailure : function(response) {
-		        this.case2({start : true}); // call login
-		      }
+    // first do a POST to /session to get cookie info for widget
+    // i.e. logging in without user
+    var params =  { app_name : 'ossi',
+                    app_password : 'Z0ks51r'
+                  };
+    new Ajax.Request(BASE_URL+'/session', {
+      method : 'post',
+      parameters : params,
+      on409 : function(response) { // server returns 409 error, meaning session already exists
+//        self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
+        self._case1b();
+      },
+      onSuccess : function(response) {
+//        self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
+        self._case1b();
+      },
+      onFailure : function(response) {
+        this.case2({start : true}); // call login
+      }
 		});
 	},
 	/**
@@ -87,6 +84,7 @@ ossi.main = Class.create(ossi.base,{
   * called only from _case1b
   */
   _case1c: function(response) {
+    var self = this;
     this.hideLoading();
     var json = Object.extend({
       user_id : null,
@@ -94,16 +92,30 @@ ossi.main = Class.create(ossi.base,{
     },response.responseJSON);
 	  if (json.user_id != null) {
   		this.userId = json.user_id;
-  		if (this.options.channelId) { //go to specified channel
-  			this.case20({start : true, channelId : this.options.channelId,
-  				backCase : this.case18.bind(this,{ out : true, backCase : this.case3.bind(this,{out:true})
-  				})
-  			});
-  		} else { // go to main
-  			this.case3({start : true});
-  		}
+  		// get username here instead of mainmenu or channel or whatever
+  		new Ajax.Request(BASE_URL+'/people/'+this.userId+'/@self', {
+  			method : 'get',
+  			requestHeaders : (client.is_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
+  			onSuccess : function(response) {
+  				var json = response.responseJSON;
+  				self.userName = (json.name != null) ? json.name['unstructured'] : json.username;
+  				if (typeof(json.role)  != 'undefined' && json.role != null) {
+  					self.userRole = json.role;
+  				}
+      		if (self.options.channelId) { //go to specified channel
+      			self.case20({start : true, channelId : self.options.channelId,
+      				backCase : self.case18.bind(self,{ out : true, backCase : self.case3.bind(self,{out:true})
+      				})
+      			});
+      		} else { // go to main
+      			self.case3({start : true});
+      		}
+  			}
+  		});
     } else { // user not identified
-  		if(this.options.channelId && this.options.wall) { 
+      this.userId = false;
+      this.userName = 'Anonymous';
+  		if (this.options.channelId && this.options.wall) { 
   			this.case24({channelId : this.options.channelId }); // go to wall
   		} else if(this.options.channelId && !this.options.wall) {
   			this.case2({start : true, channelId : this.options.channelId}); // go to login and then channel
@@ -794,7 +806,7 @@ ossi.main = Class.create(ossi.base,{
     if (this.sessionCookie) this.sessionCookie = false;
     this.hideLoading();
     this.case6({
-      message : "We were unable to connect to Common Services. You may have lost network connectivity. Please try again later!",
+      message : "There has been an error within Common Services, or Ossi has been unable to reach Common Services. You may have lost network connectivity. Please try again later!",
       buttonText : "Restart application",
       backCase: function() { window.location.reload(); }.bind(self)
     });

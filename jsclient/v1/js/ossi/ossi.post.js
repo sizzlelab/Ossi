@@ -62,12 +62,14 @@ ossi.post = Class.create(ossi.base,{
           }
           var author_string = (typeof(json.metadata.author) != 'undefined') ? '<span style="color:#C0C0C0">Posted by</span> '+json.metadata.author+'' : '';
 
-          $('post_avatar').update('<img src="'+BASE_URL+'/people/'+json.updated_by+'/@avatar/small_thumbnail" width="50" height="50" border="0" />');
+          var avatar_src = (json.owner == null) ? 'images/icons/standard/001_54.png' : BASE_URL+'/people/'+json.updated_by+'/@avatar/small_thumbnail';
+          $('post_avatar').update('<img src="'+avatar_src+'" width="50" height="50" border="0" />');
           $('post_author_text').update(author_string);
           $('post_updated_text').update('Updated '+updated_text);
           $('post_content').update(self._parseBBCode(json.metadata.body));
-          if (typeof(json.metadata.author) != 'undefined') {
+          if (typeof(json.metadata.author) != 'undefined' && json.owner != null) {
             $('post_profile_button').update(json.metadata.author+'\'s profile');
+            $('post_profile_button_container').show();
           }
           self.userId = json.updated_by; // save user id into instance
         } else {
@@ -115,12 +117,12 @@ ossi.post = Class.create(ossi.base,{
           				<div class="nav_button">\
           					<a id="post_reply_button" class="nav_button_text" href="javascript:void(null);">Reply</a>\
           				</div>\
-          				<div class="nav_button">\
+          				<div id="post_profile_button_container" class="nav_button" style="display:none">\
           					<a id="post_profile_button" class="nav_button_text" href="javascript:void(null);">See profile</a>\
           				</div>\
                 ';
-        h += this._getModeratorHTML();
-        h += '          		<div class="nav_button">\
+    h += this._getModeratorHTML();
+    h += '    		<div class="nav_button">\
           					<a id="post_back_button" class="nav_button_text" href="javascript:void(null);">Back to channel</a>\
           				</div>\
           			</div>\
@@ -137,7 +139,7 @@ ossi.post = Class.create(ossi.base,{
                   "<br />",
                   '<span class="quoted_block">',
                   '</span>');
-    for(i = 0; i < search.length; i++) {
+    for (i = 0; i < search.length; i++) {
       var value = value.replace(search[i],replace[i]);
     }
     return value;

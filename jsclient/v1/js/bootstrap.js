@@ -6,6 +6,7 @@ var ossi = {
       document.write('<script type="text/javascript" src="'+libraryName+'"></script>');
     },
     libraries: [  '3rdParty/prototype-m.js',
+                  '3rdParty/md5.js',
                   'extras/prototype.extras.js',
                   'ossi/ossi.base.js',
                   'ossi/ossi.main.js',

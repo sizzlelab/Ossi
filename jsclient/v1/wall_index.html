@@ -13,7 +13,7 @@
 			name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
 			var regexS = "[\\?&]"+name+"=([^&#]*)";
 			var regex = new RegExp( regexS );
-			var results = regex.exec( window.location.href );
+			var results = regex.exec( window.location.href);
 			if( results == null ) return "";
 			else return results[1];
 		}
@@ -35,7 +35,7 @@
 				new ossi.main();
 			});
 */
-			var channelId = gup('channel');
+			var channelId = hex_md5(gup('channel')).substr(0,22);
 			var wall = gup('wall');
 			var refresh = gup('refresh');
 			var styles = gup('css');

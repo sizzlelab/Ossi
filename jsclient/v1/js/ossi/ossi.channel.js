@@ -22,7 +22,7 @@ ossi.channel = Class.create(ossi.base,{
     this._resetInterval(); // this resets the intervalled update call, if selfUpdate is enabled
 	},
 	/**
-	* _update
+	* update
 	*
 	* does not handle XHR failure yet!
 	*/
@@ -46,7 +46,7 @@ ossi.channel = Class.create(ossi.base,{
         if(!self.options.wall) self.parent.hideLoading();
         var json = response.responseJSON;
 
-        //for moderator privilage check. there must be userId - also now wall view, atm
+        //for moderator privilege check. there must be a userId - also now wall view, atm
         if ((!Object.isUndefined(self.parent.userId) || !self.options.wall) &&
           self.parent.userRole == 'moderator' && json.tags != null && json.tags.match('private') == 'private') {
         	self.priv = true;
@@ -75,6 +75,47 @@ ossi.channel = Class.create(ossi.base,{
           $('channel_placeholder').update('<div style="padding:10px; text-align:center">Error occurred. Try again later.</div>');
           $('add_post_button_container').hide();
         }
+      },
+      on404 : function(response) { // channel was not found, now creating it
+        var userName = (Object.isUndefined(self.parent.userName)) ? 'Anonymous' : self.parent.userName;
+        var params = {
+          owner : self.parent.userId,
+          title : self.options.channelId,
+          id : self.options.channelId,
+          tags : 'channel',
+          'metadata[creator]' : userName
+        };
+        var URL = BASE_URL+'/appdata/cWslSQyIyr3yiraaWPEYjL/@collections/'; // ossi app id hard coded
+        self.parent.showLoading();
+        new Ajax.Request(URL,{
+          method : 'post',
+          requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
+          parameters : params,
+          onSuccess : function(response) { // now post the new channel's collection ID and title to channel list collection
+            params = {  
+              content_type : 'collection',
+              collection_id : self.options.channelId
+            };
+            URL = BASE_URL+'/appdata/cWslSQyIyr3yiraaWPEYjL/@collections/'+self.parent.channelsId; // ossi app Id hard-coded
+            new Ajax.Request(URL,{
+              method : 'post',
+              requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
+              parameters : params,
+              onSuccess : function(response) {
+                self.parent.hideLoading();
+                self.update();
+              },
+              onFailure : function(response) {
+                self.parent.hideLoading();
+                alert('Could not add channel to channel list');
+              }
+            });
+          },
+          onFailure : function(response) {
+            self.parent.hideLoading();
+            alert('Could not create channel!');
+          }
+        });
       }
     });
 	},
@@ -115,46 +156,53 @@ ossi.channel = Class.create(ossi.base,{
   _getHTML: function() {
     var h =   '\
           		  <div id="channelpane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
-          			<div id="channel_back_button_2_container" class="nav_button" style="display:none">\
-          				<a id="channel_back_button2" class="nav_button_text" href="javascript:void(null);">Back to Channel List</a>\
-          			</div>\
-                  	<div id="channel_placeholder">\
-                  	</div>\
-                  ';
+            			<div id="channel_back_button_2_container" class="nav_button" style="display:none">\
+            				<a id="channel_back_button2" class="nav_button_text" href="javascript:void(null);">Back to Channel List</a>\
+            			</div>\
+                	<div id="channel_placeholder"></div>\
+              ';
 
-	if(!Object.isUndefined(this.parent.userId)) { 
-		
-		h += '	  	<div id="add_post_button_container" class="nav_button">\
+    if (this.parent.userId != false) { 
+		  h +=    '\
+  			  	      <div id="add_post_button_container" class="nav_button">\
           					<a id="add_post_button" class="nav_button_text" href="javascript:void(null);">Add Post</a>\
           		  	</div>\
-         		';
-	}
-	h += '		  	<div id="channel_next_button_container" class="nav_button" style="display:none">\
+       		    ';
+    } else {
+		  h +=    '\
+  			  	      <div id="add_post_button_container" class="nav_button">\
+          					<a id="add_post_button" class="nav_button_text" href="javascript:void(null);">Add Anonymous Post</a>\
+          		  	</div>\
+       		    ';
+    }
+    h +=      '\
+    		  	      <div id="channel_next_button_container" class="nav_button" style="display:none">\
           				<a id="channel_next_button" class="nav_button_text" href="javascript:void(null);">Next Page</a>\
           		  	</div>\
           		  	<div id="channel_previous_button_container" class="nav_button" style="display:none">\
           				<a id="channel_previous_button" class="nav_button_text" href="javascript:void(null);">Previous Page</a>\
           		  	</div>\
           		';
-	if(!Object.isUndefined(this.parent.userId)) { 
-		h += '		<div id="moderator_placeholder">\
-                	</div>\
-					<div class="nav_button">\
+	  if (this.parent.userId != false) { 
+		  h +=    '\
+  	  		        <div id="moderator_placeholder"></div>\
+  				        <div class="nav_button">\
           					<a id="channel_back_button" class="nav_button_text" href="javascript:void(null);">Back to Channel List</a>\
           				</div>\
           			</div>\
-          		';
-	} else if(Object.isUndefined(this.parent.userId) && this.options.wall) {
-		h += '		<div class="nav_button">\
+        		  ';
+	  } else {
+		  h +=    '\
+  	  		        <div class="nav_button">\
           					<a id="channel_login_button" class="nav_button_text" href="javascript:void(null);">Log in</a>\
           				</div>\
           			</div>\
-          		';
-	}
+        		  ';
+	  }
     return h;
   },
   _getButtonHTML: function(post) {
-    var icon = '001_54';
+    var anonymous_icon = 'images/icons/standard/001_54.png';
     var updated_text = '';
     if (post.updated_at != 'undefined') {
       if (post.updated_at != null) {
@@ -188,45 +236,46 @@ ossi.channel = Class.create(ossi.base,{
 
     var author_string = (typeof(post.metadata.author) != 'undefined') ? 'by '+post.metadata.author+' ' : '';
     var stripped_message = post.metadata.body;
+    var avatar_src = (post.owner == null) ? anonymous_icon : BASE_URL+'/people/'+post.updated_by+'/@avatar/small_thumbnail';
 
-    if(!this.options.wall) {
-		stripped_message = stripped_message.replace(/<\/?[^>]+(>|$)/g, ""); //clean html-tags away
-		stripped_message = stripped_message.replace(/\[quote\].*\[\/quote\]/g,'').replace(/<br \/>/g,'');
-	    var message_stub = stripped_message.truncate(40);
-    	var h =   '\
-          				<div class="post_button" id="post_id_'+post.id+'">\
-                    <div class="post_button_left_column">\
-                    	<img style="margin:2px 0px 0px 2px; border:solid #eee 1px;"\
-                    	src="'+BASE_URL+'/people/'+post.updated_by+'/@avatar/small_thumbnail"\
-                    	width="50" height="50" border="0" />\
-                    	</div>\
-                    <div class="post_button_text">\
-        						  <div class="button_title"><a href="javascript:void(null);">'+message_stub+'</a></div>\
-        						  <div class="button_subtitle_text" style="padding-top:3px">'+author_string+' '+updated_text+'</div>\
-                    </div>\
-          				</div>\
-          			';    	
+    if (!this.options.wall) {
+  		stripped_message = stripped_message.replace(/<\/?[^>]+(>|$)/g, ""); //clean html-tags away
+  		stripped_message = stripped_message.replace(/\[quote\].*\[\/quote\]/g,'').replace(/<br \/>/g,'');
+  	    var message_stub = stripped_message.truncate(40);
+      	var h =   '\
+            				<div class="post_button" id="post_id_'+post.id+'">\
+                      <div class="post_button_left_column">\
+                      	<img style="margin:2px 0px 0px 2px; border:solid #eee 1px;"\
+                      	src="'+avatar_src+'"\
+                      	width="50" height="50" border="0" />\
+                      	</div>\
+                      <div class="post_button_text">\
+          						  <div class="button_title"><a href="javascript:void(null);">'+message_stub+'</a></div>\
+          						  <div class="button_subtitle_text" style="padding-top:3px">'+author_string+' '+updated_text+'</div>\
+                      </div>\
+            				</div>\
+            			';    	
     } else {
-		stripped_message = stripped_message.replace(/<\/?[^>]+(>|$)/g, ""); //clean html-tags away
-		stripped_message = stripped_message.replace(/\[quote\].*\[\/quote\]/g,'').replace(/<br \/>/g,'');
-	    var message_stub = stripped_message.replace(/(ftp|http|https|file):\/\/[\S]+(\b|$)/gim,
-			'<a href="$&" style="text-decoration: underline;" target="_blank">$&</a>').replace(/([^\/])(www[\S]+(\b|$))/gim,
-			'$1<a href="http://$2" style="text-decoration: underline;" target="_blank">$2</a>');
+  		stripped_message = stripped_message.replace(/<\/?[^>]+(>|$)/g, ""); //clean html-tags away
+  		stripped_message = stripped_message.replace(/\[quote\].*\[\/quote\]/g,'').replace(/<br \/>/g,'');
+  	    var message_stub = stripped_message.replace(/(ftp|http|https|file):\/\/[\S]+(\b|$)/gim,
+  			'<a href="$&" style="text-decoration: underline;" target="_blank">$&</a>').replace(/([^\/])(www[\S]+(\b|$))/gim,
+  			'$1<a href="http://$2" style="text-decoration: underline;" target="_blank">$2</a>');
 
-	    var h =   '\
-          		<div class="post_wall" id="post_id_'+post.id+'">\
-                    <div class="wall_post_button_left_column">\
-                    	<img style="margin:2px 0px 0px 2px; border:solid #eee 1px;"\
-                    	src="'+BASE_URL+'/people/'+post.updated_by+'/@avatar/small_thumbnail"\
-                    	width="50" height="50" border="0" />\
-                    </div>\
-                    <div  style="height:55px; float:left;">&nbsp;</div>\
-                    <div class="wall_post_button_text">\
-        						  <div class="wall_button_title"><a href="javascript:void(null);">'+message_stub+'</a></div>\
-        						  <div class="wall_button_subtitle_text" style="padding-top:3px">'+author_string+' '+updated_text+'</div>\
-                    </div><div style="clear:both;"></div>\
-          		</div>\
-          			';
+  	    var h =   '\
+            		<div class="post_wall" id="post_id_'+post.id+'">\
+                      <div class="wall_post_button_left_column">\
+                      	<img style="margin:2px 0px 0px 2px; border:solid #eee 1px;"\
+                      	src="'+avatar_src+'"\
+                      	width="50" height="50" border="0" />\
+                      </div>\
+                      <div  style="height:55px; float:left;">&nbsp;</div>\
+                      <div class="wall_post_button_text">\
+          						  <div class="wall_button_title"><a href="javascript:void(null);">'+message_stub+'</a></div>\
+          						  <div class="wall_button_subtitle_text" style="padding-top:3px">'+author_string+' '+updated_text+'</div>\
+                      </div><div style="clear:both;"></div>\
+            		</div>\
+            			';
     
     }
     return h;
@@ -333,31 +382,31 @@ ossi.channel = Class.create(ossi.base,{
   _addListeners: function() {
     $('channel_next_button').onclick = this._nextHandler.bindAsEventListener(this);
     $('channel_previous_button').onclick = this._previousHandler.bindAsEventListener(this);
-
-	if(!Object.isUndefined(this.parent.userId) || !this.options.wall) {
+	  if (this.parent.userId != false || !this.options.wall) {
 	    $('channel_back_button').onclick = this._backHandler.bindAsEventListener(this);
 	    $('channel_back_button2').onclick = this._backHandler.bindAsEventListener(this);
-		$('add_post_button').onclick = this._addPostHandler.bindAsEventListener(this);
-	} else {
-		$('channel_login_button').onclick = this._loginHandler.bindAsEventListener(this);
-	}
+		  $('add_post_button').onclick = this._addPostHandler.bindAsEventListener(this);
+	  } else {
+		  $('add_post_button').onclick = this._addPostHandler.bindAsEventListener(this);
+		  $('channel_login_button').onclick = this._loginHandler.bindAsEventListener(this);
+	  }
   },
   _removeListeners: function() {
     $('channel_next_button').onclick = function() { return };
     $('channel_previous_button').onclick = function() { return };
-
-	if(!Object.isUndefined(this.parent.userId) || !this.options.wall) {
+	  if (this.parent.userId != false || !this.options.wall) {
 	    $('channel_back_button').onclick = function() { return }
 	    $('add_post_button').onclick = function() { return }
     	$('channel_back_button2').onclick = function() { return }
-
-	    if(this.parent.userRole == 'moderator' && this.priv != true){
-	      $('channel_delete_button').onclick = function() { return }
-	      $('channel_allow_delete_button').onclick = function() { return }
-    	}
-	} else {
-	    $('channel_login_button').onclick = function() { return }
-	}
+      if (!Object.isUndefined(this.parent.userRole)) {
+  	    if (this.parent.userRole == 'moderator' && this.priv != true){
+  	      $('channel_delete_button').onclick = function() { return }
+  	      $('channel_allow_delete_button').onclick = function() { return }
+      	}
+      }
+  	} else {
+  	    $('channel_login_button').onclick = function() { return }
+  	}
   },
   _addLinkListeners: function() { // for dynamic buttons
   	if(!Object.isUndefined(this.parent.userId) && !this.options.wall){
