@@ -62,7 +62,7 @@ ossi.post = Class.create(ossi.base,{
           }
           var author_string = (typeof(json.metadata.author) != 'undefined') ? '<span style="color:#C0C0C0">Posted by</span> '+json.metadata.author+'' : '';
 
-          var avatar_src = (json.owner == null) ? 'images/icons/standard/001_54.png' : BASE_URL+'/people/'+json.updated_by+'/@avatar/small_thumbnail';
+          var avatar_src = (json.owner == null) ? 'images/anon_icon.png' : BASE_URL+'/people/'+json.updated_by+'/@avatar/small_thumbnail';
           $('post_avatar').update('<img src="'+avatar_src+'" width="50" height="50" border="0" />');
           $('post_author_text').update(author_string);
           $('post_updated_text').update('Updated '+updated_text);

@@ -46,7 +46,7 @@ ossi.login = Class.create(ossi.base,{
             				<div class="nav_button">\
             					<a id="signup_button" class="nav_button_text" href="javascript:void(null);">Sign up</a>\
             				</div>\
-            				<div class="nav_button">\
+            				<div class="nav_button" style="display:none">\
             					<a id="wappu_button" class="nav_button_text" href="javascript:void(null);"><b><i>Wappu Login</i></b></a>\
             				</div>\
             				<div class="nav_button">\
