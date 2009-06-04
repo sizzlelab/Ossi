@@ -88,7 +88,7 @@ ossi.mainmenu = Class.create(ossi.base,{
   },
   _getHTML: function() {
     var h =   '\
-          			<div id="mainmenupane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
+          			<div id="mainmenupane" style="display:none; position:absolute; top:0px; left:0px; width:'+client.dimensions.width+'px">\
           				<div id="logo_small"></div>\
           				<div id="microblog_button" class="post_button">\
                     <div class="post_button_left_column"><img style="margin:2px 0px 0px 2px; border:solid #eee 1px;" src="'+BASE_URL+'/people/'+this.parent.userId+'/@avatar/small_thumbnail?'+Math.random()*9999+'" width="50" height="50" border="0" /></div>\

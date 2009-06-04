@@ -8,10 +8,17 @@ ossi.main = Class.create(ossi.base,{
       chrome : false,
       width : false,
       height : false,
+      x : false,
+      y : false,
       wall : false
     },options);
     WIDGET_VIEWPORT = { height : 428, width : 313 }; // set these to same values as for #content_area.widget in main.css
     this.mainElement = new Element('div');
+    this.mainElement.setStyle({
+      width: this.options.width+'px',
+      height: this.options.height+'px',
+      clip: 'rect(0 '+this.options.width+' '+this.options.height+' 0)'
+    });
     document.body.appendChild(this.mainElement);
     this.channelsId = 'd8-W0MMEir3yhJaaWPEYjL'; // hardcoded id on alpha.sizl.org!
 //    this.channelsId = 'bzFvEETj8r3yz7aaWPfx7J'; // hardcoded id on beta.sizl.org!
@@ -21,11 +28,11 @@ ossi.main = Class.create(ossi.base,{
     this.XHRequests = [];
     Ajax.Responders.register({ onCreate:this._onXHRCreate.bind(this), onComplete:this._onXHRComplete.bind(this) }); // set handlers for managing requests
     this.utils = new ossi.utils(this);
-//    this.splash = document.createElement('div');
-//    Element.extend(this.splash);
-//    document.body.appendChild(this.splash);
     this.loadingpane = new Element('div');
     Element.extend(this.loadingpane);
+    this.loadingpane.setStyle({
+      width: this.options.width+'px'
+    });
     document.body.appendChild(this.loadingpane);
     this.loadingpane.hide();
     this.loadingpane.addClassName('loading');
@@ -47,7 +54,6 @@ ossi.main = Class.create(ossi.base,{
 //    this.splash.hide();
     this.mainElement.update('');
   	this.mainElement.show();
-  	this.mainElement.makeClipping(); // make clipping for main element
     this.showLoading();
 
     // first do a POST to /session to get cookie info for widget
@@ -148,33 +154,33 @@ ossi.main = Class.create(ossi.base,{
 	    if (options.start) { // login without effects (first time)
 			if (options.channelId) {
 				this.sub1 = new ossi.login(this, {	'hostElement' : this.mainElement,
-	      											'channelId' : options.channelId,
-	        	                                  	'backCase' : options.backCase});
+	      											              'channelId' : options.channelId,
+      	                                  	'backCase' : options.backCase});
 			} else {
 				this.sub1 = new ossi.login(this, {	'hostElement' : this.mainElement,
-													'backCase' : options.backCase});
+                  													'backCase' : options.backCase});
 			}
 		    this.sub1.pane.show();
 	    } else { // login page emerges with fx
-			this.sub2 = this.sub1;
+			  this.sub2 = this.sub1;
 			if (options.channelId) {
 				this.sub1 = new ossi.login(this, {	'hostElement' : this.mainElement,
-	      											'channelId' : options.channelId,
-	        	                                  	'backCase' : options.backCase});
+	      											              'channelId' : options.channelId,
+      	                                  	'backCase' : options.backCase});
 			} else {
 				this.sub1 = new ossi.login(this, {	'hostElement' : this.mainElement,
-	        	                                  	'backCase' : options.backCase});
+      	                                  	'backCase' : options.backCase});
 			}
-	      if (options.out) {
-	        this.utils.out(this.sub2.pane,this.sub1.pane,function() {
-	          this.sub2.destroy();
-	        }.bind(this));
-	      } else {
-	        this.utils.into(this.sub2.pane,this.sub1.pane,function() {
-	          this.sub2.destroy();
-	        }.bind(this));
-	      }
-	    }
+      if (options.out) {
+        this.utils.out(this.sub2.pane,this.sub1.pane,function() {
+          this.sub2.destroy();
+        }.bind(this));
+      } else {
+        this.utils.into(this.sub2.pane,this.sub1.pane,function() {
+          this.sub2.destroy();
+        }.bind(this));
+      }
+    }
 	},
 	/**
 	* main screen
@@ -790,6 +796,9 @@ ossi.main = Class.create(ossi.base,{
 	  client = {};
 	  client.is_widget = (typeof(window.widget) != 'undefined') ? true : false;
 	  client.dimensions = client.is_widget ? WIDGET_VIEWPORT : document.viewport.getDimensions();
+	  if (this.options.width && this.options.height) {
+	    client.dimensions = { height : this.options.height, width : this.options.width }
+    }
   },
   /**
   * _setClientUI
