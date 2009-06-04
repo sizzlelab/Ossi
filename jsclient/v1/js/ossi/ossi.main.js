@@ -9,7 +9,8 @@ ossi.main = Class.create(ossi.base,{
       wall : false
     },options);
     WIDGET_VIEWPORT = { height : 428, width : 313 }; // set these to same values as for #content_area.widget in main.css
-    this.mainElement = $('content_area'); // hardcoded for now
+    this.mainElement = new Element('div');
+    document.body.appendChild(this.mainElement);
     this.channelsId = 'd8-W0MMEir3yhJaaWPEYjL'; // hardcoded id on alpha.sizl.org!
 //    this.channelsId = 'bzFvEETj8r3yz7aaWPfx7J'; // hardcoded id on beta.sizl.org!
     this.sub1 = false; // pointers for case classes
@@ -18,8 +19,14 @@ ossi.main = Class.create(ossi.base,{
     this.XHRequests = [];
     Ajax.Responders.register({ onCreate:this._onXHRCreate.bind(this), onComplete:this._onXHRComplete.bind(this) }); // set handlers for managing requests
     this.utils = new ossi.utils(this);
-    this.splash = $('splash_screen');
-    this.loadingpane = $('loading');
+//    this.splash = document.createElement('div');
+//    Element.extend(this.splash);
+//    document.body.appendChild(this.splash);
+    this.loadingpane = new Element('div');
+    Element.extend(this.loadingpane);
+    document.body.appendChild(this.loadingpane);
+    this.loadingpane.hide();
+    this.loadingpane.addClassName('loading');
     this._getClient(); // determine which client we are serving for
     this._setClientUI(); // on the basis of the client values make CSS changes
     BASE_URL = (client.is_widget) ? 'http://cos.alpha.sizl.org' : '/cos'; // where to go asking for COS
@@ -35,7 +42,7 @@ ossi.main = Class.create(ossi.base,{
 		var options = Object.extend({
 			out : false
 		},options);
-    this.splash.hide();
+//    this.splash.hide();
     this.mainElement.update('');
   	this.mainElement.show();
   	this.mainElement.makeClipping(); // make clipping for main element
