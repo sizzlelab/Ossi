@@ -1,0 +1,84 @@
+<html>
+	<head>
+		<title>OssiTesterWidget</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<!-- jQuery -->
+		<script language="javascript" type="text/javascript" src="libs/jquery-1.3.2.min.js"></script>
+		<script language="JavaScript" type="text/javascript" src="libs/jQuery.frameReady.js"></script>
+		<!-- JsUnit -->
+		<script language='JavaScript' type='text/javascript' src='libs/jsunit/app/jsUnitCore.js'></script>
+		<!-- COS module -->
+		<script language='JavaScript' type='text/javascript' src='libs/cos.js' ></script>
+	</head>
+		
+		<iframe id='iframe' name='iframe' src='/v1/index.html' frameborder='0'  ></iframe>
+		
+		<div id='data' >
+			<p>OSSI Tester</p>
+		</div>
+		
+		<script type='text/javascript'>
+			$.frameReady( testCase(), 'top.iframe', { remote: true} );
+			var TRANSACTION_DELAY = 4000; // wait 4 secs between transactions
+			var COS_ID = 'dLRfOwt7qr3QtLaaWPEYjL';
+			
+			// TODO: could this be mase syncronous
+			function waitForTransaction(f){
+				setTimeout( f ,TRANSACTION_DELAY );
+			}
+			
+			function testCase() { 
+				scope = top.iframe.document;
+				if( scope.URL == "about:blank" ) {
+					// scope failed
+					// FIXME: this is a bit ugly
+					setTimeout(
+					function(){
+               			alert('Please wait...');
+						testCase();
+               		} ,
+						TRANSACTION_DELAY
+					);
+					return;
+				}
+
+				$( '#username', scope).val('tester');
+				$( '#password', scope ).val('tester');
+				$( '#login_button', scope ).click();
+				
+				waitForTransaction(
+						function(){
+               		x = $('#mainmenupane', scope).contents();
+					assertEquals( 'Main component should have 17 elements' , 17 , x.length );
+					assertEquals( 'Name should be tester' , 'tester' , $('#mainmenu_profile_name', scope).html() );
+					$('#friends_button' , scope).click();
+					waitForTransaction(
+							function() {
+					assertEquals('Matti should be a friend', 1, $('#friend_uid_link_biPssKjrCr3PQyaaWPEYjL', scope).length )
+					$('#friend_list_back_button', scope).click();
+					var test_input = Math.ceil( Math.random() * 10000000 )
+					cos.user.post_user( COS_ID, { 'person[status_message]' : test_input }  )
+					waitForTransaction( 
+						function(){
+					x = $('#mainmenupane', scope).contents();
+					assertEquals('Main component should have 17 elements', 17, x.length);
+					assertEquals('Name should be tester', 'tester', $('#mainmenu_profile_name', scope).html());
+					assertEquals('View of status not updated' , '' + test_input , $('#mainmenu_status_text', scope).html() );
+					$('#mainmenu_status_text', scope).click();
+					waitForTransaction(
+						function(){
+					test_input = Math.ceil( Math.random() * 10000000 )
+					$('status_textarea', scope).val( test_input );
+					$('#done_button', scope).click();
+					// cos.user.get_user( COS_ID );
+					assertEquals( 'Status should have been updated', cos.user.user.status.message , '' + test_input );
+					} );
+					} );
+					} );
+               		} );
+				
+			}
+		</script>
+		
+	</body>
+</html>
