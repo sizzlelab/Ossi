@@ -46,13 +46,13 @@ var ossi = {
       var getBootScript = function () { 
         var s = document.getElementsByTagName("script"); 
         for (var i=0; i<s.length; i++) {
-          if (s[i].src && s[i].src.match(/bootstrap\.js(\?.*)?$/)){return s[i];}
+          if (s[i].src && s[i].src.match(/ossi\.js(\?.*)?$/)){return s[i];}
         }
       };
       var bootScript = getBootScript();
       if (!bootScript)
         return alert ('ossi boot script failed');
-      ossi.path = bootScript.src.replace(/bootstrap\.js(\?.*)?$/,'');
+      ossi.path = bootScript.src.replace(/ossi\.js(\?.*)?$/,'');
       for (var i = 0; i < ossi.bootstrap.libraries.length; i++) {
         ossi.bootstrap.load(ossi.path+ossi.bootstrap.libraries[i]);
       }
