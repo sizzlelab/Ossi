@@ -5,6 +5,10 @@ var ossi = {
       // inserting via DOM fails in Safari 2.0, so brute force approach
       document.write('<script type="text/javascript" src="'+libraryName+'"></script>');
     },
+    CSS: [
+      'css/main.css',
+      'css/ossiWallStyles.css'
+    ],
     libraries: [  '3rdParty/prototype-m.js',
                   '3rdParty/md5.js',
                   'extras/prototype.extras.js',
@@ -47,12 +51,21 @@ var ossi = {
       };
       var bootScript = getBootScript();
       if (!bootScript)
-          return alert ('ossi boot script failed');
+        return alert ('ossi boot script failed');
       ossi.path = bootScript.src.replace(/bootstrap\.js(\?.*)?$/,'');
       for (var i = 0; i < ossi.bootstrap.libraries.length; i++) {
         ossi.bootstrap.load(ossi.path+ossi.bootstrap.libraries[i]);
+      }
+      ossi.bootstrap.loadCSS(); // load CSS too
+    },
+    loadCSS: function() {
+      for (var i = 0; i < ossi.bootstrap.CSS.length; i++) {
+        document.write('<link type="text/css" rel="stylesheet" href="'+ossi.bootstrap.CSS[i]+'" />');
       }
     }
   }
 }
 ossi.bootstrap.loadLibraries();
+window.onload = function() {
+  new ossi.main({});  
+}

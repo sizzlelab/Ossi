@@ -5,7 +5,9 @@ ossi.main = Class.create(ossi.base,{
 	initialize: function(options) {
 	  this.options = Object.extend({
       channelId : false,
-      refreshChannel : false,
+      chrome : false,
+      width : false,
+      height : false,
       wall : false
     },options);
     WIDGET_VIEWPORT = { height : 428, width : 313 }; // set these to same values as for #content_area.widget in main.css
@@ -557,27 +559,27 @@ ossi.main = Class.create(ossi.base,{
     	  backCase : false
 		},options);
 		this.sub2 = this.sub1;
-    	this.sub1 = new ossi.channel(this, {'hostElement' : this.mainElement,
-                                            'selfUpdate' : true,
-            	                           	'channelId' : options.channelId,
-								            'wall' : this.options.wall,
-                    	                  	'backCase' : options.backCase
-											});
-		if(options.start) {
-			this.sub1.pane.show();
-			this.sub1.update();
+  	this.sub1 = new ossi.channel(this, {  'hostElement' : this.mainElement,
+                                          'selfUpdate' : true,
+          	                           	  'channelId' : options.channelId,
+							                            'wall' : this.options.wall,
+                  	                  	  'backCase' : options.backCase
+		});
+		if (options.start) {
+  		this.sub1.pane.show();
+  		this.sub1.update();
 		} else {
-		    if (options.out) {
-		      this.utils.out(this.sub2.pane,this.sub1.pane,function() {
-		        this.sub2.destroy();
-		        this.sub1.update();
-		      }.bind(this));
-		    } else {
-		      this.utils.into(this.sub2.pane,this.sub1.pane,function() {
-		        this.sub2.destroy();
-		        this.sub1.update();
-		      }.bind(this));
-		    }
+	    if (options.out) {
+	      this.utils.out(this.sub2.pane,this.sub1.pane,function() {
+	        this.sub2.destroy();
+	        this.sub1.update();
+	      }.bind(this));
+	    } else {
+	      this.utils.into(this.sub2.pane,this.sub1.pane,function() {
+	        this.sub2.destroy();
+	        this.sub1.update();
+	      }.bind(this));
+	    }
 		}
 	},
   /**
