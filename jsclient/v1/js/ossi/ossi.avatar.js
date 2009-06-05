@@ -43,7 +43,7 @@ ossi.avatar = Class.create(ossi.base,{
                   <form target="avatar_frame" action="/cos/people/'+this.parent.userId+'/@avatar" method="post" enctype="multipart/form-data" name="avatar_form" id="avatar_form">\
                     <input name="_method" type="hidden" class="upload_pic" value="PUT" />\
             				<div id="about_Ossi" style="text-align:center; margin:12px 10px 12px 10px">\
-                      <p>Please note that avatar upload does not work in iPhone. On N95 it will open a new window, which you can then close after upload to return to Ossi.</p>\
+                      <p>Please note that avatar upload does not work in iPhone due to platform restrictions, also on Ossi widget file upload is disabled by the platform itself. On N95 it will open a new window, which you can then close after upload to return to Ossi.</p>\
                     </div>\
                     <div id="upload_container" style="position:relative; margin:12px auto 12px auto; width:200px;">\
                       <div style="position: relative; text-align: center; top: 0px; z-index: 2;">\

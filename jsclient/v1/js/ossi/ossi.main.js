@@ -13,12 +13,7 @@ ossi.main = Class.create(ossi.base,{
       wall : false
     },options);
     WIDGET_VIEWPORT = { height : 428, width : 313 }; // set these to same values as for #content_area.widget in main.css
-    this.mainElement = new Element('div');
-    this.mainElement.setStyle({
-      width: this.options.width+'px',
-      height: this.options.height+'px',
-      clip: 'rect(0 '+this.options.width+' '+this.options.height+' 0)'
-    });
+    this.mainElement = new Element('div', { id : 'content_area' });
     document.body.appendChild(this.mainElement);
     this.channelsId = 'd8-W0MMEir3yhJaaWPEYjL'; // hardcoded id on alpha.sizl.org!
 //    this.channelsId = 'bzFvEETj8r3yz7aaWPfx7J'; // hardcoded id on beta.sizl.org!
@@ -28,11 +23,8 @@ ossi.main = Class.create(ossi.base,{
     this.XHRequests = [];
     Ajax.Responders.register({ onCreate:this._onXHRCreate.bind(this), onComplete:this._onXHRComplete.bind(this) }); // set handlers for managing requests
     this.utils = new ossi.utils(this);
-    this.loadingpane = new Element('div');
+    this.loadingpane = new Element('div', { id : 'loading' });
     Element.extend(this.loadingpane);
-    this.loadingpane.setStyle({
-      width: this.options.width+'px'
-    });
     document.body.appendChild(this.loadingpane);
     this.loadingpane.hide();
     this.loadingpane.addClassName('loading');
@@ -65,11 +57,11 @@ ossi.main = Class.create(ossi.base,{
       method : 'post',
       parameters : params,
       on409 : function(response) { // server returns 409 error, meaning session already exists
-//        self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
+        self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
         self._case1b();
       },
       onSuccess : function(response) {
-//        self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
+        self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
         self._case1b();
       },
       onFailure : function(response) {
@@ -85,7 +77,7 @@ ossi.main = Class.create(ossi.base,{
 	  var self = this;
     new Ajax.Request(BASE_URL+'/session', { 
       method : 'get',
-      requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
+      requestHeaders : (client.is_widget) ? ['Cookie',self.sessionCookie] : '',
       onSuccess : function(response) {
         self._case1c(response);
       },
@@ -110,7 +102,7 @@ ossi.main = Class.create(ossi.base,{
   		// get username here instead of mainmenu or channel or whatever
   		new Ajax.Request(BASE_URL+'/people/'+this.userId+'/@self', {
   			method : 'get',
-  			requestHeaders : (client.is_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
+  			requestHeaders : (client.is_widget && self.sessionCookie) ? ['Cookie',self.sessionCookie] : '',
   			onSuccess : function(response) {
   				var json = response.responseJSON;
   				self.userName = (json.name != null) ? json.name['unstructured'] : json.username;
@@ -795,10 +787,13 @@ ossi.main = Class.create(ossi.base,{
   _getClient: function() {
 	  client = {};
 	  client.is_widget = (typeof(window.widget) != 'undefined') ? true : false;
-	  client.dimensions = client.is_widget ? WIDGET_VIEWPORT : document.viewport.getDimensions();
-	  if (this.options.width && this.options.height) {
+	  if (client.is_widget) {
+	    client.dimensions = WIDGET_VIEWPORT;
+	  } else if (this.options.width && this.options.height) {
 	    client.dimensions = { height : this.options.height, width : this.options.width }
-    }
+	  } else {
+	    client.dimensions = document.viewport.getDimensions();
+	  }
   },
   /**
   * _setClientUI
@@ -811,6 +806,14 @@ ossi.main = Class.create(ossi.base,{
       document.body.addClassName('widget');
       this.mainElement.addClassName('widget');
       this.loadingpane.addClassName('widget');
+    } else if (this.options.width && this.options.height) {
+      this.mainElement.setStyle({
+        width: this.options.width+'px',
+        height: this.options.height+'px'
+      });
+      this.loadingpane.setStyle({
+        width: this.options.width+'px'
+      });
     }
   },
 	/**
