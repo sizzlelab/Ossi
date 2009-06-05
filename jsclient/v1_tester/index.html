@@ -70,13 +70,11 @@
 				$('#mainmenu_status_text', scope).click();
 				waitForTransaction( function(){
 				test_input = Math.ceil( Math.random() * 10000000 )
-				$('status_textarea', scope).val( test_input );
+				$('#status_textarea', scope).val( test_input );
 				$('#done_button', scope).click();
 				waitForTransaction( function(){
 				me = cos.user.get_user( COS_ID );
-				// todo: broken!!
-				alert( 'Cos ' + me.self.status.message + ' self ' + test_input );
-				// assertEquals( 'Status should have been updated', me.self.status.message , '' + test_input );
+				assertEquals( 'Status should have been updated', me.self.status.message , '' + test_input );
 				// testing channels
 				$('#channels_button', scope).click();
 				waitForTransaction( function() {
