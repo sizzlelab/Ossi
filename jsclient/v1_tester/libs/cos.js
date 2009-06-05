@@ -59,11 +59,10 @@ cos = {
 	
 	user: {
 		
-		user = null;
-	
+		user : null,
 		
 		get_user: function(id){
-			user = { self : {} , groups : {} , friends : {} , location : {}};
+			var user = { id : id , self : {} , groups : {} , friends : {} , location : {}};
 			// user data
 			jQuery.ajax({
 				async: false,
@@ -111,15 +110,15 @@ cos = {
 			return user;
 		},
 		
-		post_user: function(id, data, user){
+		post_user: function(user, data){
 			jQuery.ajax({
 				async: false,
-				url: cos.COS_URL + 'people/' + id + '/@self',
+				url: cos.COS_URL + 'people/' + user.id + '/@self',
 				type: 'put',
 				data : data,
 				dataType: 'json',
 				success: function(data, textStatus){
-					user.data = data
+					user.self = data
 				}
 			});
 			return user;
