@@ -67,5 +67,6 @@ var ossi = {
 }
 ossi.bootstrap.loadLibraries();
 window.onload = function() {
-  new ossi.main({width:400, height:400, x:100, y:100});  
+//  new ossi.main({width:400, height:400, x:100, y:100});  
+  new ossi.main();  
 }
