@@ -1,10 +1,34 @@
 /**
  * COS integration JavaScript-file.
  * 
- * <b>Depends on</b> jQuery core
- * 
+ * Should worl on mobile devices...
+ *
  * @author Matti Nelimarkka, HIIT, matti.nelimarkka@hiit.fi
  */
+
+function http_request( method, url, parameters ){
+	// this should be a smart selector...
+	http = new XMLHttpRequest();
+	// parameters need to be encoded
+	http.open( method , url, false);
+	http.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
+	http.send( http_parameter( parameters ) );
+	while( http.readyState != 4 ) {
+		// this is syncronous method
+	}
+	alert( url );
+	alert( http_parameter( parameters ) );
+	return eval( '(' + http.responseText + ')' );
+}
+
+function http_parameter( object ) {
+	ret = '';
+	for( element in object ){
+		if( ret != '' ) { ret += '&'; }
+		ret += escape( element ) + '=' + escape( object[element] );
+	}
+	return ret;
+}
 
 cos = {
 
@@ -16,111 +40,33 @@ cos = {
 		app_password: 'testi',
 		cos_user_id: '',
 		
-		auth: function(){
-			jQuery.ajax({
-				async: false,
-				url: cos.COS_URL + 'session',
-				type: 'post',
-				data: {
-					app_name: cos.authenticate.app_name,
-					app_password: cos.authenticate.app_password
-				},
-			});
-		},
-		
 		login: function(user, pass){
 			// Dummy implementation, first kill exsisting sessions
-			jQuery.ajax({
-				async: false,
-				url: cos.COS_URL + 'session',
-				type: 'delete',
-			});			
-			jQuery.ajax({
-				async: false,
-				url: cos.COS_URL + 'session',
-				type: 'post',
-				data: {
-					username: user,
-					password: pass,
-					app_name: cos.authenticate.app_name,
-					app_password: cos.authenticate.app_password
-				},
-				dataType: 'json',
-				success: function(data, textStatus){
-					cos.authenticate.cos_user_id = data.user_id;
-				},
-				error: function(XMLHttpRequest, textStatus, errorThrown){
-					cos.authenticate.cos_user_id = 'Fail: ' + XMLHttpRequest.status;
-				}
-			});
+			http_request( 'delete' , cos.COS_URL + 'session' , null );		
+			data = http_request( 'post' , cos.COS_URL + 'session' ,  { username: user, password: pass,
+					app_name: cos.authenticate.app_name, app_password: cos.authenticate.app_password } );
+			cos.authenticate.cos_user_id = data.user_id;
 		}
 		
 	},
 	
 	user: {
 		
-		user : null,
-		
 		get_user: function(id){
 			var user = { id : id , self : {} , groups : {} , friends : {} , location : {}};
 			// user data
-			jQuery.ajax({
-				async: false,
-				url: cos.COS_URL + 'people/' + id + '/@self',
-				type: 'get',
-				dataType: 'json',
-				success: function(data, textStatus){
-					user.self = data;
-					cos.user.user = data;
-				}
-			});
+			user.self = http_request( 'GET' , cos.COS_URL + 'people/' + id + '/@self' , null );
 			// get groups
-			jQuery.ajax({
-				async: false,
-				url: cos.COS_URL + 'people/' + id + '/@groups',
-				type: 'get',
-				dataType: 'json',
-				success: function(data, textStatus){
-					// handle this
-					user.groups = data;
-				}
-			});
+			user.groups = http_request( 'GETÃ' , cos.COS_URL + 'people/' + id + '/@groups', null);
 			// get friends
-			jQuery.ajax({
-				async: false,
-				url: cos.COS_URL + 'people/' + id + '/@friends',
-				type: 'get',
-				dataType: 'json',
-				success: function(data, textStatus){
-					// handle this
-					user.friends = data;
-				}
-			});
+			user.friends = http_request( 'GET' , cos.COS_URL + 'people/' + id + '/@friends', null);
 			// get location
-			jQuery.ajax({
-				async: false,
-				url: cos.COS_URL + 'people/' + id + '/@location',
-				type: 'get',
-				dataType: 'json',
-				success: function(data, textStatus){
-					// handle this
-					user.location = data;
-				}
-			});
+			user.location = http_request( 'GET' , cos.COS_URL + 'people/' + id + '/@location', null);
 			return user;
 		},
 		
 		post_user: function(user, data){
-			jQuery.ajax({
-				async: false,
-				url: cos.COS_URL + 'people/' + user.id + '/@self',
-				type: 'put',
-				data : data,
-				dataType: 'json',
-				success: function(data, textStatus){
-					user.self = data
-				}
-			});
+			user.self = http_request( 'PUT' , cos.COS_URL + 'people/' + user.id + '/@self', data );
 			return user;
 		}
 		
