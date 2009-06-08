@@ -83,7 +83,6 @@
 				}
 				waitForTransaction( function(){
 				me = cos.user.get_user( COS_ID );
-				alert('Status check');
 				assertEquals( 'Status should have been updated', me.self.status.message , '' + test_input );
 				// testing channels
 				scope.getElementById('channels_button').onclick();
