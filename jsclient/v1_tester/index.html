@@ -2,10 +2,10 @@
 	<head>
 		<title>OssiTesterWidget</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-		<!-- jQuery -->
-		<script language="javascript" type="text/javascript" src="libs/jquery-1.3.2.min.js"></script>
-		<!-- JsUnit -->
-		<script language='JavaScript' type='text/javascript' src='libs/jsunit/app/jsUnitCore.js'></script>
+		<!-- common http-enabler -->
+		<script language="javascript" type="text/javascript" src="libs/http.js"></script>
+		<!-- simple unitt -->
+		<script language='JavaScript' type='text/javascript' src='libs/check.js'></script>
 		<!-- COS module -->
 		<script language='JavaScript' type='text/javascript' src='libs/cos.js' ></script>
 	</head>
@@ -18,9 +18,7 @@
 		</div>
 		
 		<script type='text/javascript'>
-			$('#start').click( function() {
-				this.temp = 10;
-			} );
+			document.getElementById('start').onclick = function() {this.temp = 10; };
 
 			testCase();
 			var TRANSACTION_DELAY = 4000; // wait 4 secs between transactions

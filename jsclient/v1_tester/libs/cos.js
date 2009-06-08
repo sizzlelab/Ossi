@@ -11,14 +11,21 @@ function http_request( method, url, parameters ){
 	http = new XMLHttpRequest();
 	// parameters need to be encoded
 	http.open( method , url, false);
-	http.setRequestHeader("Content-Type", "text/plain;charset=UTF-8");
-	http.send( http_parameter( parameters ) );
+	if( parameters != null ) {
+		http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		http.setRequestHeader("Content-length", parameters.length);
+		http.setRequestHeader("Connection", "close");
+		http.send( http_parameter( parameters ) );
+	} else {
+		http.send( null );
+	}
 	while( http.readyState != 4 ) {
 		// this is syncronous method
 	}
-	alert( url );
-	alert( http_parameter( parameters ) );
-	return eval( '(' + http.responseText + ')' );
+	if( http.responseText != '' ) {
+		alert( http.responseText );
+		return eval( '(' + http.responseText + ')' );
+	}
 }
 
 function http_parameter( object ) {
