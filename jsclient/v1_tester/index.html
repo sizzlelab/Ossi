@@ -4,7 +4,6 @@
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 		<!-- jQuery -->
 		<script language="javascript" type="text/javascript" src="libs/jquery-1.3.2.min.js"></script>
-		<script language="JavaScript" type="text/javascript" src="libs/jQuery.frameReady.js"></script>
 		<!-- JsUnit -->
 		<script language='JavaScript' type='text/javascript' src='libs/jsunit/app/jsUnitCore.js'></script>
 		<!-- COS module -->
@@ -15,10 +14,15 @@
 		
 		<div id='data' >
 			<p>OSSI Tester</p>
+			<button id='start'>Start testing</button>
 		</div>
 		
 		<script type='text/javascript'>
-			$.frameReady( testCase(), 'top.iframe', { remote: true} );
+			$('#start').click( function() {
+				this.temp = 10;
+			} );
+
+			testCase();
 			var TRANSACTION_DELAY = 4000; // wait 4 secs between transactions
 			var COS_ID = 'dLRfOwt7qr3QtLaaWPEYjL';
 			
@@ -27,65 +31,72 @@
 				setTimeout( f ,TRANSACTION_DELAY );
 			}
 			
+			var temp = 0;
 			function testCase() { 
 				scope = top.iframe.document;
-				if( scope.URL == "about:blank" ) {
-					// scope failed
+				if( scope.URL == "about:blank" | scope.URL == '' | this.temp < 6 ) {		
+					this.temp++;
 					// FIXME: this is a bit ugly
-					setTimeout(
-					function(){
-               			alert('Please wait...');
+					setTimeout( function(){
 						testCase();
-               		} ,
-						TRANSACTION_DELAY
-					);
+               				} , TRANSACTION_DELAY );
 					return;
 				}
 
+				alert('We are go!');
 				// login
-				$( '#username', scope).val('tester');
-				$( '#password', scope ).val('tester');
-				$( '#login_button', scope ).click();
+				scope.getElementById( 'username' ).value = 'tester';
+				scope.getElementById( 'password' ).value = 'tester';
+				scope.getElementById( 'login_button' ).onclick();
+				// $( '#username', scope).val('tester');
 				waitForTransaction( function(){
 				// test main menu content
-               	x = $('#mainmenupane', scope).contents();
-				assertEquals( 'Main component should have 17 elements' , 17 , x.length );
-				assertEquals( 'Name should be tester' , 'tester' , $('#mainmenu_profile_name', scope).html() );
+               			x = scope.getElementById('mainmenupane').childElements();
+				assertEquals( 'Main component should have 8 elements' , 8 , x.length );
+				assertEquals( 'Name should be tester' , 'tester' , scope.getElementById('mainmenu_profile_name').innerHTML );
 				// test that user has friend
-				$('#friends_button' , scope).click();
+				scope.getElementById('friends_button').onclick();
 				waitForTransaction( function() {
-				assertEquals('Matti should be a friend', 1, $('#friend_uid_link_biPssKjrCr3PQyaaWPEYjL', scope).length )
+				friend = scope.getElementById( 'friend_uid_link_biPssKjrCr3PQyaaWPEYjL' );
+				assertEquals('Matti should be a friend', 'Matti Nelimarkka' , friend.innerHTML.match('Matti Nelimarkka')[0] );
 				// update status via API request
 				var test_input = Math.ceil( Math.random() * 10000000 )
 				var me = cos.user.get_user( COS_ID );
 				cos.user.post_user( me, { 'person[status_message]' : test_input }  )
-				$('#friend_list_back_button', scope).click();
+				scope.getElementById( 'friend_list_back_button' ).onclick();
 				waitForTransaction( function(){
 				// verify we are in the main menu
-				x = $('#mainmenupane', scope).contents();
-				assertEquals('Main component should have 17 elements', 17, x.length);
+				x = scope.getElementById( 'mainmenupane' ).childElements();
+				assertEquals('Main component should have 8 elements', 8, x.length);
 				// verify that API request has been updated into the view
-				assertEquals('View of status not updated' , '' + test_input , $('#mainmenu_status_text', scope).html() );
+				assertEquals('View of status not updated' , '' + test_input , scope.getElementById('mainmenu_status_text').innerHTML );
 				// test status update via OSSI
-				$('#mainmenu_status_text', scope).click();
+				scope.getElementById('microblog_button').onclick();
 				waitForTransaction( function(){
-				test_input = Math.ceil( Math.random() * 10000000 )
-				$('#status_textarea', scope).val( test_input );
-				$('#done_button', scope).click();
+				test_input = Math.ceil( Math.random() * 10000000 );
+				scope.getElementById('status_textarea').value = test_input;
+				// TODO: FIXME
+				try {
+					scope.getElementById('done_button').onclick();
+				} catch( e ) {
+
+				}
 				waitForTransaction( function(){
 				me = cos.user.get_user( COS_ID );
+				alert('Status check');
 				assertEquals( 'Status should have been updated', me.self.status.message , '' + test_input );
 				// testing channels
-				$('#channels_button', scope).click();
+				scope.getElementById('channels_button').onclick();
 				waitForTransaction( function() {
 				// look the page where channel is
 				channel_found = false;
 				while( ! channel_found ) {
-					channels = $("div:contains('Ossi Tester Channel')", scope);
-					if( channels.length > 0 ) {
+					channel = scope.getElementById('channel_id_bNcEjsuAer3PsHaaWPEYjL');
+					// ("div:contains('Ossi Tester Channel')", scope);
+					if( channel.innerHTML != null ) {
 						channel_found = true;
 					} else {
-						$('#channels_next_button', scope).click();
+						scope.getElementById('channels_next_button').onclick();
 						// this should sleep for some time
 						for( i = 0; i < 10000; i++ ) {
 							// HACK
@@ -93,22 +104,23 @@
 						}
 					}							
 				}
-				$('#channel_id_bNcEjsuAer3PsHaaWPEYjL', scope).click();
+				scope.getElementById('channel_id_bNcEjsuAer3PsHaaWPEYjL').onclick();
 				waitForTransaction( function () {
-				$('#add_post_button' , scope ).click();			
+				scope.getElementById('add_post_button').onclick();			
 				waitForTransaction( function () {
 				test_input = Math.ceil( Math.random() * 10000000 );
-				$('#post_message', scope).val( test_input );
+				scope.getElementById('post_message').value = test_input;
 				// todo: should include API tests if API is modified
-				$('#save_post_button' , scope ).click();
+				scope.getElementById('save_post_button').onclick();
 				waitForTransaction( function() {
-				$('#ok_button', scope).click();
+				scope.getElementById('ok_button' ).onclick();
 				waitForTransaction( function() {
-				found = $('.post_button:first', scope).html().match(test_input);
+				found = scope.getElementsByClassName('post_button')[0].innerHTML.match(test_input);
+				// found = $('.post_button:first', scope).html().match(test_input);
 				assertNotNull( 'There should be new message', found );
-				$('#channel_back_button', scope).click();
+				scope.getElementById('channel_back_button').onclick();
 				waitForTransaction( function() {
-				$('#channels_back_button', scope).click();
+				scope.getElementById('channels_back_button').onclick();
 				} );
 				} );
 				} );
