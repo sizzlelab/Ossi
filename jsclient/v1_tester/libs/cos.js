@@ -39,7 +39,8 @@ cos = {
 		app_name: 'essi',
 		app_password: 'testi',
 		cos_user_id: '',
-		
+
+		/* FIXME */		
 		login: function(user, pass){
 			// Dummy implementation, first kill exsisting sessions
 			http_request( 'delete' , cos.COS_URL + 'session' , null );		
@@ -57,7 +58,7 @@ cos = {
 			// user data
 			user.self = http_request( 'GET' , cos.COS_URL + 'people/' + id + '/@self' , null );
 			// get groups
-			user.groups = http_request( 'GETÃ' , cos.COS_URL + 'people/' + id + '/@groups', null);
+			user.groups = http_request( 'GET' , cos.COS_URL + 'people/' + id + '/@groups', null);
 			// get friends
 			user.friends = http_request( 'GET' , cos.COS_URL + 'people/' + id + '/@friends', null);
 			// get location
