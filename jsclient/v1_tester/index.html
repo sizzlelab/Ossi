@@ -6,8 +6,6 @@
 		<script language="javascript" type="text/javascript" src="libs/http.js"></script>
 		<!-- simple unitt -->
 		<script language='JavaScript' type='text/javascript' src='libs/check.js'></script>
-		<!-- COS module -->
-		<script language='JavaScript' type='text/javascript' src='libs/cos.js' ></script>
 	</head>
 		
 		<iframe id='iframe' name='iframe' src='../v1/index.html' frameborder='0'  ></iframe>
@@ -21,7 +19,7 @@
 			document.getElementById('start').onclick = function() {this.temp = 10; };
 
 			testCase();
-			var TRANSACTION_DELAY = 4000; // wait 4 secs between transactions
+			var TRANSACTION_DELAY = 2500; // wait 2 secs between transactions
 			var COS_ID = 'dLRfOwt7qr3QtLaaWPEYjL';
 			
 			// TODO: could this be mase syncronous
@@ -42,6 +40,7 @@
 				}
 
 				alert('We are go!');
+				http_request( 'GET' , './log.php?error=Enter test' , {} , function() {} );
 				// login
 				scope.getElementById( 'username' ).value = 'tester';
 				scope.getElementById( 'password' ).value = 'tester';
@@ -59,8 +58,7 @@
 				assertEquals('Matti should be a friend', 'Matti Nelimarkka' , friend.innerHTML.match('Matti Nelimarkka')[0] );
 				// update status via API request
 				var test_input = Math.ceil( Math.random() * 10000000 )
-				var me = cos.user.get_user( COS_ID );
-				cos.user.post_user( me, { 'person[status_message]' : test_input }  )
+				http_request( 'PUT' , '/cos/people/' + COS_ID + '/@self', { 'person[status_message]' : test_input } , function(){}  )
 				scope.getElementById( 'friend_list_back_button' ).onclick();
 				waitForTransaction( function(){
 				// verify we are in the main menu
@@ -80,8 +78,9 @@
 
 				}
 				waitForTransaction( function(){
-				me = cos.user.get_user( COS_ID );
-				assertEquals( 'Status should have been updated', me.self.status.message , '' + test_input );
+				http_request( 'GET' , '/cos/people/' + COS_ID + '/@self', {} , function() {
+					assertEquals( 'Status should have been updated', response.status.message , '' + test_input );
+				} );
 				// testing channels
 				scope.getElementById('channels_button').onclick();
 				waitForTransaction( function() {
@@ -128,6 +127,7 @@
 				} );
 				} );
 				} );
+				http_request( 'GET' , './log.php?error=Finished test' , {} , function() {} );
                	} );
 				
 			}
