@@ -8,6 +8,8 @@ ossi.friendlist = Class.create(ossi.base,{
       hostElement : false
 	  },options);
 	  this.pane = false;
+	  this.count = 5;
+	  this.startIndex = 0;
     this._draw();
 	},
 	/**
@@ -15,7 +17,11 @@ ossi.friendlist = Class.create(ossi.base,{
 	*
 	* does not handle XHR failure yet!
 	*/
-	update: function() {
+	update: function(options) {
+	var options = Object.extend({
+      startIndex : 0,
+      count : this.count
+	  },options);
     if (typeof(this.parent.userId) == 'undefined') return; // userId in the parent controller not set
     var self = this;
     var URL = BASE_URL+'/people/'+this.parent.userId+'/@friends';
@@ -29,15 +35,20 @@ ossi.friendlist = Class.create(ossi.base,{
         if (typeof(json.entry) != 'undefined') {
           if (json.entry.length > 0) {
             var h = '';
-            json.entry.each(function(entry) {
-              h += this._getButtonHTML(entry);
-            },self);
+			max = options.startIndex + options.count > json.entry.length ? json.entry.length - options.startIndex : options.count;
+			for( i = 0; i < max; i++ ){
+			  	h += self._getButtonHTML(json.entry[options.startIndex + i]);
+            }
             $('friends_placeholder').update(h);
             self._addLinkListeners();
-            if (json.entry.length > 5) $('friend_list_back_button_2_container').show(); // show second back button at top of screen if more than 5 channels
-
+            if (json.entry.length > 5) $('friend_list_back_button_2_container').show(); // show second back button at top of screen if more than 5 friends
+			if (options.startIndex + options.count < json.entry.length) $('friends_next_button_container').show();
+            else $('friends_next_button_container').hide()
+            if (options.startIndex > 0) $('friends_previous_button_container').show();
+            else $('friends_previous_button_container').hide()
             // now loop through results again and fetch user location (this is a temporary measure)
-            json.entry.each(function(user) {
+            for( i = 0; i < max; i++) {
+			  user = json.entry[options.startIndex + i];
               var URL = BASE_URL+'/people/'+user.id+'/@location';
               new Ajax.Request(URL,{
                 method : 'get',
@@ -51,9 +62,8 @@ ossi.friendlist = Class.create(ossi.base,{
                     self.parent.hideLoading();
                   }, 600);
                 }
-              });
-            },self);
-            
+              } );
+			}            
           } else {
             $('friends_placeholder').replace('<div style="padding:10px; text-align:center">Your friend list is currently empty. Click on "Find Friends" to search for people in the network and add them onto your list.</div>');
           }
@@ -98,6 +108,12 @@ ossi.friendlist = Class.create(ossi.base,{
           				</div>\
                   <div id="friends_placeholder">\
                   </div>\
+				        <div id="friends_next_button_container" class="nav_button" style="display:none">\
+          					<a id="friends_next_button" class="nav_button_text" href="javascript:void(null);">Next Page</a>\
+          				</div>\
+          				<div id="friends_previous_button_container" class="nav_button" style="display:none">\
+          					<a id="friends_previous_button" class="nav_button_text" href="javascript:void(null);">Previous Page</a>\
+          				</div>\
           				<div id="new_friend_requests_button_container" class="nav_button" style="display:none;">\
           					<a id="new_friend_requests_button" class="nav_button_text" href="javascript:void(null);"></a>\
           				</div>\
@@ -143,6 +159,14 @@ ossi.friendlist = Class.create(ossi.base,{
   _backHandler: function() {
     this.options.backCase.apply();
   },
+  _nextHandler: function() {
+    this.update({ 'startIndex' : this.startIndex+this.count, 'count' : this.count });
+    this.startIndex += this.count;
+  },
+  _previousHandler: function() {
+    this.update({ 'startIndex' : this.startIndex-this.count, 'count' : this.count });
+    this.startIndex -= this.count;
+  },
   _addFriendHandler: function() {
     this.parent.case11({ backCase : this.parent.case9.bind(this.parent,{out : true, backCase : this.parent.case3.bind(this.parent,{out:true}) }) });
   },
@@ -170,12 +194,16 @@ ossi.friendlist = Class.create(ossi.base,{
     $('friend_list_back_button').onclick = this._backHandler.bindAsEventListener(this);
     $('friend_list_back_button2').onclick = this._backHandler.bindAsEventListener(this);
     $('add_friend_button').onclick = this._addFriendHandler.bindAsEventListener(this);
+	$('friends_next_button').onclick = this._nextHandler.bindAsEventListener(this);
+    $('friends_previous_button').onclick = this._previousHandler.bindAsEventListener(this);
   },
   _removeListeners: function() {
     $('new_friend_requests_button').onclick = function() { return };
     $('friend_list_back_button').onclick = function() { return };
     $('friend_list_back_button2').onclick = function() { return };
     $('add_friend_button').onclick = function() { return };
+	$('friends_next_button').onclick = function() { return };
+    $('friends_previous_button').onclick = function() { return };
   },
   _addLinkListeners: function() { // for dynamic buttons
     $$('.profile_button').each(function(button) {
