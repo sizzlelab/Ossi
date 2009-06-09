@@ -1,7 +1,15 @@
 // Common HTTP request components
 
 function http_request( method, url, parameters, f ){
-        // this should be a smart selector...
+        // from Wikipedia:
+	if( typeof XMLHttpRequest == "undefined" ) XMLHttpRequest = function() {
+	  	try { return new ActiveXObject("Msxml2.XMLHTTP.6.0") } catch(e) {}
+  		try { return new ActiveXObject("Msxml2.XMLHTTP.3.0") } catch(e) {}
+  		try { return new ActiveXObject("Msxml2.XMLHTTP") } catch(e) {}
+  		try { return new ActiveXObject("Microsoft.XMLHTTP") } catch(e) {}
+  		throw new Error( "This browser does not support XMLHttpRequest." )
+	};
+	// end of Wikipedia (Handling old Explorers)
         http = new XMLHttpRequest();
         // parameters need to be encoded
         http.open( method , url, true);
@@ -33,10 +41,3 @@ function http_parameter( object ) {
         return ret;
 }
 
-function sleep( ms ) {
-	time = new Date();
-	nowTime = new Date();
-	while( nowTime - time < ms ) {
-		nowTime = new Date();
-	}
-}

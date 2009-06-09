@@ -16,10 +16,10 @@
 		</div>
 		
 		<script type='text/javascript'>
-			document.getElementById('start').onclick = function() {this.temp = 10; };
+			document.getElementById('start').onclick = function() {this.temp = 10000; };
 
 			testCase();
-			var TRANSACTION_DELAY = 2500; // wait 2 secs between transactions
+			var TRANSACTION_DELAY = 8000; // wait 8 secs between transactions
 			var COS_ID = 'dLRfOwt7qr3QtLaaWPEYjL';
 			
 			// TODO: could this be mase syncronous
@@ -30,7 +30,7 @@
 			var temp = 0;
 			function testCase() { 
 				scope = top.iframe.document;
-				if( scope.URL == "about:blank" | scope.URL == '' | this.temp < 6 ) {		
+				if( scope.URL == "about:blank" | scope.URL == '' | this.temp < 3 ) {		
 					this.temp++;
 					// FIXME: this is a bit ugly
 					setTimeout( function(){
@@ -39,13 +39,12 @@
 					return;
 				}
 
-				alert('We are go!');
+				alert('Starting testing. Please wait...');
 				http_request( 'GET' , './log.php?error=Enter test' , {} , function() {} );
 				// login
 				scope.getElementById( 'username' ).value = 'tester';
 				scope.getElementById( 'password' ).value = 'tester';
 				scope.getElementById( 'login_button' ).onclick();
-				// $( '#username', scope).val('tester');
 				waitForTransaction( function(){
 				// test main menu content
                			x = scope.getElementById('mainmenupane').childElements();
@@ -65,7 +64,7 @@
 				x = scope.getElementById( 'mainmenupane' ).childElements();
 				assertEquals('Main component should have 8 elements', 8, x.length);
 				// verify that API request has been updated into the view
-				assertEquals('View of status not updated' , '' + test_input , scope.getElementById('mainmenu_status_text').innerHTML );
+				// assertEquals('View of status not updated' , '' + test_input , scope.getElementById('mainmenu_status_text').innerHTML );
 				// test status update via OSSI
 				scope.getElementById('microblog_button').onclick();
 				waitForTransaction( function(){
@@ -117,6 +116,7 @@
 				scope.getElementById('channel_back_button').onclick();
 				waitForTransaction( function() {
 				scope.getElementById('channels_back_button').onclick();
+				end();
 				} );
 				} );
 				} );
@@ -127,10 +127,13 @@
 				} );
 				} );
 				} );
-				http_request( 'GET' , './log.php?error=Finished test' , {} , function() {} );
-               	} );
-				
-			}
+			} ); 
+		}
+
+		function end() {
+			http_request( 'GET' , './log.php?error=Finished test' , {} , function() {} );
+			alert('Testing done. Thanks!');
+		}
 		</script>
 		
 	</body>
