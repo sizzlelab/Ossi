@@ -152,23 +152,10 @@ ossi.profile = Class.create(ossi.base,{
         var json = response.responseJSON;
         // currently returns currently logged in user's data. no need to parse
         // should check if the request fails though
-
         self.parent.case6({
           message : "Friend request sent! After the recipient accepts your request you become connected!",
           buttonText : "Back",
-          backCase : self.parent.case12.bind(self.parent,{
-            search : self.options.search,
-            out : true,
-            backCase:self.parent.case11.bind(self.parent,{
-              out:true,
-              backCase:self.parent.case9.bind(self.parent,{
-                out:true,
-                backCase:self.parent.case3.bind(self.parent,{
-                  out:true
-                })
-              })
-            })
-          })
+          backCase : self.options.backCase,
         });
 
         setTimeout(function() {
@@ -195,16 +182,7 @@ ossi.profile = Class.create(ossi.base,{
         self.parent.case6({
           message : "Friend request accepted!",
           buttonText : "Back",
-          backCase : self.parent.case14.bind(self.parent,{
-            search : self.options.search,
-            out : true,
-            backCase:self.parent.case9.bind(self.parent,{
-              out:true,
-              backCase:self.parent.case3.bind(self.parent,{
-                out:true
-              })
-            })
-          })
+          backCase : self.options.backCase,
         });
 
         setTimeout(function() {
@@ -229,16 +207,7 @@ ossi.profile = Class.create(ossi.base,{
         self.parent.case6({
           message : "Friend request rejected!",
           buttonText : "Back",
-          backCase : self.parent.case14.bind(self.parent,{
-            search : self.options.search,
-            out : true,
-            backCase:self.parent.case9.bind(self.parent,{
-              out:true,
-              backCase:self.parent.case3.bind(self.parent,{
-                out:true
-              })
-            })
-          })
+          backCase : self.options.backCase,
         });
 
         setTimeout(function() {
