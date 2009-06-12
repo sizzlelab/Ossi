@@ -129,20 +129,24 @@ ossi.groupmembers = Class.create(ossi.base,{
     this.parent.case11({ backCase : this.parent.case9.bind(this.parent,{out : true, backCase : this.parent.case3.bind(this.parent,{out:true}) }) });
   },
   _openProfileHandler: function(event,button_id) {
+  	var groupId = this.options.groupId;
     var uid = button_id.replace("person_uid_","");
     this.parent.case13({
       userId : uid,
+	  out: true,
+	  groupId : this.options.groupId,
       backCase : this.parent.case28.bind(this.parent,{
         out : true,
+		groupId : this.options.groupId,
         backCase : this.parent.case27.bind(this.parent,{
-		  out:true,
-		  groupId : self.groupId,
-		  backCase : this.parent.case25(this.parent, {
+		  out: true,
+		  groupId : this.options.groupId,
+		  backCase : this.parent.case25.bind(this.parent, {
 			out: true,
-			backCase : this.parent.case3(this.parent, {out: true}),
+			backCase : this.parent.case3.bind(this.parent, {out: true}),
 		  })
-		}) 
-      })
+		})
+      }) 
     });
 
   },
