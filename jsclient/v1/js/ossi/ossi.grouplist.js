@@ -8,7 +8,7 @@ ossi.grouplist = Class.create(ossi.base,{
       hostElement : false
 	  },options);
     this.count = 8;
-	  this.startIndex = 1;
+	  this.startIndex = 0;
 	  this.pane = false;
     this._draw();
 	},
@@ -19,7 +19,7 @@ ossi.grouplist = Class.create(ossi.base,{
 	*/
 	update: function(options) {
 		var options = Object.extend({
-      startIndex : 1,
+      startIndex : 0,
       count : this.count
 	  },options);
     var self = this;
@@ -35,9 +35,16 @@ ossi.grouplist = Class.create(ossi.base,{
         var json = response.responseJSON;
         if (typeof(json.entry) != 'undefined') {
           if (json.entry.length > 0) {
-            self._drawContents(json.entry);
-            if (json.entry.length > 5) $('groups_back_button_2_container').show(); // show second back button at top of screen if more than 5 groups
-            if (options.startIndex + options.count < json.totalResults) $('groups_next_button_container').show();
+            var h = '';
+			max = options.startIndex + options.count > json.entry.length ? json.entry.length - options.startIndex : options.count;
+			for( i = 0; i < max; i++ ){
+	  		  h += self._getButtonHTML(json.entry[options.startIndex + i]);
+			}
+    		$('groups_placeholder').update(h);
+    		self._addLinkListeners();
+            // back buttons
+			if (json.entry.length > 5) $('groups_back_button_2_container').show(); // show second back button at top of screen if more than 5 groups
+            if (options.startIndex + options.count < json.entry.length ) $('groups_next_button_container').show();
             else $('groups_next_button_container').hide()
             if (options.startIndex > 1) $('groups_previous_button_container').show();
             else $('groups_previous_button_container').hide()
@@ -57,15 +64,7 @@ ossi.grouplist = Class.create(ossi.base,{
       }
     });
 	},
-	_drawContents: function(entries) {
-    var self = this;
-    var h = '';
-    entries.each(function(entry) {
-      h += self._getButtonHTML(entry);
-    },self);
-    $('groups_placeholder').update(h);
-    this._addLinkListeners();
-  },
+
   _draw: function() {
     if (this.options.hostElement) {
       this.options.hostElement.insert(this._getHTML());
@@ -75,6 +74,7 @@ ossi.grouplist = Class.create(ossi.base,{
       alert('ossi.grouplist._draw() failed! this.options.hostElement not defined!');
     }
   },
+
   _getHTML: function() {
     var h =   '\
           			<div id="grouplistpane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
@@ -83,10 +83,10 @@ ossi.grouplist = Class.create(ossi.base,{
           				</div>\
                   <div id="groups_placeholder">\
                   </div>\
-          				<div id="groups_next_button_container" class="nav_button" style="display:none">\
+          				<div id="groups_next_button_container" class="nav_button" style="display:none" >\
           					<a id="groups_next_button" class="nav_button_text" href="javascript:void(null);">Next Page</a>\
           				</div>\
-          				<div id="groups_previous_button_container" class="nav_button" style="display:none">\
+          				<div id="groups_previous_button_container" class="nav_button" style="display:none" >\
           					<a id="groups_previous_button" class="nav_button_text" href="javascript:void(null);">Previous Page</a>\
           				</div>\
           				<div id="about_groups_button_container" class="nav_button">\
