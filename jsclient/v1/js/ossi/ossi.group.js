@@ -25,7 +25,7 @@ ossi.group = Class.create(ossi.base,{
       requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
       onSuccess : function(response) { // does not handle invalid responses
         var json = response.responseJSON;
-        
+		
         // title
         if (! Object.isUndefined(json.group.title)) $('group_title').update(json.group.title);
         else $('group_title').update('N/A');
@@ -37,6 +37,12 @@ ossi.group = Class.create(ossi.base,{
         // type
         if (! Object.isUndefined(json.group.group_type)) $('group_type').update(json.group.group_type);
         else $('group_type').update('N/A');
+		
+		if( json.group.is_member ) {
+		  $('leave_button_container').show();
+		} else {
+		  $('join_button_container').show();
+		}
 
         setTimeout(function() {
           self.parent.hideLoading();
@@ -71,8 +77,11 @@ ossi.group = Class.create(ossi.base,{
                       </dl>\
             				</div>\
             				<div style="height:14px"></div>\
-            				<div class="nav_button">\
+            				<div id="join_button_container" class="nav_button" style="display:none"v>\
             					<a id="join_button" class="nav_button_text" href="javascript:void(null);">Join Group</a>\
+            				</div>\
+							<div  id="leave_button_container"  class="nav_button" style="display:none" >\
+            					<a id="leave_button" class="nav_button_text" href="javascript:void(null);">Leave Group</a>\
             				</div>\
             				<div class="nav_button">\
             					<a id="members_button" class="nav_button_text" href="javascript:void(null);">Members</a>\
@@ -116,6 +125,37 @@ ossi.group = Class.create(ossi.base,{
       }
     });
   },
+  
+  _leaveHandler: function() {
+    var self = this;
+    if (typeof(this.parent.userId) == 'undefined') return; // userId in the parent controller not set
+    var URL = BASE_URL+'/people/'+this.parent.userId+'/@groups/' + this.options.groupId;
+    self.parent.showLoading();
+    new Ajax.Request(URL, {
+      method : 'delete',
+      requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
+      onSuccess : function(response) { // does not handle invalid responses
+        var json = response.responseJSON;
+        self.parent.case6({
+          message : "You have successfully left this group!",
+          buttonText : "Back",
+          backCase:self.parent.case27.bind(self.parent,{
+            groupId : self.options.groupId,
+            out:true,
+            backCase:self.parent.case25.bind(self.parent,{
+              out:true,
+              backCase:self.parent.case3.bind(self.parent,{out:true})
+            })
+          })
+        });
+        self.parent.hideLoading();
+      },
+      onFailure : function() {
+        alert('could not add user to group!');
+      }
+    });
+  },
+  
   _backHandler: function() {
     this.options.backCase.apply();
   },
@@ -138,11 +178,13 @@ ossi.group = Class.create(ossi.base,{
   _addListeners: function() {
     $('members_button').onclick = this._membersHandler.bindAsEventListener(this);
     $('join_button').onclick = this._joinHandler.bindAsEventListener(this);
+    $('leave_button').onclick = this._leaveHandler.bindAsEventListener(this);
     $('back_button').onclick = this._backHandler.bindAsEventListener(this);
   },
   _removeListeners: function() {
     $('members_button').onclick = function() { return }
     $('join_button').onclick = function() { return }
+    $('leave_button').onclick = function() { return }
     $('back_button').onclick = function() { return }
   },
   destroy: function () {
