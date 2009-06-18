@@ -36,14 +36,16 @@ ossi.channel = Class.create(ossi.base,{
     // get contents
     var URL = BASE_URL+'/appdata/cWslSQyIyr3yiraaWPEYjL/@collections/'+self.options.channelId; // ossi app Id hard-coded
     var params = { startIndex : options.startIndex, count : options.count };
-    if(!self.options.wall) self.parent.showLoading();
+//    if(!self.options.wall) self.parent.showLoading();
+    self.parent.showLoading();
     
     new Ajax.Request(URL,{
       method : 'get',
       requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
       parameters : params,
       onSuccess : function(response) {
-        if(!self.options.wall) self.parent.hideLoading();
+//        if(!self.options.wall) self.parent.hideLoading();
+        self.parent.hideLoading();
         var json = response.responseJSON;
 
         //for moderator privilege check. there must be a userId - also now wall view, atm

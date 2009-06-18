@@ -1,5 +1,5 @@
 * {
-    #border: 0;
+    /*#border: 0;*/
     margin: 0;
     padding: 0;
     color:#fff;
@@ -84,6 +84,15 @@ body.widget {
   padding:7px 7px 7px 20px;
 }
 
+#loading.wall {
+  position:absolute;
+  top:1px;
+  left:1px;
+  z-index:99999;
+  width:284px;
+  padding:7px 7px 7px 20px;
+}
+
 #loading_animation {
   margin-top: 20%;
   background: #000;
@@ -153,7 +162,7 @@ body.widget {
 }
 
 .nav_button {
-  #display: block;
+/*  #display: block;*/
   border: solid 1px black;
   background: #323131 url(../images/button_bg.png) repeat-x top;
   margin: 0px 0px 0px 0px;
@@ -165,7 +174,7 @@ body.widget {
 
 .nav_button_text {
   display:block;
-  #width:90%;
+/*  #width:90%;*/
   height:70%;
   padding-top: 9px;
   font-size:12px;
@@ -176,7 +185,7 @@ body.widget {
 
 .feed_button_text {
   display:block;
-  #width:90%;
+/*  #width:90%;*/
   height:90%;
   padding-top: 5px;
   font-size:12px;
@@ -187,7 +196,7 @@ body.widget {
 
 .search_results_profile_button {
   display:block;
-  #width:90%;
+/*  #width:90%;*/
   height:90%;
   padding-top: 5px;
   font-size:12px;
@@ -209,12 +218,12 @@ body.widget {
 
 .subscription_button_text {
   display:block;
-  #width:90%;
+/*  #width:90%;*/
   height:90%;
   padding-top: 0px;
   font-size:12px;
   color:white;
-  #vertical-align: middle;
+/*  #vertical-align: middle;*/
   text-decoration:none;
 }
 
@@ -289,7 +298,7 @@ body.widget {
 }
 
 .my_status_button {
-  #display: block;
+/*  #display: block;*/
   border: solid 1px black;
   background: #3db005 url(../images/status_button_bg.png) repeat-x top;
   margin: 0px 0px 0px 0px;
@@ -300,7 +309,7 @@ body.widget {
 }
 
 .subscription_button {
-  #display: block;
+/*  #display: block;*/
   border: solid 1px black;
   background: #323131 url(../images/button_bg.png) repeat-x top;
   margin: 0px 0px 0px 0px;
@@ -340,14 +349,14 @@ body.widget {
 */
 
 .button_pic {
-  #width:50px;
+/*  #width:50px;*/
   height:50px;
   border: solid 1px white;
 }
 
 .button_icon {
-  #width:50px;
-  #height:50px;
+/*  #width:50px;*/
+/*  #height:50px;*/
   border: solid 0px white;
 }
 
@@ -413,13 +422,13 @@ div.channel_button_left_column.private {
 
 div.channel_button_text {
   margin-left:8px;
-  heigth:55px;
+  height:55px;
   padding:5px 5px 5px 5px;
 }
 
 div.post_button_text {
   margin-left:56px;
-  heigth:56px;
+  height:56px;
   padding:5px 5px 5px 5px;
 }
 
@@ -462,7 +471,7 @@ a:visited {
 a:hover { 
   color:white; 
   text-decoration:none;
-  #background: #fc7e17 url(../images/button_bg_hover.png) repeat-x top;
+/*  background: #fc7e17 url(../images/button_bg_hover.png) repeat-x top;*/
   background: transparent;
 }
 

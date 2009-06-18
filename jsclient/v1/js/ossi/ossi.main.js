@@ -13,8 +13,91 @@ ossi.main = Class.create(ossi.base,{
       wall : false
     },options);
     WIDGET_VIEWPORT = { height : 428, width : 313 }; // set these to same values as for #content_area.widget in main.css
-    this.mainElement = new Element('div', { id : 'content_area' });
-    document.body.appendChild(this.mainElement);
+
+    console.log(this.options);
+
+    // if this is a wall then create chrome for the window
+    if (this.options.wall) {
+      var self = this;
+      this.window = new Element('div', { id : 'ossi_window' });
+      this.windowHandle = new Element('div', { id : 'ossi_window_handle' });
+      this.windowContent = new Element('div', { id : 'ossi_window_content' });
+      document.body.appendChild(this.window);
+      this.window.appendChild(this.windowContent);
+      this.window.appendChild(this.windowHandle);
+      this.window.setStyle({
+        position : 'absolute',
+        top : '100px',
+        left : '100px',
+        background : '#000',
+        border : 'solid #444 2px',
+        width : WIDGET_VIEWPORT.width+'px',
+        height : WIDGET_VIEWPORT.height+'px'
+      });
+      this.windowHandle.setStyle({
+        position : 'absolute',
+        right : '-29px',
+        top : '10px',
+        width : '25px',
+        height : '90px',
+        background : '#555',
+        cursor : 'pointer',
+        color : '#ff8a21',
+        fontFamily : 'helvetica',
+        fontWeight : 'bold',
+        fontSize : '14px',
+        textAlign : 'center',
+        paddingTop : '10px',
+//        layoutFlow: 'vertical-ideographic',
+        border : 'solid #444 2px'
+      });
+      var h = '\
+        O<br />S<br />S<br />I\
+        <div id="ossi_toggle_window_button" style="position:absolute; left:8px; bottom:10px; width:10px; height:10px; background:red;"><img id="ossi_toggle_button_image" src="../images/ossi_minimize_button.png" border="0" /></div>\
+        <img src="../images/ossi_maximize_button.png" style="display:none" />\
+      ';
+      this.windowHandle.update(h);
+      this.windowToggleButton = $('ossi_toggle_window_button');
+      this.windowToggleButton.onclick = function() {
+        if (!Object.isUndefined(self.wallHidden)) {
+          if (self.wallHidden) { 
+            self.utils.showWall();
+            $('ossi_toggle_button_image').src = '../images/ossi_minimize_button.png';
+          } else {
+            self.utils.hideWall();
+            $('ossi_toggle_button_image').src = '../images/ossi_maximize_button.png';
+          }
+        } else{
+          self.utils.hideWall(this.window);
+          $('ossi_toggle_button_image').src = '../images/ossi_maximize_button.png';
+        }
+      }
+      this.windowContent.setStyle({
+        position : 'absolute',
+        left : '0px',
+        top : '0px',
+        width : WIDGET_VIEWPORT.width+'px',
+        height : WIDGET_VIEWPORT.height+'px',
+        overflowY : 'auto',
+        overflowX : 'hidden'
+      });
+    }
+
+    // create main content element
+    if (this.options.wall) {
+      this.mainElement = this.windowContent;
+//      this.windowContent.appendChild(this.mainElement);
+      new Draggable(this.window, { 
+        handle : this.windowHandle,
+        onStart : function() {
+          this.wallHidden = false;
+        }.bind(this)
+      });
+    } else {
+      this.mainElement = new Element('div', { id : 'content_area' });
+      document.body.appendChild(this.mainElement);
+    }
+
     this.channelsId = 'd8-W0MMEir3yhJaaWPEYjL'; // hardcoded id on alpha.sizl.org!
 //    this.channelsId = 'bzFvEETj8r3yz7aaWPfx7J'; // hardcoded id on beta.sizl.org!
     this.sub1 = false; // pointers for case classes
@@ -24,8 +107,11 @@ ossi.main = Class.create(ossi.base,{
     Ajax.Responders.register({ onCreate:this._onXHRCreate.bind(this), onComplete:this._onXHRComplete.bind(this) }); // set handlers for managing requests
     this.utils = new ossi.utils(this);
     this.loadingpane = new Element('div', { id : 'loading' });
-    Element.extend(this.loadingpane);
-    document.body.appendChild(this.loadingpane);
+    if (this.options.wall) {
+      this.window.appendChild(this.loadingpane);
+    } else {
+      document.body.appendChild(this.loadingpane);
+    }
     this.loadingpane.hide();
     this.loadingpane.addClassName('loading');
     this._getClient(); // determine which client we are serving for
@@ -785,12 +871,23 @@ ossi.main = Class.create(ossi.base,{
 	* sets values for a global client object
 	*/
   _getClient: function() {
+    var agent = navigator.userAgent;
 	  client = {};
 	  client.is_widget = (typeof(window.widget) != 'undefined') ? true : false;
+    client.is_WRT_widget = false;
+    client.is_Dashboard_widget = false;
 	  if (client.is_widget) {
-	    client.dimensions = WIDGET_VIEWPORT;
+      if (agent.include('Series60')) { // if we're running inside Nokia WRT
+        client.is_WRT_widget = true;
+	      client.dimensions = document.viewport.getDimensions();
+      } else { // if not then we assume User Agent is an OS X Dashboard
+        client.is_Dashboard_widget = true;
+	      client.dimensions = WIDGET_VIEWPORT;
+      }
 	  } else if (this.options.width && this.options.height) {
 	    client.dimensions = { height : this.options.height, width : this.options.width }
+	  } else if (this.options.wall) {
+      client.dimensions = WIDGET_VIEWPORT;
 	  } else {
 	    client.dimensions = document.viewport.getDimensions();
 	  }
@@ -802,10 +899,12 @@ ossi.main = Class.create(ossi.base,{
   *
   */
   _setClientUI: function() {
-    if (client.is_widget) {
+    if (client.is_Dashboard_widget) {
       document.body.addClassName('widget');
       this.mainElement.addClassName('widget');
       this.loadingpane.addClassName('widget');
+    } else if (this.options.wall) {
+      this.loadingpane.addClassName('wall');
     } else if (this.options.width && this.options.height) {
       this.mainElement.setStyle({
         width: this.options.width+'px',

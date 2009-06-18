@@ -6,10 +6,12 @@ var ossi = {
       document.write('<script type="text/javascript" src="'+libraryName+'"></script>');
     },
     CSS: [
-      'css/main.css',
-      'css/ossiWallStyles.css'
+      'main.css',
+      'ossiWallStyles.css'
     ],
     libraries: [  '3rdParty/prototype-m.js',
+                  '3rdParty/effects.js',
+                  '3rdParty/dragdrop.js',
                   '3rdParty/md5.js',
                   'extras/prototype.extras.js',
                   'ossi/ossi.base.js',
@@ -53,6 +55,7 @@ var ossi = {
       if (!bootScript)
         return alert ('ossi boot script failed');
       ossi.path = bootScript.src.replace(/ossi\.js(\?.*)?$/,'');
+      ossi.cssPath = bootScript.src.replace(/js\/ossi\.js(\?.*)?$/,'') + 'css/';
       for (var i = 0; i < ossi.bootstrap.libraries.length; i++) {
         ossi.bootstrap.load(ossi.path+ossi.bootstrap.libraries[i]);
       }
@@ -60,13 +63,15 @@ var ossi = {
     },
     loadCSS: function() {
       for (var i = 0; i < ossi.bootstrap.CSS.length; i++) {
-        document.write('<link type="text/css" rel="stylesheet" href="'+ossi.bootstrap.CSS[i]+'" />');
+        document.write('<link type="text/css" rel="stylesheet" href="'+ossi.cssPath+ossi.bootstrap.CSS[i]+'" />');
       }
     }
   }
 }
 ossi.bootstrap.loadLibraries();
-window.onload = function() {
-//  new ossi.main({width:400, height:400, x:100, y:100});  
-  new ossi.main();  
+if (typeof(wall) == 'undefined') {
+  window.onload = function() {
+  //  new ossi.main({width:400, height:400, x:100, y:100});  
+    new ossi.main();  
+  }
 }

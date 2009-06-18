@@ -28,7 +28,7 @@ ossi.utils = Class.create(ossi.base,{
   	a.setStyle({left:'0px', width:client.dimensions.width+'px'});
   	b.setStyle({left:-client.dimensions.width+'px', width:client.dimensions.width+'px'});
   	b.show();
-  	a.scrollTo();
+//  	a.scrollTo();
   	new PeriodicalExecuter(function(pe) {
   		var speed = self.getSpeed(0,client.dimensions.width,parseInt(a.getStyle('left')),40,1);
   		a.setStyle({left:(parseInt(a.getStyle('left'))+speed)+'px'});
@@ -45,7 +45,7 @@ ossi.utils = Class.create(ossi.base,{
   	a.setStyle({left:'0px', width:client.dimensions.width+'px'});
   	b.setStyle({left:client.dimensions.width+'px', width:client.dimensions.width+'px'});
   	b.show();
-  	a.scrollTo();
+//  	a.scrollTo();
   	new PeriodicalExecuter(function(pe) {
   		var speed = self.getSpeed(client.dimensions.width,0,parseInt(b.getStyle('left')),40,1);
   		a.setStyle({left:(parseInt(a.getStyle('left'))+speed)+'px'});
@@ -125,5 +125,32 @@ ossi.utils = Class.create(ossi.base,{
       h = s+' months ago';
     }
     return h;
-  }  
+  },
+  hideWall: function() {
+    var self = this;
+    var startpoint = parseInt(self.parent.window.getStyle('left'));
+    var endpoint = -self.parent.window.getWidth();
+  	new PeriodicalExecuter(function(pe) {
+  		var speed = self.getSpeed(startpoint,endpoint,parseInt(self.parent.window.getStyle('left')),40,1);
+  		self.parent.window.setStyle({left:(parseInt(self.parent.window.getStyle('left'))+speed)+'px'});
+  		if (parseInt(self.parent.window.getStyle('left')) == endpoint) {
+  			pe.stop();
+        self.parent.wallX = startpoint;
+        self.parent.wallHidden = true;
+  		}
+  	}, 0.01);
+  },
+  showWall: function() {
+    var self = this;
+    var startpoint = parseInt(self.parent.window.getStyle('left'));
+    var endpoint = (Object.isUndefined(self.parent.wallX)) ? 100 : self.parent.wallX;
+  	new PeriodicalExecuter(function(pe) {
+  		var speed = self.getSpeed(startpoint,endpoint,parseInt(self.parent.window.getStyle('left')),40,1);
+  		self.parent.window.setStyle({left:(parseInt(self.parent.window.getStyle('left'))+speed)+'px'});
+  		if (parseInt(self.parent.window.getStyle('left')) == endpoint) {
+  			pe.stop();
+        self.parent.wallHidden = false;
+  		}
+  	}, 0.01);
+  }
 });
