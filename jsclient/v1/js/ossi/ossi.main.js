@@ -640,14 +640,16 @@ ossi.main = Class.create(ossi.base,{
     	  start : false,
     	  out : false,
     	  channelId : false,
-    	  backCase : false
+    	  backCase : false,
+		  startIndex : 1
 		},options);
 		this.sub2 = this.sub1;
   	this.sub1 = new ossi.channel(this, {  'hostElement' : this.mainElement,
                                           'selfUpdate' : true,
           	                           	  'channelId' : options.channelId,
 							                            'wall' : this.options.wall,
-                  	                  	  'backCase' : options.backCase
+                  	                  	  'backCase' : options.backCase,
+										  'startIndex' : options.startIndex
 		});
 		if (options.start) {
   		this.sub1.pane.show();
@@ -705,14 +707,16 @@ ossi.main = Class.create(ossi.base,{
       out : false,
       channelId : false,
       postId : false,
-      backCase : false
+      backCase : false,
+	  startIndex : 1
 	  },options);
 
     this.sub2 = this.sub1;
     this.sub1 = new ossi.post(this, {   'hostElement' : this.mainElement,
                                         'channelId' : options.channelId,
                                         'postId' : options.postId,
-                                        'backCase' : options.backCase});
+                                        'backCase' : options.backCase,
+										'startIndex' : options.startIndex});
     if (options.out) {
       this.utils.out(this.sub2.pane,this.sub1.pane,function() {
         this.sub2.destroy();

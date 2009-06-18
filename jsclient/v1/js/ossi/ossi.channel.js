@@ -14,8 +14,8 @@ ossi.channel = Class.create(ossi.base,{
     },options);
     this.count = this.options.count;
     this.updateInterval = 15000; //this.parent.options.refreshChannel;
-    this.updateOptions = {};
-    this.startIndex = 1;
+    this.updateOptions = { 'startIndex' : this.options.startIndex };
+    this.startIndex = this.options.startIndex;
     this.priv = true; // for moderator privilage check
     this.pane = false;
     this._draw();
@@ -286,13 +286,16 @@ ossi.channel = Class.create(ossi.base,{
     var self = this;
     var post_id = button_id.replace("post_id_","");
     var channel_id = self.options.channelId;
+	var startIndex = self.startIndex;
     self.parent.case22({
       channelId : channel_id,
       postId : post_id,
+	  startIndex : startIndex,
       backCase : self.parent.case20.bind(self.parent,{
         out : true,
         channelId : channel_id,
         postId : post_id,
+		startIndex : startIndex,
         backCase : self.parent.case18.bind(self.parent,{
           out : true,
           backCase : self.parent.case3.bind(self.parent,{out:true}) 
