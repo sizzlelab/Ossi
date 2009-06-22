@@ -151,10 +151,12 @@ ossi.post = Class.create(ossi.base,{
       backCase : self.parent.case22.bind(self.parent,{
         out : true,
         channelId : self.options.channelId,
+		startIndex : self.options.startIndex,
         postId : self.options.postId,
         backCase : self.parent.case20.bind(self.parent,{
           out : true,
           channelId : self.options.channelId,
+		  startIndex : self.options.startIndex,
           postId : self.options.postId,
           backCase : self.parent.case18.bind(self.parent,{
             out : true,
@@ -169,7 +171,6 @@ ossi.post = Class.create(ossi.base,{
     var post_id = button_id.replace("post_id_","");
     var post_id = self.options.postId;
     self.parent.case20({
-      postId : post_id,
       postId : post_id,
       backCase : self.parent.case18.bind(self.parent,{
         out : true,
