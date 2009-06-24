@@ -14,8 +14,6 @@ ossi.main = Class.create(ossi.base,{
     },options);
     WIDGET_VIEWPORT = { height : 428, width : 313 }; // set these to same values as for #content_area.widget in main.css
 
-    console.log(this.options);
-
     // if this is a wall then create chrome for the window
     if (this.options.wall) {
       var self = this;
