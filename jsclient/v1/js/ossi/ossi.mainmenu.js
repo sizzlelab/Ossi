@@ -105,13 +105,16 @@ ossi.mainmenu = Class.create(ossi.base,{
           				  <a id="friends_button" class="nav_button_text" href="javascript:void(null);">Friends</a>\
           				</div>\
           				<div class="nav_button">\
-          					<a id="channels_button" class="nav_button_text" href="javascript:void(null);">Channels</a>\
-          				</div>\
-          				<div class="nav_button">\
           					<a id="groups_button" class="nav_button_text" href="javascript:void(null);">Groups</a>\
           				</div>\
           				<div class="nav_button">\
-          					<a id="profile_button" class="nav_button_text" href="javascript:void(null);">My Profile</a>\
+          					<a id="channels_button" class="nav_button_text" href="javascript:void(null);">Sizzle</a>\
+          				</div>\
+          				<div class="nav_button">\
+          					<a id="search_button" class="nav_button_text" href="javascript:void(null);">Search</a>\
+          				</div>\
+          				<div class="nav_button">\
+          					<a id="profile_button" class="nav_button_text" href="javascript:void(null);">Profile settings</a>\
           				</div>\
           				<div class="nav_button">\
           					<a id="logout_button" class="nav_button_text" href="javascript:void(null);">Logout</a>\
