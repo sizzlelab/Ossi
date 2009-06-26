@@ -35,7 +35,7 @@ ossi.group = Class.create(ossi.base,{
         else $('group_description').update('N/A');
 
         // type
-        if (! Object.isUndefined(json.group.group_type)) $('group_type').update(json.group.group_type);
+        if (! Object.isUndefined(json.group.group_type)) $('group_type').update(json.group.group_type + ' group');
         else $('group_type').update('N/A');
 		
 		if( json.group.is_member ) {
@@ -67,14 +67,11 @@ ossi.group = Class.create(ossi.base,{
           			<div id="grouppane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
                   <form>\
                     <div style="margin: 12px auto 12px auto; text-align: left; width: 205px;">\
-                      <dl>\
-                        <dt style="color:#666; margin:0px 0px 5px 0px;">Group title:</dt>\
-                          <dd id="group_title" style=" margin:0px 0px 10px 15px;">loading...</dd>\
-                        <dt style="color:#666; margin:0px 0px 5px 0px;">Group description:</dt>\
-                          <dd id="group_description" style=" margin:0px 0px 10px 15px;">loading...</dd>\
-                        <dt style="color:#666; margin:0px 0px 5px 0px;">Group type:</dt>\
-                          <dd id="group_type" style=" margin:0px 0px 10px 15px;">loading...</dd>\
-                      </dl>\
+                      <div>\
+                          <p id="group_title" style=" margin:0px 0px 10px 15px; color: #58bb3d; font-size: 120%;">loading...</p>\
+                          <p id="group_description" style=" margin:0px 0px 10px 15px;">loading...</p>\
+                          <p id="group_type" style=" margin:0px 0px 10px 15px;">loading...</p>\
+                      </div>\
             				</div>\
             				<div style="height:14px"></div>\
             				<div id="join_button_container" class="nav_button" style="display:none"v>\
