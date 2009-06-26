@@ -93,19 +93,15 @@ ossi.searchresults = Class.create(ossi.base,{
         }
       }
     }
-
-
-
-
-
-
+		
     var h =   '\
-          				<div class="button">\
-          					<a class="search_results_profile_button" id="search_uid_'+user.id+'" href="javascript:void(null);">\
-          						<table><tr><td class="button_pic_td"><img class="button_icon" src="images/icons/grey/001_54.png"/></td><td class="button_text_td"><span class="button_title">'+name+'<br/></span>\
-          						<span class="button_content_text">'+status_message+'<br/></span>\
-          						<span class="button_subtitle_text">'+status_time+'</span></td></tr></table>\
-          					</a>\
+          				<div class="profile_button" id="search_uid_'+user.id+'" href="javascript:void(null);">\
+                    <div class="post_button_left_column"><img style="margin:2px 0px 0px 2px; border:solid #eee 1px;" src="'+BASE_URL+'/people/'+user.id+'/@avatar/small_thumbnail?'+Math.random()*9999+'" width="50" height="50" border="0" /></div>\
+                    <div class="post_button_text">\
+        						  <div class="button_title">'+name+'</div>\
+        						  <div class="button_content_text"><a href="javascript:void(null);">'+status_message+'</a></div>\
+        						  <div class="button_subtitle_text" style="padding-top:3px">'+status_time+'</div>\
+                    </div>\
           				</div>\
           			';
     return h;
@@ -135,7 +131,7 @@ ossi.searchresults = Class.create(ossi.base,{
     $('search_results_back_button').onclick = function() { return };
   },
   _addLinkListeners: function() { // for dynamic buttons
-    $$('.search_results_profile_button').each(function(button) {
+    $$('.profile_button').each(function(button) {
       button.onclick = this._openProfileHandler.bindAsEventListener(this,button.id);
     },this);
   },
