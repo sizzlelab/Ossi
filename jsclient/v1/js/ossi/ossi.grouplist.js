@@ -165,6 +165,13 @@ ossi.grouplist = Class.create(ossi.base,{
     if (! Object.isUndefined(group.group_type)) {
       ident_class = (group.group_type == 'open') ? 'public' : 'private';
     }
+	
+	// Change the bar to orange if I'm member of the group
+	if( ! Object.isUndefined(group.is_member) ) {
+	  if( group.is_member ) {
+	  	ident_class = 'my';
+	  }
+	}
     
     var members_html = '';
     if (! Object.isUndefined(group.members)) members_html += group.members+' members.'; 

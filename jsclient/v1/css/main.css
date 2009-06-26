@@ -348,6 +348,14 @@ body.widget {
 }
 */
 
+.next_button {
+	float: right;
+	width: 50%;
+}
+
+.previous_button {
+}
+
 .button_pic {
 /*  #width:50px;*/
   height:50px;
@@ -418,6 +426,10 @@ div.channel_button_left_column.public {
 
 div.channel_button_left_column.private {
   background: #bb3d3d;
+}
+
+div.channel_button_left_column.my {
+  background: #ff9900;
 }
 
 div.channel_button_text {
