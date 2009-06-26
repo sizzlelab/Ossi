@@ -89,31 +89,7 @@ ossi.searchresults = Class.create(ossi.base,{
       }
       if (user.status.changed != 'undefined') {
         if (user.status.changed != null) {
-          // timestamp to epoch
-          var d = user.status.changed;
-          var a = Date.UTC(d.substring(0,4),d.substring(5,7),d.substring(8,10),d.substring(11,13),d.substring(14,16),d.substring(17,19));
-
-          // now to epoch
-          var e = new Date();
-          var b = Date.UTC(e.getUTCFullYear(),(e.getUTCMonth()+1),e.getUTCDate(),e.getUTCHours(),e.getUTCMinutes(),e.getUTCSeconds());
-
-          // set string data
-          var s = (b-a) / 1000;
-          if (s < 60) {
-            status_time = 'a moment ago';
-          } else if (s >= 60 && s < 3600) {
-            s = Math.floor(s/60);
-            status_time = s+' mins ago';
-          } else if (s >= 3600 && s < 86400) {
-            s = Math.floor(s/3600);
-            status_time = s+' hours ago';
-          } else if (s >= 86400 && s < 2592000) {
-            s = Math.floor(s/86400);
-            status_time = s+' days ago';
-          } else if (s >= 2592000) {
-            s = Math.floor(s/2592000);
-            status_time = s+' months ago';
-          }
+		  status_time = this.parent.utils.agoString(user.status.changed);
         }
       }
     }
