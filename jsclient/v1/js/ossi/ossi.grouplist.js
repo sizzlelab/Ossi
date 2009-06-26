@@ -36,24 +36,7 @@ ossi.grouplist = Class.create(ossi.base,{
         var json = response.responseJSON;
         if (typeof(json.entry) != 'undefined') {
           if (json.entry.length > 0) {
-		  	
-			// XXX: Hack
-			// First, iterate trought the response and sort the group so that the groups where you belong are first in the respose handled!
-			var myGroups = new Array();
-			var otherGroups = new Array();
-			json.entry.each( function(item) {
-			  if( item.group.is_member ) {
-			  	myGroups.push( item );
-			  } else {
-			  	otherGroups.push( item );
-			  }
-			} );
-			// Add the data back to json.entry (used in the code => don't want to rename
-			json.entry.clear();
-			json.entry.push( myGroups );
-			json.entry.push( otherGroups );
-			json.entry = json.entry.flatten();
-			// Now add elements as usual to the view
+			json.entry.sort( self._myOwnSorter );
             var h = '';
 			max = options.startIndex + options.count > json.entry.length ? json.entry.length - options.startIndex : options.count;
 			for( i = 0; i < max; i++ ){
@@ -83,6 +66,14 @@ ossi.grouplist = Class.create(ossi.base,{
       }
     });
 	},
+
+  _myOwnSorter: function( a, b ) {
+  	a = a.group.is_member;
+	b = b.group.is_member;
+	if (a < b ) return 1
+	if (a > b ) return -1
+	return 0 
+  },
 
   _draw: function() {
     if (this.options.hostElement) {
