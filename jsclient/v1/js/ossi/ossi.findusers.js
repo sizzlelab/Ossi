@@ -28,7 +28,6 @@ ossi.findusers = Class.create(ossi.base,{
             					You can search by person\'s name, or part of, below.\
             				</div>\
             				<div class="login">\
-            					search:<br/>\
             					<input class="textinput" maxlength="30" name="search_string" id="search_string" type="text"/>\
             				</div>\
             				<div style="height:14px"></div>\
