@@ -28,15 +28,15 @@ ossi.friendlist = Class.create(ossi.base,{
     self.parent.showLoading();
     new Ajax.Request(URL, {
       method : 'get',
+	  parameters : {'sortBy' : 'status_changed', 'sortOrder' : 'descending'},
       requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
       onSuccess : function(response) {
         var json = response.responseJSON;
         self._removeLinkListeners();
         if (typeof(json.entry) != 'undefined') {
           if (json.entry.length > 0) {
-		  	json.entry.sort( self._statusSorter );
             var h = '';
-			max = options.startIndex + options.count > json.entry.length ? json.entry.length - options.startIndex : options.count;
+			var max = options.startIndex + options.count > json.entry.length ? json.entry.length - options.startIndex : options.count;
 			for( i = 0; i < max; i++ ){
 			  	h += self._getButtonHTML(json.entry[options.startIndex + i]);
             }
@@ -91,28 +91,7 @@ ossi.friendlist = Class.create(ossi.base,{
         });
       }
     });
-	},
-	
-	// Sorting according to status updates
-  _statusSorter: function( a, b ) {
-  	var da;
-	var fb;
-  	if (a.status.changed != null) {
-	  a = a.status.changed;
-	  da = Date.UTC(a.substring(0,4),a.substring(5,7),a.substring(8,10),a.substring(11,13),a.substring(14,16),a.substring(17,19));
-	} else {
-	  da = -1;
-	}
-	if (b.status.changed != null) {
-	  b = b.status.changed;
-	  db = Date.UTC(b.substring(0, 4), b.substring(5, 7), b.substring(8, 10), b.substring(11, 13), b.substring(14, 16), b.substring(17, 19));
-	} else {
-	  db = -1;
-	}
-	if (da < db ) return 1
-	if (da > db ) return -1
-	return 0 
-  },	
+	},	
 	
   _draw: function() {
     if (this.options.hostElement) {
