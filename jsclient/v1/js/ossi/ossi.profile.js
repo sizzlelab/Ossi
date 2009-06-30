@@ -37,6 +37,7 @@ ossi.profile = Class.create(ossi.base,{
               break;
             case "friend":
               $('profile_add_as_friend_button_container').hide();
+			  $('profile_remove_friend_button_container').show();
               break;
             case "requested":
               $('profile_add_as_friend_button_container').hide();
@@ -69,6 +70,9 @@ ossi.profile = Class.create(ossi.base,{
                   <div id="profile_placeholder"></div>\
           				<div id="profile_add_as_friend_button_container" class="nav_button">\
           					<a id="profile_add_as_friend_button" class="nav_button_text" href="javascript:void(null);">Add as Friend</a>\
+          				</div>\
+						<div id="profile_remove_friend_button_container" style="display:none" class="nav_button">\
+          					<a id="profile_remove_friend_button" class="nav_button_text" href="javascript:void(null);">Remove this Friend</a>\
           				</div>\
                   <div id="pending_nav" style="display:none">\
             				<div class="nav_button">\
@@ -155,7 +159,14 @@ ossi.profile = Class.create(ossi.base,{
         self.parent.case6({
           message : "Friend request sent! After the recipient accepts your request you become connected!",
           buttonText : "Back",
-          backCase : self.options.backCase,
+		  backCase2 : self.options.backCase,
+		  userId : self.options.userId,
+		  hostElement: self.options.hostElement,
+          backCase : self.parent.case13.bind( this.parent, {
+		    userId : self.options.userId,
+			hostElement : self.options.hostElement,
+		  	backCase : self.options.backCase2,
+			} )
         });
 
         setTimeout(function() {
@@ -164,6 +175,39 @@ ossi.profile = Class.create(ossi.base,{
       }
     });
   },
+
+  _removeFriendHandler: function() {
+    if (typeof(this.options.userId) == 'undefined') return; // userId in the parent controller not set
+    var self = this;
+    var URL = BASE_URL+'/people/'+this.parent.userId+'/@friends/' + this.options.userId;
+    self.parent.showLoading();
+    new Ajax.Request(URL, {
+      method : 'delete',
+      requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
+      onSuccess : function(response) { // does not handle invalid responses
+        var json = response.responseJSON;
+        // currently returns currently logged in user's data. no need to parse
+        // should check if the request fails though
+        self.parent.case6({
+          message : "Friendship has been removed.",
+          buttonText : "Back",
+		  backCase2 : self.options.backCase,
+		  userId : self.options.userId,
+		  hostElement: self.options.hostElement,
+          backCase : self.parent.case13.bind( this.parent, {
+		    userId : self.options.userId,
+			hostElement : self.options.hostElement,
+		  	backCase : self.options.backCase2,
+			} )
+        });
+
+        setTimeout(function() {
+          self.parent.hideLoading();
+        }, 600);
+      }
+    });
+  },  
+  
   _acceptRequestHandler: function() {
     if (typeof(this.options.userId) == 'undefined') return; // userId in the parent controller not set
     var self = this;
@@ -178,7 +222,7 @@ ossi.profile = Class.create(ossi.base,{
         var json = response.responseJSON;
         // currently returns currently logged in user's data. no need to parse
         // should check if the request fails though
-
+		var userId = this.options.userId;
         self.parent.case6({
           message : "Friend request accepted!",
           buttonText : "Back",
@@ -203,7 +247,6 @@ ossi.profile = Class.create(ossi.base,{
         var json = response.responseJSON;
         // currently returns currently logged in user's data. no need to parse
         // should check if the request fails though
-
         self.parent.case6({
           message : "Friend request rejected!",
           buttonText : "Back",
@@ -221,12 +264,14 @@ ossi.profile = Class.create(ossi.base,{
     $('profile_accept_friendship_request_button').onclick = this._acceptRequestHandler.bindAsEventListener(this);
     $('profile_reject_friendship_request_button').onclick = this._rejectRequestHandler.bindAsEventListener(this);
     $('profile_add_as_friend_button').onclick = this._addFriendHandler.bindAsEventListener(this);
+	$('profile_remove_friend_button').onclick = this._removeFriendHandler.bindAsEventListener(this);
   },
   _removeListeners: function() {
     $('profile_back_button').onclick = function() { return };
     $('profile_accept_friendship_request_button').onclick = function() { return };
     $('profile_reject_friendship_request_button').onclick = function() { return };
     $('profile_add_as_friend_button').onclick = function() { return };
+	$('profile_remove_friend_button').onclick = function() { return };
   },
   destroy: function () {
     this._removeListeners();
