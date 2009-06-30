@@ -157,7 +157,8 @@ ossi.friendlist = Class.create(ossi.base, {
           <div class="nav_button">\
             <a id="friend_list_back_button" class="nav_button_text" href="javascript:void(null);">Back</a>\
           </div>\
-        </div>\';
+        </div>\
+		';
     return h;
   },
   _getButtonHTML: function(user){
@@ -193,7 +194,8 @@ ossi.friendlist = Class.create(ossi.base, {
               status_time +
             '</div>\
            </div>\
-       </div>\';
+       </div>\
+	   ';
     return h;
   },
   _backHandler: function(){
