@@ -43,10 +43,20 @@ ossi.channellist = Class.create(ossi.base,{
           if (json.entry.length > 0) {
             self._drawContents(json.entry);
             if (json.entry.length > 5) $('channels_back_button_2_container').show(); // show second back button at top of screen if more than 5 channels
-            if (options.startIndex + options.count < json.totalResults) $('channels_next_button_container').show();
-            else $('channels_next_button_container').hide()
-            if (options.startIndex > 1) $('channels_previous_button_container').show();
-            else $('channels_previous_button_container').hide()
+            if (options.startIndex + options.count < json.totalResults) {
+				$('channels_next_button_container').show();
+				Element.setStyle($('channels_previous_button_container'), { 'width': '50%' } );
+			} else {
+			  $('channels_next_button_container').hide();
+			  Element.setStyle($('channels_previous_button_container'), { 'width': '100%' });
+			} 
+			if (options.startIndex > 1) {
+			  $('channels_previous_button_container').show();
+			  Element.setStyle($('channels_next_button_container'), { 'width': '50%' });
+			} else {
+			  $('channels_previous_button_container').hide();
+			  Element.setStyle($('channels_next_button_container'), { 'width': '100%' });
+			}
           } else {
             $('channels_placeholder').replace('<div style="padding:10px; text-align:center">There are currently no channels available to you in the service. Please contact system administrators at: otasizzle-helpdesk@hiit.fi</div>');
           }
@@ -89,12 +99,14 @@ ossi.channellist = Class.create(ossi.base,{
           				</div>\
                   <div id="channels_placeholder">\
                   </div>\
-          				<div id="channels_next_button_container" class="nav_button" style="display:none">\
-          					<a id="channels_next_button" class="nav_button_text" href="javascript:void(null);">Next Page</a>\
-          				</div>\
-          				<div id="channels_previous_button_container" class="nav_button" style="display:none">\
-          					<a id="channels_previous_button" class="nav_button_text" href="javascript:void(null);">Previous Page</a>\
-          				</div>\
+          				<div class="nav_button" >\
+							<div id="channels_next_button_container" class="nav_button next_button" style="display:none">\
+          						<a id="channels_next_button" class="nav_button_text" href="javascript:void(null);">Next Page</a>\
+          					</div>\
+							<div id="channels_previous_button_container" class="nav_button previous_button" style="display:none">\
+          						<a id="channels_previous_button" class="nav_button_text" href="javascript:void(null);">Previous Page</a>\
+          					</div>\
+						</div>\
           				<div id="create_channel_button_container" class="nav_button">\
           					<a id="create_channel_button" class="nav_button_text" href="javascript:void(null);">Create New Channel</a>\
           				</div>\
@@ -112,31 +124,7 @@ ossi.channellist = Class.create(ossi.base,{
     var updated_text = '';
     if (channel.updated_at != 'undefined') {
       if (channel.updated_at != null) {
-        // timestamp to epoch
-        var d = channel.updated_at;
-        var a = Date.UTC(d.substring(0,4),d.substring(5,7),d.substring(8,10),d.substring(11,13),d.substring(14,16),d.substring(17,19));
-
-        // now to epoch
-        var e = new Date();
-        var b = Date.UTC(e.getUTCFullYear(),(e.getUTCMonth()+1),e.getUTCDate(),e.getUTCHours(),e.getUTCMinutes(),e.getUTCSeconds());
-
-        // set string data
-        var s = (b-a) / 1000;
-        if (s < 60) {
-          updated_text = 'a moment ago';
-        } else if (s >= 60 && s < 3600) {
-          s = Math.floor(s/60);
-          updated_text = s+' mins ago';
-        } else if (s >= 3600 && s < 86400) {
-          s = Math.floor(s/3600);
-          updated_text = s+' hours ago';
-        } else if (s >= 86400 && s < 2592000) {
-          s = Math.floor(s/86400);
-          updated_text = s+' days ago';
-        } else if (s >= 2592000) {
-          s = Math.floor(s/2592000);
-          updated_text = s+' months ago';
-        }
+        updated_text = this.parent.utils.agoString( channel.updated_at );
       }
     }
     
