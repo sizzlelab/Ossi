@@ -123,7 +123,7 @@ ossi.post = Class.create(ossi.base,{
                 ';
     h += this._getModeratorHTML();
     h += '    		<div class="nav_button">\
-          					<a id="post_back_button" class="nav_button_text" href="javascript:void(null);">Back to channel</a>\
+          					<a id="post_back_button" class="nav_button_text" href="javascript:void(null);">Back</a>\
           				</div>\
           			</div>\
           		';

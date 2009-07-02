@@ -204,7 +204,7 @@ ossi.channel = Class.create(ossi.base, {
     var h = '\
           		  <div id="channelpane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
             			<div id="channel_back_button_2_container" class="nav_button" style="display:none">\
-            				<a id="channel_back_button2" class="nav_button_text" href="javascript:void(null);">Back to Channel List</a>\
+            				<a id="channel_back_button2" class="nav_button_text" href="javascript:void(null);">Back</a>\
             			</div>\
                 	<div id="channel_placeholder"></div>\
               ';
@@ -237,7 +237,7 @@ ossi.channel = Class.create(ossi.base, {
       h += '\
   	  		        <div id="moderator_placeholder"></div>\
   				        <div class="nav_button">\
-          					<a id="channel_back_button" class="nav_button_text" href="javascript:void(null);">Back to Channel List</a>\
+          					<a id="channel_back_button" class="nav_button_text" href="javascript:void(null);">Back</a>\
           				</div>\
           			</div>\
         		  ';

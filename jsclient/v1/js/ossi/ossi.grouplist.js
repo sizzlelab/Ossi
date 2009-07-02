@@ -115,7 +115,7 @@ ossi.grouplist = Class.create(ossi.base, {
     var h = '\
           			<div id="grouplistpane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
           				<div id="groups_back_button_2_container" class="nav_button" style="display:none">\
-          					<a id="groups_back_button2" class="nav_button_text" href="javascript:void(null);">Back to Main Menu</a>\
+          					<a id="groups_back_button2" class="nav_button_text" href="javascript:void(null);">Back</a>\
           				</div>\
                   <div id="groups_placeholder">\
                   </div>\
@@ -134,7 +134,7 @@ ossi.grouplist = Class.create(ossi.base, {
           					<a id="create_group_button" class="nav_button_text" href="javascript:void(null);">Create New Group</a>\
           				</div>\
           				<div class="nav_button">\
-          					<a id="groups_back_button" class="nav_button_text" href="javascript:void(null);">Back to Main Menu</a>\
+          					<a id="groups_back_button" class="nav_button_text" href="javascript:void(null);">Back</a>\
           				</div>\
           			</div>\
           		';

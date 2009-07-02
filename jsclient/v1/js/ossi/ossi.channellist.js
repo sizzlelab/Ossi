@@ -95,7 +95,7 @@ ossi.channellist = Class.create(ossi.base,{
     var h =   '\
           			<div id="channellistpane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
           				<div id="channels_back_button_2_container" class="nav_button" style="display:none">\
-          					<a id="channels_back_button2" class="nav_button_text" href="javascript:void(null);">Back to Main Menu</a>\
+          					<a id="channels_back_button2" class="nav_button_text" href="javascript:void(null);">Back</a>\
           				</div>\
                   <div id="channels_placeholder">\
                   </div>\
@@ -114,7 +114,7 @@ ossi.channellist = Class.create(ossi.base,{
           					<a id="about_channels_button" class="nav_button_text" href="javascript:void(null);">About Channels</a>\
           				</div>\
           				<div class="nav_button">\
-          					<a id="channels_back_button" class="nav_button_text" href="javascript:void(null);">Back to Main Menu</a>\
+          					<a id="channels_back_button" class="nav_button_text" href="javascript:void(null);">Back</a>\
           				</div>\
           			</div>\
           		';
