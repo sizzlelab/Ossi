@@ -93,6 +93,14 @@ ossi.utils = Class.create(ossi.base,{
   roundNumber: function(num, dec) {
   	return Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
   },
+
+  dateToString: function(UTC_string) {
+    var d = UTC_string;
+	var a = Date.UTC(d.substring(0,4),d.substring(5,7),d.substring(8,10),d.substring(11,13),d.substring(14,16),d.substring(17,19));
+	a = new Date(a);
+	return a.getDate() + '.' + (a.getMonth()+1) + '.' + a.getFullYear() + ' ' + a.getHours() + ':' + a.getMinutes();
+  },
+  
   agoString: function(UTC_string) {
     
     // return string
@@ -101,7 +109,7 @@ ossi.utils = Class.create(ossi.base,{
     // argument date to epoch
     var d = UTC_string;
     var a = Date.UTC(d.substring(0,4),d.substring(5,7),d.substring(8,10),d.substring(11,13),d.substring(14,16),d.substring(17,19));
-
+	
     // now to epoch
     var e = new Date();
     var b = Date.UTC(e.getUTCFullYear(),(e.getUTCMonth()+1),e.getUTCDate(),e.getUTCHours(),e.getUTCMinutes(),e.getUTCSeconds());

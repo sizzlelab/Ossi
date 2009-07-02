@@ -257,7 +257,7 @@ ossi.channel = Class.create(ossi.base, {
     var updated_text = '';
     if (post.updated_at != 'undefined') {
       if (post.updated_at != null) {
-        updated_text = this.parent.utils.agoString(post.updated_at);
+	    updated_text = this.parent.utils.dateToString(post.updated_at);
       }
     }
     
