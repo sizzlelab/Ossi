@@ -37,12 +37,12 @@ ossi.post = Class.create(ossi.base,{
 			  updated_text = self.parent.utils.dateToString( json.updated_at );
             }
           }
-          var author_string = (typeof(json.metadata.author) != 'undefined') ? '<span style="color:#C0C0C0">Posted by</span> '+json.metadata.author+'' : '';
+          var author_string = (typeof(json.metadata.author) != 'undefined') ? '<span style="color:#C0C0C0">By</span> '+json.metadata.author+'' : '';
 
           var avatar_src = (json.owner == null) ? 'images/anon_icon.png' : BASE_URL+'/people/'+json.updated_by+'/@avatar/small_thumbnail';
           $('post_avatar').update('<img src="'+avatar_src+'" width="50" height="50" border="0" />');
           $('post_author_text').update(author_string);
-          $('post_updated_text').update('Updated '+updated_text);
+          $('post_updated_text').update(updated_text);
           $('post_content').update(self._parseBBCode(json.metadata.body));
           if (typeof(json.metadata.author) != 'undefined' && json.owner != null) {
             $('post_profile_button').update(json.metadata.author+'\'s profile');

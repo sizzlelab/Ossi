@@ -146,7 +146,6 @@ ossi.channellist = Class.create(ossi.base,{
                     <div class="channel_button_text">\
         						  <div class="button_title"><a href="javascript:void(null);">'+channel.title+'</a></div>\
         						  <div class="button_subtitle_text" style="padding-top:3px">'+channel.totalResults+' messages. Updated '+updated_text+'</div>\
-        						  '+creator_html+'\
                     </div>\
           				</div>\
           			';

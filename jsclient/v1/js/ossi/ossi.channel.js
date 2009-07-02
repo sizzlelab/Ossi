@@ -312,7 +312,7 @@ ossi.channel = Class.create(ossi.base, {
       '</a></div>\
           						  <div class="wall_button_subtitle_text" style="padding-top:3px">' +
       author_string +
-      ' ' +
+      ' , ' +
       updated_text +
       '</div>\
                       </div><div style="clear:both;"></div>\
