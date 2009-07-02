@@ -867,6 +867,31 @@ ossi.main = Class.create(ossi.base,{
     }
 	},
 
+  /**
+	* group members
+	*/
+	case29: function(options) {
+      var options = Object.extend({
+        out : false
+      },options);
+
+    this.sub2 = this.sub1;
+    this.sub1 = new ossi.changepassword(this, {   'hostElement' : this.mainElement,
+                                          'backCase' : options.backCase});
+    if (options.out) {
+      this.utils.out(this.sub2.pane,this.sub1.pane,function() {
+        this.sub2.destroy();
+        this.sub1.update();
+      }.bind(this));
+    } else {
+      this.utils.into(this.sub2.pane,this.sub1.pane,function() {
+        this.sub2.destroy();
+        this.sub1.update();
+      }.bind(this));
+    }
+	},
+
+
 	/**
 	* _getClient
 	*

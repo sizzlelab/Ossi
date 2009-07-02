@@ -151,13 +151,7 @@ ossi.myprofile = Class.create(ossi.base,{
                               <option value="">------</option>\
                   					</select>\
                           </dd>\
-                        <div id="password_container">\
-                          <dt style="color:#666; margin:0px 0px 5px 0px;">Password:</dt>\
-                            <dd style=" margin:0px 0px 10px 15px;"><input id="profile_password" class="myprofile_input" maxlength="30" name="profile_password" type="password"/></dd>\
-                          <dt style="color:#666; margin:0px 0px 5px 0px;">Confirm password:</dt>\
-                            <dd style=" margin:0px 0px 10px 15px;"><input id="profile_password_confirm" class="myprofile_input" maxlength="30" name="profile_password_confirm" type="password"/></dd>\
-                        </div>\
-                      </dl>\
+	                        </dl>\
             				</div>\
             				<div style="height:14px"></div>\
             				<div class="nav_button">\
@@ -166,8 +160,11 @@ ossi.myprofile = Class.create(ossi.base,{
             				<div class="nav_button">\
             					<a id="avatar_button" class="nav_button_text" href="javascript:void(null);">Change avatar</a>\
             				</div>\
+							<div class="nav_button">\
+            					<a id="password_button" class="nav_button_text" href="javascript:void(null);">Change password</a>\
+            				</div>\
             				<div class="nav_button">\
-            					<a id="cancel_button" class="nav_button_text" href="javascript:void(null);">Back to main menu</a>\
+            					<a id="cancel_button" class="nav_button_text" href="javascript:void(null);">Back</a>\
             				</div>\
                   </form>\
           			</div>\
@@ -187,22 +184,10 @@ ossi.myprofile = Class.create(ossi.base,{
       var m = ($F('profile_month').length != 2) ? '0'+$F('profile_month') : $F('profile_month');
       dob = $F('profile_year') + '-' + m + '-' + d;
     }
-    if (p != pc) {
-      self.parent.case6({
-        backCase : self.parent.case8.bind(self.parent,{
-          out:true,
-          backCase:self.parent.case3.bind(self.parent,{out:true}) // tells back button to go back to main menu
-        }),
-        message : "Passwords do not match!",
-        buttonText : "Back"
-      });
-      return;
-    }
     var params =  { 'person[name][given_name]' : fn,
                     'person[name][family_name]' : ln
                   };
     if (g != false) params['person[gender]'] = g;
-    if (p.length > 0) params['person[password]'] = p;
     if (dob) params['person[birthdate]'] = dob;
     var URL = BASE_URL+'/people/'+this.parent.userId+'/@self';
     self.parent.loadingpane.show();
@@ -234,9 +219,11 @@ ossi.myprofile = Class.create(ossi.base,{
       }
     });
   },
+  
   _cancelHandler: function() {
     this.options.backCase.apply();
   },
+  
   _avatarHandler: function() {
     var self = this;
     self.parent.case23({
@@ -246,15 +233,28 @@ ossi.myprofile = Class.create(ossi.base,{
       })
     });
   },
+
+  _passwordHandler: function() {
+    var self = this;
+    self.parent.case29({
+        backCase : self.parent.case8.bind(self.parent,{
+        out:true,
+        backCase:self.parent.case3.bind(self.parent,{out:true})
+      })
+    });
+  },
+
   _addListeners: function() {
     $('save_button').onclick = this._saveHandler.bindAsEventListener(this);
     $('avatar_button').onclick = this._avatarHandler.bindAsEventListener(this);
+	$('password_button').onclick = this._passwordHandler.bindAsEventListener(this);
     $('cancel_button').onclick = this._cancelHandler.bindAsEventListener(this);
   },
   _removeListeners: function() {
     $('save_button').onclick = function() { return }
     $('avatar_button').onclick = function() { return }
-    $('cancel_button').onclick = function() { return }
+    $('password_button').onclick = function() { return }
+	$('cancel_button').onclick = function() { return }
   },
   destroy: function () {
     this._removeListeners();
