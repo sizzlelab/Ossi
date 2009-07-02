@@ -868,7 +868,7 @@ ossi.main = Class.create(ossi.base,{
 	},
 
   /**
-	* group members
+	* change password
 	*/
 	case29: function(options) {
       var options = Object.extend({
@@ -890,6 +890,29 @@ ossi.main = Class.create(ossi.base,{
       }.bind(this));
     }
 	},
+
+    /**
+	* search
+	*/
+	case30: function(options) {
+      var options = Object.extend({
+        out : false
+      },options);
+
+    this.sub2 = this.sub1;
+    this.sub1 = new ossi.search(this, {   'hostElement' : this.mainElement,
+                                          'backCase' : options.backCase});
+    if (options.out) {
+      this.utils.out(this.sub2.pane,this.sub1.pane,function() {
+        this.sub2.destroy();
+      }.bind(this));
+    } else {
+      this.utils.into(this.sub2.pane,this.sub1.pane,function() {
+        this.sub2.destroy();
+      }.bind(this));
+    }
+	},
+
 
 
 	/**
