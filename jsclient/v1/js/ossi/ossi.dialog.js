@@ -6,7 +6,7 @@ ossi.dialog = Class.create(ossi.base,{
     this.parent = parent;
 		this.options = Object.extend({
       hostElement : false,
-      backCase : function() { return false; },
+      backCase : false,
       buttonText : false,
       message : false
 	  },options);

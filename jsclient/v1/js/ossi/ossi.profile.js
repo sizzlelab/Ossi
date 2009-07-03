@@ -34,10 +34,11 @@ ossi.profile = Class.create(ossi.base,{
           switch (json.connection) {
             case "none": // not friends with
               // do nothing, default mode
+			        $('profile_remove_friend_button_container').hide();
               break;
             case "friend":
               $('profile_add_as_friend_button_container').hide();
-			  $('profile_remove_friend_button_container').show();
+			        $('profile_remove_friend_button_container').show();
               break;
             case "requested":
               $('profile_add_as_friend_button_container').hide();
@@ -58,6 +59,7 @@ ossi.profile = Class.create(ossi.base,{
   _draw: function() {
     if (this.options.hostElement) {
       this.options.hostElement.insert(this._getHTML());
+      this._removeListeners();
       this._addListeners();
       this.pane = $('profilepane');
     } else {
@@ -159,14 +161,12 @@ ossi.profile = Class.create(ossi.base,{
         self.parent.case6({
           message : "Friend request sent! After the recipient accepts your request you become connected!",
           buttonText : "Back",
-		  backCase2 : self.options.backCase,
-		  userId : self.options.userId,
-		  hostElement: self.options.hostElement,
-          backCase : self.parent.case13.bind( this.parent, {
-		    userId : self.options.userId,
-			hostElement : self.options.hostElement,
-		  	backCase : self.options.backCase2,
-			} )
+    		  backCase2 : self.options.backCase,
+    		  userId : self.options.userId,
+    		  hostElement: self.options.hostElement,
+          backCase : function() {
+            this.parent.case31();
+          }.bind(self)
         });
 
         setTimeout(function() {
@@ -188,17 +188,15 @@ ossi.profile = Class.create(ossi.base,{
         var json = response.responseJSON;
         // currently returns currently logged in user's data. no need to parse
         // should check if the request fails though
+
         self.parent.case6({
           message : "Friendship has been removed.",
           buttonText : "Back",
-		  backCase2 : self.options.backCase,
-		  userId : self.options.userId,
-		  hostElement: self.options.hostElement,
-          backCase : self.parent.case13.bind( this.parent, {
-		    userId : self.options.userId,
-			hostElement : self.options.hostElement,
-		  	backCase : self.options.backCase2,
-			} )
+		      userId : self.options.userId,
+		      hostElement: self.options.hostElement,
+          backCase : function() {
+            this.parent.case31();
+          }.bind(self)
         });
 
         setTimeout(function() {

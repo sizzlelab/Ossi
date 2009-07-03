@@ -352,7 +352,9 @@ ossi.main = Class.create(ossi.base,{
 	                                        'buttonText' : options.buttonText
 	                                    });
     this.utils.into(this.sub2.pane,this.sub1.pane,function() {
-      this.sub2.destroy();
+// DO NOT DESTROY sub2
+// IT IS USED AGAIN WHEN GETTING BACK TO USER PROFILE TO KEEP USER BROWSING PATH INTACT
+//      this.sub2.destroy(); 
     }.bind(this));
 	},
 	/**
@@ -913,7 +915,21 @@ ossi.main = Class.create(ossi.base,{
     }
 	},
 
+    /**
+	* swap back from previous case without recreating sub1 and sub2
+	* (for getting back from dialog without losing user's browse path)
+	*/
+	case31: function(options) {
+    var tmp = this.sub2;
+    this.sub2 = this.sub1;
+    this.sub1 = tmp;
 
+    this.utils.out(this.sub2.pane,this.sub1.pane,function() {
+      this.sub2.destroy();
+      this.sub1._draw();
+      this.sub1.update();
+    }.bind(this));
+	},
 
 	/**
 	* _getClient
