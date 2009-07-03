@@ -140,14 +140,14 @@ ossi.friendlist = Class.create(ossi.base, {
             </div>\
             <div id="friends_placeholder">\
             </div>\
-	  <div class="nav_button" >\
-	    <div id="friends_next_button_container" class="nav_button next_button" style="display:none">\
-	      <a id="friends_next_button" class="nav_button_text" href="javascript:void(null);">Next Page</a>\
+	          <div class="nav_button" >\
+	            <div id="friends_next_button_container" class="nav_button next_button" style="display:none">\
+	              <a id="friends_next_button" class="nav_button_text" href="javascript:void(null);">Next Page</a>\
+              </div>\
+	            <div id="friends_previous_button_container" class="nav_button previous_button" style="display:none">\
+                <a id="friends_previous_button" class="nav_button_text" href="javascript:void(null);">Previous Page</a>\
             </div>\
-	    <div id="friends_previous_button_container" class="nav_button previous_button" style="display:none">\
-              <a id="friends_previous_button" class="nav_button_text" href="javascript:void(null);">Previous Page</a>\
-            </div>\
-	  </div>\
+	        </div>\
           <div id="new_friend_requests_button_container" class="nav_button" style="display:none;">\
             <a id="new_friend_requests_button" class="nav_button_text" href="javascript:void(null);"></a>\
           </div>\
@@ -187,9 +187,7 @@ ossi.friendlist = Class.create(ossi.base, {
               <div class="button_title"><a id="friend_uid_link_' + user.id +'" href="javascript:void(null);">' +
               name +
               '</a></div>\
-            <div class="button_content_text"><a href="javascript:void(null);">' +
-              status_message +
-            '</a></div>\
+            <div class="button_content_text">' + status_message + '</div>\
             <div class="button_subtitle_text" style="padding-top:3px">' +
               status_time +
             '</div>\
