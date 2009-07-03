@@ -4,13 +4,13 @@
 ossi.profile = Class.create(ossi.base,{
 	initialize: function(parent,options) {
     this.parent = parent;
-		this.options = Object.extend({
-		  userId : false,
-		  pendingNav : false,
-		  search : false,
+		  this.options = Object.extend({
+		    userId : false,
+		    pendingNav : false,
+		    search : false,
       hostElement : false
-	  },options);
-	  this.pane = false;
+	    },options);
+	   this.pane = false;
     this._draw();
 	},
 	/**
@@ -30,15 +30,20 @@ ossi.profile = Class.create(ossi.base,{
         var json = response.responseJSON;
         var h = self._getProfileHTML(json);
         $('profile_placeholder').replace(h);
+								// hide everything!
+								$('profile_add_as_friend_button_container').hide();
+			     $('profile_remove_friend_button_container').hide();
+								$('pending_nav').hide();
         if (typeof(json.connection) != 'undefined') {
           switch (json.connection) {
             case "none": // not friends with
               // do nothing, default mode
-			        $('profile_remove_friend_button_container').hide();
+			           $('profile_remove_friend_button_container').hide();
+														$('profile_add_as_friend_button_container').show();
               break;
             case "friend":
               $('profile_add_as_friend_button_container').hide();
-			        $('profile_remove_friend_button_container').show();
+			           $('profile_remove_friend_button_container').show();
               break;
             case "requested":
               $('profile_add_as_friend_button_container').hide();
@@ -73,10 +78,10 @@ ossi.profile = Class.create(ossi.base,{
           				<div id="profile_add_as_friend_button_container" class="nav_button">\
           					<a id="profile_add_as_friend_button" class="nav_button_text" href="javascript:void(null);">Add as Friend</a>\
           				</div>\
-						<div id="profile_remove_friend_button_container" style="display:none" class="nav_button">\
+						        <div id="profile_remove_friend_button_container" style="display:none" class="nav_button">\
           					<a id="profile_remove_friend_button" class="nav_button_text" href="javascript:void(null);">Remove this Friend</a>\
           				</div>\
-                  <div id="pending_nav" style="display:none">\
+              <div id="pending_nav" style="display:none">\
             				<div class="nav_button">\
             					<a id="profile_accept_friendship_request_button" class="nav_button_text" href="javascript:void(null);">Accept Friendship Request</a>\
             				</div>\
@@ -192,8 +197,8 @@ ossi.profile = Class.create(ossi.base,{
         self.parent.case6({
           message : "Friendship has been removed.",
           buttonText : "Back",
-		      userId : self.options.userId,
-		      hostElement: self.options.hostElement,
+		        userId : self.options.userId,
+		        hostElement: self.options.hostElement,
           backCase : function() {
             this.parent.case31();
           }.bind(self)
@@ -217,16 +222,13 @@ ossi.profile = Class.create(ossi.base,{
       parameters : params,
       requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
       onSuccess : function(response) { // does not handle invalid responses
-        var json = response.responseJSON;
-        // currently returns currently logged in user's data. no need to parse
-        // should check if the request fails though
-		var userId = this.options.userId;
         self.parent.case6({
           message : "Friend request accepted!",
           buttonText : "Back",
-          backCase : self.options.backCase,
+          backCase : function() {
+            this.parent.case31();
+          }.bind(self)
         });
-
         setTimeout(function() {
           self.parent.hideLoading();
         }, 600);
@@ -242,13 +244,13 @@ ossi.profile = Class.create(ossi.base,{
       method : 'delete',
       requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
       onSuccess : function(response) { // does not handle invalid responses
-        var json = response.responseJSON;
-        // currently returns currently logged in user's data. no need to parse
         // should check if the request fails though
         self.parent.case6({
           message : "Friend request rejected!",
           buttonText : "Back",
-          backCase : self.options.backCase,
+          backCase : function() {
+            this.parent.case31();
+          }.bind(self)
         });
 
         setTimeout(function() {
@@ -262,14 +264,14 @@ ossi.profile = Class.create(ossi.base,{
     $('profile_accept_friendship_request_button').onclick = this._acceptRequestHandler.bindAsEventListener(this);
     $('profile_reject_friendship_request_button').onclick = this._rejectRequestHandler.bindAsEventListener(this);
     $('profile_add_as_friend_button').onclick = this._addFriendHandler.bindAsEventListener(this);
-	$('profile_remove_friend_button').onclick = this._removeFriendHandler.bindAsEventListener(this);
+	   $('profile_remove_friend_button').onclick = this._removeFriendHandler.bindAsEventListener(this);
   },
   _removeListeners: function() {
     $('profile_back_button').onclick = function() { return };
     $('profile_accept_friendship_request_button').onclick = function() { return };
     $('profile_reject_friendship_request_button').onclick = function() { return };
     $('profile_add_as_friend_button').onclick = function() { return };
-	$('profile_remove_friend_button').onclick = function() { return };
+	   $('profile_remove_friend_button').onclick = function() { return };
   },
   destroy: function () {
     this._removeListeners();
