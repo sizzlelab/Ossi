@@ -346,10 +346,10 @@ ossi.main = Class.create(ossi.base,{
 	  },options);
 
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.dialog(this,  { 'hostElement' : this.mainElement,
-	                                      'backCase' : options.backCase,
-	                                      'message' : options.message,
-	                                      'buttonText' : options.buttonText
+    this.sub1 = new ossi.dialog(this,  {  'hostElement' : this.mainElement,
+	                                        'backCase' : options.backCase,
+	                                        'message' : options.message,
+	                                        'buttonText' : options.buttonText
 	                                    });
     this.utils.into(this.sub2.pane,this.sub1.pane,function() {
       this.sub2.destroy();
