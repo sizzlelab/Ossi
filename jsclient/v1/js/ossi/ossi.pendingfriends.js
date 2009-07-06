@@ -68,16 +68,36 @@ ossi.pendingfriends = Class.create(ossi.base,{
   },
   _getButtonHTML: function(user) {
     var name = (user.name != null) ? user.name['unstructured'] : user.username; // if name has not been set
-    var status = (user.status_message != null) ? user.status_message : 'n/a'; // if name has not been set
-    var h =   '\
-          				<div class="button">\
-          					<a class="search_results_profile_button" id="pending_person_uid_'+user.id+'" href="javascript:void(null);">\
-          						<table><tr><td class="button_pic_td"><img class="button_icon" src="images/icons/grey/001_54.png"/></td><td class="button_text_td"><span class="button_title">'+name+'<br/></span>\
-          						<span class="button_content_text">'+status+'<br/></span>\
-          						<span class="button_subtitle_text">[when updated], [how far away]</span></td></tr></table>\
-          					</a>\
-          				</div>\
-          			';
+    var status_message = 'A';
+    var status_time = 'A';
+    if (typeof(user.status) != 'undefined') {
+      if (user.status.message != 'undefined') {
+        if (user.status.message != null) {
+          status_message = user.status.message;
+        }
+      }
+      if (user.status.changed != 'undefined') {
+        if (user.status.changed != null) {
+          status_time = this.parent.utils.agoString(user.status.changed);
+        }
+      }
+    }
+    var h = '\
+           <div class="profile_button" id="pending_person_uid_' + user.id + '" href="javascript:void(null);">\
+           <div class="post_button_left_column"><img style="margin:2px 0px 0px 2px; border:solid #eee 1px;" src="' +
+             BASE_URL + '/people/' + user.id +'/@avatar/small_thumbnail?' + Math.random() * 9999 +
+           '" width="50" height="50" border="0" /></div>\
+           <div class="post_button_text">\
+              <div class="button_title"><a id="friend_uid_link_' + user.id +'" href="javascript:void(null);">' +
+              name +
+              '</a></div>\
+            <div class="button_content_text">' + status_message + '</div>\
+            <div class="button_subtitle_text" style="padding-top:3px">' +
+              status_time +
+            '</div>\
+           </div>\
+       </div>\
+	   ';
     return h;
   },
   _backHandler: function() {
