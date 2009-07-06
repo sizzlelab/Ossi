@@ -140,7 +140,7 @@ ossi.friendlist = Class.create(ossi.base, {
             </div>\
             <div id="friends_placeholder">\
             </div>\
-	          <div class="nav_button" >\
+	          <div class="nav_button" style="top: -1px; position: relative;">\
 	            <div id="friends_next_button_container" class="nav_button next_button" style="display:none">\
 	              <a id="friends_next_button" class="nav_button_text" href="javascript:void(null);">Next Page</a>\
               </div>\
