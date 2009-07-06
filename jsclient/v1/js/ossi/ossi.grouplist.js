@@ -119,14 +119,14 @@ ossi.grouplist = Class.create(ossi.base, {
           				</div>\
                   <div id="groups_placeholder">\
                   </div>\
-				      	<div class="nav_button">\
+				      	<div class="nav_button" style="top: -1px; position: relative;" >\
           				  <div id="groups_next_button_container" class="nav_button next_button" style="display:none" >\
           					<a id="groups_next_button" class="nav_button_text" href="javascript:void(null);">Next Page</a>\
           				  </div>\
           				  <div id="groups_previous_button_container" class="nav_button previous_button" style="display:none" >\
           					<a id="groups_previous_button" class="nav_button_text" href="javascript:void(null);">Previous Page</a>\
           				  </div>\
-						</div>\
+					      	</div>\
           				<div id="about_groups_button_container" class="nav_button">\
           					<a id="about_groups_button" class="nav_button_text" href="javascript:void(null);">About Groups</a>\
           				</div>\

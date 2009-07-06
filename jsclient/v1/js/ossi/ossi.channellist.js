@@ -99,7 +99,7 @@ ossi.channellist = Class.create(ossi.base,{
           				</div>\
                   <div id="channels_placeholder">\
                   </div>\
-          				<div class="nav_button" >\
+          				<div class="nav_button" style="top: -1px; position: relative;" >\
 							<div id="channels_next_button_container" class="nav_button next_button" style="display:none">\
           						<a id="channels_next_button" class="nav_button_text" href="javascript:void(null);">Next Page</a>\
           					</div>\
