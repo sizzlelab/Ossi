@@ -238,7 +238,7 @@ ossi.profile = Class.create(ossi.base,{
   _rejectRequestHandler: function() {
     if (typeof(this.options.userId) == 'undefined') return; // userId in the parent controller not set
     var self = this;
-    var URL = '/people/'+this.parent.userId+'/@pending_friend_requests/'+this.options.userId;
+    var URL = BASE_URL + '/people/'+this.parent.userId+'/@pending_friend_requests/'+this.options.userId;
     self.parent.showLoading();
     new Ajax.Request(URL, {
       method : 'delete',
