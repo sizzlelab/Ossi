@@ -130,7 +130,7 @@ ossi.pendingfriends = Class.create(ossi.base,{
     $('pending_friend_list_back_button').onclick = function() { return };
   },
   _addLinkListeners: function() { // for dynamic buttons
-    $$('.search_results_profile_button').each(function(button) {
+    $$('.profile_button').each(function(button) {
       button.onclick = this._openProfileHandler.bindAsEventListener(this,button.id);
     },this);
   },
