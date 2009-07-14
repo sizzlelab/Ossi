@@ -9,7 +9,8 @@
 		<link type="text/css" rel="stylesheet" href="../css/main.css" />
 		<script language="Javascript" src="../js/ossi.js"></script>
 		<script language="Javascript">
-  		function gup( name ) {
+	
+	  function gup( name ) {
   			name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
   			var regexS = "[\\?&]"+name+"=([^&#]*)";
   			var regex = new RegExp( regexS );
@@ -18,40 +19,14 @@
   			else return results[1];
   		}
 
-  		function loadCSS(cssFile) {
-  			var s = cssFile
-  			if(s == '') s = '../css/ossiWallStyles.css';
-  			var headID = document.getElementsByTagName("head")[0];         
-  			var cssNode = document.createElement('link');
-  			cssNode.type = 'text/css';
-  			cssNode.rel = 'stylesheet';
-  			cssNode.href = s;
-  			cssNode.media = 'screen';
-  			headID.appendChild(cssNode);
-  		}
-		
-			var channelId = hex_md5(gup('channel')).substr(0,22);
-//			var wall = gup('wall');
-			var refresh = gup('refresh');
-			var styles = gup('css');
-			loadCSS(styles);
-//			var postcount = gup('pc');
-			
+	
 			window.onload = function() {
-				new ossi.main({ 'channelId' : (channelId != '') ? channelId : false, 
-								        'wall' : true,
-								        'refreshChannel' : (refresh != '') ? refresh : false}); 
+				var channelId = this.gup('channelId');
+				new ossi.main({ 'channelId' : channelId != '' ? channelId : false, 
+								        'wall' : false });
 			};
 			
 		</script>
 		<style></style>
 	</head>
-	<body>
-	  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-	  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-	  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-	  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-	  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-	  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-	</body>
-</html>
+	</html>

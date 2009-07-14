@@ -53,7 +53,7 @@ ossiFloater = {
     div.appendChild(closeButton);
     // Ossi iframe
     var ossi = document.createElement('iframe');
-    ossi.setAttribute('src', 'http://ossi.alpha.sizl.org');
+    ossi.setAttribute('src', './index.html?channelId=' + channelID);
     ossi.setAttribute('height', WIDGET_VIEWPORT.height);
     ossi.setAttribute('width', WIDGET_VIEWPORT.width);
     ossi.setAttribute('frameborder', 0);
@@ -68,8 +68,6 @@ ossiFloater = {
     
     document.onmousemove = function(event){
       if (tragMode) {
-        console.log('A ' + event.clientX + ' ' + event.clientY);
-        kissa = event;
         div.style.top = (event.clientY + 5) + 'px';
         div.style.left = (event.clientX + 5) + 'px';
       }
