@@ -39,7 +39,7 @@ ossiFloater = {
     closeButton.style.paddingTop = '10px';
     closeButton.style.border = 'solid #444 2px';
     var clickCount = 0;
-    closeButton.addEventListener( "click" , function(){
+    closeButton.onclick = function(){
 					 alert('Clicked');
       clickCount++;
       if (clickCount % 2 == 0) {
@@ -55,7 +55,7 @@ ossiFloater = {
         div.style.left = 0;
 								div.style.padding = 0;
       }
-    } , false );
+    };
     div.appendChild(closeButton);
     // Ossi iframe
     var ossi = document.createElement('iframe');
