@@ -45,10 +45,12 @@ ossiFloater = {
       if (clickCount % 2 == 0) {
         ossi.style.display = 'inline';
 								div.style.padding = '10px';
+								div.style.width = WIDGET_VIEWPORT.width + 'px';
         closeImage.setAttribute('src', '../images/ossi_minimize_button.png');
       }
       else {
         ossi.style.display = 'none';
+								div.style.width = 0;
         closeImage.setAttribute('src', '../images/ossi_maximize_button.png')
         div.style.left = 0;
 								div.style.padding = 0;
