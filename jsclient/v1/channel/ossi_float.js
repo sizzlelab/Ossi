@@ -80,8 +80,14 @@ ossiFloater = {
       if (tragMode) {
 	var x = ie ? event.clientX : e.clientX;
 	var y = ie ? event.clientY : e.clientY;
-        div.style.top = (y - 100 ) + 'px';
-        div.style.left = (x - WIDGET_VIEWPORT.width - 50) + 'px';
+	// set different x's and y's when ossi is shown
+	if( ossi.style.display != 'none' ) {
+		y -= 10;
+		x -= WIDGET_VIEWPORT.width;
+		x -= 20;
+	}
+        div.style.top =  (y - 90 ) + 'px';
+        div.style.left = (x - 30 ) + 'px';
       }
     };
     
