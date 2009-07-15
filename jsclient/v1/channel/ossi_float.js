@@ -1,16 +1,16 @@
 ossiFloater = {
 
   init: function(channelID, groupID){
-
-    var OSSI_INSTANCE_URL = 'http://labs.humanisti.fixme.fi/sizzle/ossi/jsclient/v1/';
   
+    var OSSI_INSTANCE_URL = 'http://labs.humanisti.fixme.fi/sizzle/ossi/jsclient/v1/';
+    
     var WIDGET_VIEWPORT = {
       height: 428,
       width: 313
     };
     // CHeck IE
     var ie = document.all ? true : false;
-
+    
     // Initial container div
     var div = document.createElement('div');
     div.style.display = 'none';
@@ -28,7 +28,7 @@ ossiFloater = {
     closeButton.innerHTML = 'O<br/>S<br/>S<br/>I<br/>';
     closeButton.setAttribute('id', 'ossi-float-button');
     var closeImage = document.createElement('img');
-    closeImage.setAttribute('src',  OSSI_INSTANCE_URL + '/images/ossi_minimize_button.png');
+    closeImage.setAttribute('src', OSSI_INSTANCE_URL + '/images/ossi_minimize_button.png');
     closeButton.appendChild(closeImage);
     closeButton.style.position = 'absolute';
     closeButton.style.right = '-29px';
@@ -44,52 +44,54 @@ ossiFloater = {
     closeButton.style.paddingTop = '10px';
     closeButton.style.border = 'solid #444 2px';
     var clickCount = 0;
+    var tragMode = false;
     closeButton.onclick = function(){
-      clickCount++;
-      if (clickCount % 2 == 0) {
-        ossi.style.display = 'inline';
-	div.style.padding = '10px';
-	div.style.width = WIDGET_VIEWPORT.width + 'px';
-        closeImage.setAttribute('src', OSSI_INSTANCE_URL + '/images/ossi_minimize_button.png');
-      }
-      else {
-        ossi.style.display = 'none';
-	div.style.width = 0;
-        closeImage.setAttribute('src', OSSI_INSTANCE_URL + '/images/ossi_maximize_button.png')
-        div.style.left = 0;
-	div.style.padding = 0;
+      if (!tragMode) {
+        clickCount++;
+        if (clickCount % 2 == 0) {
+          ossi.style.display = 'inline';
+          div.style.padding = '10px';
+          div.style.width = WIDGET_VIEWPORT.width + 'px';
+          closeImage.setAttribute('src', OSSI_INSTANCE_URL + '/images/ossi_minimize_button.png');
+        }
+        else {
+          ossi.style.display = 'none';
+          div.style.width = 0;
+          closeImage.setAttribute('src', OSSI_INSTANCE_URL + '/images/ossi_maximize_button.png')
+          div.style.left = 0;
+          div.style.padding = 0;
+        }
       }
     };
     div.appendChild(closeButton);
     // Ossi iframe
     var ossi = document.createElement('iframe');
-    ossi.setAttribute('src',  OSSI_INSTANCE_URL + '/index.html?channelId=' + channelID);
+    ossi.setAttribute('src', OSSI_INSTANCE_URL + '/index.html?channelId=' + channelID);
     ossi.setAttribute('height', WIDGET_VIEWPORT.height);
     ossi.setAttribute('width', WIDGET_VIEWPORT.width);
     ossi.setAttribute('frameborder', 0);
     div.appendChild(ossi);
     
-    var tragMode = false;
     document.onmousedown = function(e){
       var id = '';
       id = ie ? window.event.srcElement.id : e.target.id;
-      if (id == 'ossi-float-button'  || id == 'ossi-float') {
+      if (id == 'ossi-float-button' || id == 'ossi-float') {
         tragMode = true;
       }
     }
     
     document.onmousemove = function(e){
       if (tragMode) {
-	var x = ie ? event.clientX : e.clientX;
-	var y = ie ? event.clientY : e.clientY;
-	// set different x's and y's when ossi is shown
-	if( ossi.style.display != 'none' ) {
-		y -= 10;
-		x -= WIDGET_VIEWPORT.width;
-		x -= 20;
-	}
-        div.style.top =  (y - 90 ) + 'px';
-        div.style.left = (x - 30 ) + 'px';
+        var x = ie ? event.clientX : e.clientX;
+        var y = ie ? event.clientY : e.clientY;
+        // set different x's and y's when ossi is shown
+        if (ossi.style.display != 'none') {
+          y -= 10;
+          x -= WIDGET_VIEWPORT.width;
+          x -= 20;
+        }
+        div.style.top = (y - 90) + 'px';
+        div.style.left = (x - 30) + 'px';
       }
     };
     
