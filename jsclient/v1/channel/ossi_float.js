@@ -42,8 +42,7 @@ ossiFloater = {
     closeButton.style.paddingTop = '10px';
     closeButton.style.border = 'solid #444 2px';
     var clickCount = 0;
-    /* closeButton.onclick = function(){
-      alert('Clicked');
+    closeButton.onclick = function(){
       clickCount++;
       if (clickCount % 2 == 0) {
         ossi.style.display = 'inline';
@@ -58,7 +57,7 @@ ossiFloater = {
         div.style.left = 0;
 	div.style.padding = 0;
       }
-    }; */
+    };
     div.appendChild(closeButton);
     // Ossi iframe
     var ossi = document.createElement('iframe');
@@ -68,11 +67,11 @@ ossiFloater = {
     ossi.setAttribute('frameborder', 0);
     div.appendChild(ossi);
     
-    var tragMode = true;
+    var tragMode = false;
     document.onmousedown = function(e){
-      if( ie ) e = window.event;
-      alert( e );
-      if (e.target.id == 'ossi-float-button'  || event.target.id == 'ossi-float') {
+      var id = '';
+      id = ie ? window.event.srcElement.id : e.target.id;
+      if (id == 'ossi-float-button'  || id == 'ossi-float') {
         tragMode = true;
       }
     }
