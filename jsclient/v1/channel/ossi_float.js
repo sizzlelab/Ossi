@@ -6,6 +6,9 @@ ossiFloater = {
       height: 428,
       width: 313
     };
+    // CHeck IE
+    var ie = document.all ? true : false;
+
     // Initial container div
     var div = document.createElement('div');
     div.style.display = 'none';
@@ -13,7 +16,7 @@ ossiFloater = {
     div.style.top = '100px';
     div.style.left = '100px';
     div.style.background = '#000';
-				div.style.padding = '10px';
+    div.style.padding = '10px';
     div.style.height = WIDGET_VIEWPORT.height;
     div.style.width = WIDGET_VIEWPORT.width;
     div.setAttribute('id', 'ossi-float');
@@ -39,23 +42,23 @@ ossiFloater = {
     closeButton.style.paddingTop = '10px';
     closeButton.style.border = 'solid #444 2px';
     var clickCount = 0;
-    closeButton.onclick = function(){
-					 alert('Clicked');
+    /* closeButton.onclick = function(){
+      alert('Clicked');
       clickCount++;
       if (clickCount % 2 == 0) {
         ossi.style.display = 'inline';
-								div.style.padding = '10px';
-								div.style.width = WIDGET_VIEWPORT.width + 'px';
+	div.style.padding = '10px';
+	div.style.width = WIDGET_VIEWPORT.width + 'px';
         closeImage.setAttribute('src', '../images/ossi_minimize_button.png');
       }
       else {
         ossi.style.display = 'none';
-								div.style.width = 0;
+	div.style.width = 0;
         closeImage.setAttribute('src', '../images/ossi_maximize_button.png')
         div.style.left = 0;
-								div.style.padding = 0;
+	div.style.padding = 0;
       }
-    };
+    }; */
     div.appendChild(closeButton);
     // Ossi iframe
     var ossi = document.createElement('iframe');
@@ -65,23 +68,27 @@ ossiFloater = {
     ossi.setAttribute('frameborder', 0);
     div.appendChild(ossi);
     
-    var tragMode = false;
-    document.addEventListener( "mousedown" , function(event){
-      if (event.target.id == 'ossi-float-button'  || event.target.id == 'ossi-float') {
+    var tragMode = true;
+    document.onmousedown = function(e){
+      if( ie ) e = window.event;
+      alert( e );
+      if (e.target.id == 'ossi-float-button'  || event.target.id == 'ossi-float') {
         tragMode = true;
       }
-    } , false );
+    }
     
-    document.addEventListener( "mousemove" , function(event){
+    document.onmousemove = function(e){
       if (tragMode) {
-        div.style.top = (event.clientY + 5) + 'px';
-        div.style.left = (event.clientX + 5) + 'px';
+	var x = ie ? event.clientX : e.clientX;
+	var y = ie ? event.clientY : e.clientY;
+        div.style.top = (y - 100 ) + 'px';
+        div.style.left = (x - WIDGET_VIEWPORT.width - 50) + 'px';
       }
-    } , false );
+    };
     
-    document.addEventListener( "mouseup" , function(event){
+    document.onmouseup = function(e){
       tragMode = false;
-    } , false );
+    };
     
     // Loading done, show screen!
     div.style.display = 'block';
