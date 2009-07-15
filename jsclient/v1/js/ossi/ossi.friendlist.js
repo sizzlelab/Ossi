@@ -51,6 +51,7 @@ ossi.friendlist = Class.create(ossi.base, {
             if (json.entry.length > 5) 
               $('friend_list_back_button_2_container').show(); // show second back button at top of screen if more than 5 friends
             if (options.startIndex + options.count < json.entry.length) {
+													 $('friends_next_back_container').show();
               $('friends_next_button_container').show();
               Element.setStyle($('friends_previous_button_container'), {
                 'width': '50%'
@@ -63,6 +64,7 @@ ossi.friendlist = Class.create(ossi.base, {
               });
             }
             if (options.startIndex > 1) {
+													 $('friends_next_back_container').show();
               $('friends_previous_button_container').show();
               Element.setStyle($('friends_next_button_container'), {
                 'width': '50%'
@@ -140,7 +142,7 @@ ossi.friendlist = Class.create(ossi.base, {
             </div>\
             <div id="friends_placeholder">\
             </div>\
-	          <div class="nav_button" style="top: -1px; position: relative;">\
+	          <div id="friends_next_back_container" class="nav_button" style="top: -1px; position: relative; display: none;">\
 	            <div id="friends_next_button_container" class="nav_button next_button" style="display:none">\
 	              <a id="friends_next_button" class="nav_button_text" href="javascript:void(null);">Next Page</a>\
               </div>\
