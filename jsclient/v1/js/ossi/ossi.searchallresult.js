@@ -121,6 +121,9 @@ ossi.searchallresult = Class.create(ossi.base,{
   _getHTML: function() {
     var h =   '\
           			<div id="searchresultspane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
+													<div class="nav_button">\
+          					<a id="search_results_back_button_2" class="nav_button_text" href="javascript:void(null);">Back</a>\
+          				</div>\
                   <div id="search_results_placeholder">\
                   </div>\
           				<div class="nav_button">\
@@ -137,8 +140,8 @@ ossi.searchallresult = Class.create(ossi.base,{
 					 h += element.toButton();
 				} );
 				$('search_results_placeholder').update(h);
+    this._addLinkListeners();
 				this.parent.hideLoading();
-    self._addLinkListeners();
 		},
 		_timeSorter: function(a, b){
 			var ret = -10;

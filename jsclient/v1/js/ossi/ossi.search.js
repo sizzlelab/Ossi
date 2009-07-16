@@ -49,11 +49,9 @@ ossi.search = Class.create(ossi.base,{
 			Event.stop(e);
     this.parent.case32({
       search : $F('search_string'),
-      backCase : this.parent.case11.bind(this.parent,{
-        out : true,
-        backCase : this.parent.case9.bind(this.parent,{
+      backCase : this.parent.case30.bind(this.parent,{
           out : true,
-          backCase : this.parent.case3.bind(this.parent,{out:true}) }) }) 
+          backCase : this.parent.case3.bind(this.parent,{out:true}) }) 
     });
     return false;
   },
