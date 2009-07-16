@@ -46,7 +46,16 @@ ossi.search = Class.create(ossi.base,{
     this.options.backCase.apply();
   },
   _searchHandler: function(e) {
-    alert('Unimplemented feature');
+			Event.stop(e);
+    this.parent.case32({
+      search : $F('search_string'),
+      backCase : this.parent.case11.bind(this.parent,{
+        out : true,
+        backCase : this.parent.case9.bind(this.parent,{
+          out : true,
+          backCase : this.parent.case3.bind(this.parent,{out:true}) }) }) 
+    });
+    return false;
   },
   _addListeners: function() {
     $('search_form').onsubmit = this._searchHandler.bindAsEventListener(this);

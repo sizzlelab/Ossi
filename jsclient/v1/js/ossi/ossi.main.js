@@ -930,6 +930,33 @@ ossi.main = Class.create(ossi.base,{
       this.sub1.update();
     }.bind(this));
 	},
+	
+		/**
+	* search all results
+	*/
+	case32: function(options) {
+		var options = Object.extend({
+      search : false,
+      out : false,
+      backCase : false
+	  },options);
+
+    this.sub2 = this.sub1;
+    this.sub1 = new ossi.searchallresult(this, {  'hostElement' : this.mainElement,
+                                                'search' : options.search,
+                                                'backCase' : options.backCase});
+    if (options.out) {
+      this.utils.out(this.sub2.pane,this.sub1.pane,function() {
+        this.sub2.destroy();
+        this.sub1.update();
+      }.bind(this));
+    } else {
+      this.utils.into(this.sub2.pane,this.sub1.pane,function() {
+        this.sub2.destroy();
+        this.sub1.update();
+      }.bind(this));
+    }
+	},
 
 	/**
 	* _getClient

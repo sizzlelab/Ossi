@@ -43,8 +43,9 @@ var ossi = {
                   'ossi/ossi.post.js',
                   'ossi/ossi.avatar.js',
                   'ossi/ossi.utils.js',
-				  'ossi/ossi.changepassword.js',
-				  'ossi/ossi.search.js'
+				  												'ossi/ossi.changepassword.js',
+				              'ossi/ossi.search.js',
+																		'ossi/ossi.searchallresult.js'
                 ],
     loadLibraries: function() {
       var getBootScript = function () { 
