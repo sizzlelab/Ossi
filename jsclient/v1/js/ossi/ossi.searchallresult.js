@@ -172,9 +172,11 @@ ossi.searchallresult = Class.create(ossi.base,{
   },
   _addListeners: function() {
     $('search_results_back_button').onclick = this._backHandler.bindAsEventListener(this);
+				$('search_results_back_button_2').onclick = this._backHandler.bindAsEventListener(this);
   },
   _removeListeners: function() {
     $('search_results_back_button').onclick = function() { return };
+				$('search_results_back_button_2').onclick = function() { return };
   },
   _addLinkListeners: function() { // for dynamic buttons
     $$('.profile_button').each(function(button) {
@@ -182,7 +184,7 @@ ossi.searchallresult = Class.create(ossi.base,{
     },this);
   },
   _removeLinkListeners: function() {
-    $$('.search_results_profile_button').each(function(button) {
+    $$('.profile_button').each(function(button) {
       button.onclick = function() { return };
     },this);
   },
