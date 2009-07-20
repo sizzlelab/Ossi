@@ -8,7 +8,12 @@ ossiFloater = {
       height: 428,
       width: 313
     };
-    // CHeck IE
+    
+    // init coordinate calc placeholders
+    var diffX, diffY, restoreX;
+    var hidden = false;
+    
+    // Check IE
     var ie = document.all ? true : false;
     
     // Initial container div
@@ -44,22 +49,20 @@ ossiFloater = {
     closeButton.style.paddingTop = '10px';
     closeButton.style.border = 'solid #444 2px';
     var clickCount = 0;
-    var tragMode = false;
-    closeButton.onclick = function(){
-      if (!tragMode) {
-        clickCount++;
-        if (clickCount % 2 == 0) {
-          ossi.style.display = 'inline';
-          div.style.padding = '10px';
-          div.style.width = WIDGET_VIEWPORT.width + 'px';
+    var dragMode = false;
+    closeImage.setAttribute('id', 'ossi-close-image');
+    closeImage.style.paddingTop = '8px';
+    closeImage.onclick = function(){
+      if (!dragMode) {
+        if (hidden) {
           closeImage.setAttribute('src', OSSI_INSTANCE_URL + '/images/ossi_minimize_button.png');
-        }
-        else {
-          ossi.style.display = 'none';
-          div.style.width = 0;
+          div.style.left = restoreX+'px';
+          hidden = false;
+        } else {
           closeImage.setAttribute('src', OSSI_INSTANCE_URL + '/images/ossi_maximize_button.png')
-          div.style.left = 0;
-          div.style.padding = 0;
+          restoreX = parseInt(div.offsetLeft);
+          div.style.left = -div.offsetWidth+'px';
+          hidden = true;
         }
       }
     };
@@ -72,31 +75,41 @@ ossiFloater = {
     ossi.setAttribute('frameborder', 0);
     div.appendChild(ossi);
     
-    document.onmousedown = function(e){
+    window.onmousedown = function(e){
       var id = '';
       id = ie ? window.event.srcElement.id : e.target.id;
-      if (id == 'ossi-float-button' || id == 'ossi-float') {
-        tragMode = true;
+      if (id == 'ossi-float-button') {
+        closeImage.setAttribute('src', OSSI_INSTANCE_URL + '/images/ossi_minimize_button.png');
+        hidden = false;
+        var x = ie ? event.clientX : e.clientX;
+        var y = ie ? event.clientY : e.clientY;
+        diffX = (parseInt(div.offsetLeft)+parseInt(closeButton.offsetWidth)+parseInt(div.offsetWidth))-x;
+        diffY = (parseInt(div.offsetTop)+parseInt(closeButton.offsetHeight)+parseInt(div.offsetHeight))-y;
+        dragMode = true;
       }
     }
     
-    document.onmousemove = function(e){
-      if (tragMode) {
+    window.onmousemove = function(e){
+      if (dragMode) {
         var x = ie ? event.clientX : e.clientX;
         var y = ie ? event.clientY : e.clientY;
+
+        x -= (parseInt(closeButton.offsetWidth)+parseInt(div.offsetWidth)-diffX);
+        y -= (parseInt(closeButton.offsetHeight)+parseInt(div.offsetHeight)-diffY);
+
         // set different x's and y's when ossi is shown
         if (ossi.style.display != 'none') {
-          y -= 10;
-          x -= WIDGET_VIEWPORT.width;
-          x -= 20;
+//          y -= 10;
+//          x -= WIDGET_VIEWPORT.width;
+//          x -= 20;
         }
-        div.style.top = (y - 90) + 'px';
-        div.style.left = (x - 30) + 'px';
+        div.style.top = y + 'px';
+        div.style.left = x + 'px';
       }
     };
     
-    document.onmouseup = function(e){
-      tragMode = false;
+    window.onmouseup = function(e){
+      dragMode = false;
     };
     
     // Loading done, show screen!
