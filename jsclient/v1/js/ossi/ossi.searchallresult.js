@@ -137,22 +137,26 @@ ossi.searchallresult = Class.create(ossi.base,{
         if (typeof(json.entry) != 'undefined') {
 					     if (json.entry.length > 0) {
 						     json.entry.each(function(entry){
-							     // Write here a toButton and time functions for different classes
 												 entry = Object.extend( { 
 													toButton : function(){
   															var h =   '\
-												          				<div class="channel_button" id="search_uid_'+this.id+'" href="javascript:void(null);">\
+												          				<div class="group_button" id="search_uid_'+this.group.id+'" href="javascript:void(null);">\
 												                    <div class="post_button_left_column"></div>\
 												                    <div class="post_button_text">\
-												        						  							<div class="button_title">'+this.name+'</div>\
-												        						  							<div class="button_content_text"><a href="javascript:void(null);">'+this.description+'</a></div>\
+												        						  							<div class="button_title">'+this.group.name+'</div>\
+												        						  							<div class="button_content_text"><a href="javascript:void(null);">'+this.group.description+'</a></div>\
 												                    </div>\
 												          				</div>\
 												          			';
 												    return h;												
 													} , 
 													getDate : function(){
-														 return 0;
+														 // Group ordering to be handled smarter!
+															if (this.group.is_member) {
+			   												return 1;
+			    								} else {
+			   	           return 0;
+			            }
 													} } , entry);
 							      result.push( entry );
 						    }, self);
@@ -174,7 +178,7 @@ ossi.searchallresult = Class.create(ossi.base,{
   _getHTML: function() {
     var h =   '\
           			<div id="searchresultspane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
-													<div class="nav_button">\
+													<div class="nav_button id="search_results_back_button_2_container" style="display: none">\
           					<a id="search_results_back_button_2" class="nav_button_text" href="javascript:void(null);">Back</a>\
           				</div>\
                   <div id="search_results_placeholder">\
@@ -192,6 +196,7 @@ ossi.searchallresult = Class.create(ossi.base,{
 				data.each( function(element){
 					 h += element.toButton();
 				} );
+				if( data.length > 7 ) $('search_results_back_button_2_container').show();
 				$('search_results_placeholder').update(h);
     this._addLinkListeners();
 				this.parent.hideLoading();
@@ -211,16 +216,34 @@ ossi.searchallresult = Class.create(ossi.base,{
     this.parent.case13({
       userId : uid,
       search : this.options.search,
-      backCase : this.parent.case12.bind(this.parent,{
+      backCase : this.parent.case32.bind(this.parent,{
         out : true,
         search : this.options.search,
-        backCase : this.parent.case11.bind(this.parent,{
-          out : true,
-          backCase : this.parent.case9.bind(this.parent,{
-            out : true,
-            backCase : this.parent.case3.bind(this.parent,{out:true}) }) }) }) 
-    });
+         backCase : this.parent.case3.bind(this.parent,{out:true}) }) 
+							} );
   },
+		_openGroupHandler: function(event, button_id) {
+			var gid = button_id.replace("search_uid_","");
+			this.parent.	case27( {
+      grouplId : gid,
+      search : this.options.search,
+      backCase : this.parent.case32.bind(this.parent,{
+        out : true,
+        search : this.options.search,
+         backCase : this.parent.case3.bind(this.parent,{out:true}) }) 
+							} );
+		},
+		_openChannelHandler: function(event, button_id) {
+			var cid = button_id.replace("search_uid_","");
+			this.parent.	case20( {
+      channelId : cid,
+      search : this.options.search,
+      backCase : this.parent.case32.bind(this.parent,{
+        out : true,
+        search : this.options.search,
+         backCase : this.parent.case3.bind(this.parent,{out:true}) }) 
+							} );
+		},
   _addListeners: function() {
     $('search_results_back_button').onclick = this._backHandler.bindAsEventListener(this);
 				$('search_results_back_button_2').onclick = this._backHandler.bindAsEventListener(this);
@@ -233,9 +256,21 @@ ossi.searchallresult = Class.create(ossi.base,{
     $$('.profile_button').each(function(button) {
       button.onclick = this._openProfileHandler.bindAsEventListener(this,button.id);
     },this);
+				$$('.channel_button').each(function(button) {
+      button.onclick = this._openChannelHandler.bindAsEventListener(this,button.id);
+    },this);
+				$$('.group_button').each(function(button) {
+      button.onclick = this._openGroupHandler.bindAsEventListener(this,button.id);
+    },this);				
   },
   _removeLinkListeners: function() {
     $$('.profile_button').each(function(button) {
+      button.onclick = function() { return };
+    },this);
+				$$('.group_button').each(function(button) {
+      button.onclick = function() { return };
+    },this);
+				$$('.channel_button').each(function(button) {
       button.onclick = function() { return };
     },this);
   },
