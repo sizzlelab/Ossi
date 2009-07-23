@@ -2,7 +2,7 @@ ossiFloater = {
 
   init: function(channelID, groupID){
   
-    var OSSI_INSTANCE_URL = 'http://ossi/';
+    var OSSI_INSTANCE_URL = '.';
     
     var WIDGET_VIEWPORT = {
       height: 428,

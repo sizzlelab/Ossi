@@ -86,8 +86,7 @@ ossi.searchallresult = Class.create(ossi.base,{
 							self._drawResults( result );
       }
     });
-	/*			// FIXME: These are ideas, need to be fixed according to real COS
-				URL = BASE_URL + '/channels';
+				URL = BASE_URL + '/channels/';
 				params = {search: this.options.search};
 				new Ajax.Request(URL, {
       method : 'get',
@@ -100,14 +99,68 @@ ossi.searchallresult = Class.create(ossi.base,{
 					     if (json.entry.length > 0) {
 						     json.entry.each(function(entry){
 							     // Write here a toButton and time functions for different classes
-												 entry = Object.extend( entry );
+												 entry = Object.extend( { 
+													toButton : function(){
+  															var h =   '\
+												          				<div class="channel_button" id="search_uid_'+this.id+'" href="javascript:void(null);">\
+												                    <div class="post_button_left_column"></div>\
+												                    <div class="post_button_text">\
+												        						  							<div class="button_title">'+this.name+'</div>\
+												        						  							<div class="button_content_text"><a href="javascript:void(null);">'+this.description+'</a></div>\
+												                    </div>\
+												          				</div>\
+												          			';
+												    return h;												
+													} , 
+													getDate : function(){
+														var d = this.updated_at;
+														var a = Date.UTC(d.substring(0,4),d.substring(5,7),d.substring(8,10),d.substring(11,13),d.substring(14,16),d.substring(17,19));
+	   									return a;
+													} } , entry);
 							      result.push( entry );
 						    }, self);
 					   }
 				   }
 							self._drawResults( result );
       },
-    }); */
+    });
+				// Group search requires hacking!
+				URL = BASE_URL + '/groups/@public';
+				params = {query: this.options.search};
+				new Ajax.Request(URL, {
+      method : 'get',
+      parameters : params,
+      requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
+      onSuccess : function(response) {
+        var json = response.responseJSON;
+        self._removeLinkListeners();
+        if (typeof(json.entry) != 'undefined') {
+					     if (json.entry.length > 0) {
+						     json.entry.each(function(entry){
+							     // Write here a toButton and time functions for different classes
+												 entry = Object.extend( { 
+													toButton : function(){
+  															var h =   '\
+												          				<div class="channel_button" id="search_uid_'+this.id+'" href="javascript:void(null);">\
+												                    <div class="post_button_left_column"></div>\
+												                    <div class="post_button_text">\
+												        						  							<div class="button_title">'+this.name+'</div>\
+												        						  							<div class="button_content_text"><a href="javascript:void(null);">'+this.description+'</a></div>\
+												                    </div>\
+												          				</div>\
+												          			';
+												    return h;												
+													} , 
+													getDate : function(){
+														 return 0;
+													} } , entry);
+							      result.push( entry );
+						    }, self);
+					   }
+				   }
+							self._drawResults( result );
+      },
+    });
 	},
   _draw: function() {
     if (this.options.hostElement) {
@@ -144,13 +197,11 @@ ossi.searchallresult = Class.create(ossi.base,{
 				this.parent.hideLoading();
 		},
 		_timeSorter: function(a, b){
-			var ret = -10;
 			var dateA = a.getDate();
 			var dateB = b.getDate();
-			if( dateA < dateB ) ret = 1;
-			else if( dateB < dateA ) ret = -1;
-			else ret = 0;
-			return ret;
+			if( dateA < dateB ) return 1;
+		 if( dateB < dateA ) return -1;
+			else return 0;
 		},
   _backHandler: function() {
     this.options.backCase.apply();
