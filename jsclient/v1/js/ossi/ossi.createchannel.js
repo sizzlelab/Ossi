@@ -23,12 +23,14 @@ ossi.createchannel = Class.create(ossi.base,{
     var h =   '\
           			<div id="createchannelpane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
                   <form>\
-            				<div style="height:33px; text-align:center; padding-top:20px;">\
-            					Enter channel\'s name below:\
-            				</div>\
-            				<div class="login">\
-            					<input class="textinput" maxlength="30" name="channel_title" id="channel_title" type="text"/>\
-            				</div>\
+                    <div style="margin: 18px auto 12px; text-align: left; width: 170px;">\
+                      <dl>\
+                        <dt style="color:#666; margin:0px 0px 5px 0px;">Channel name:</dt>\
+                          <dd style=" margin:0px 0px 10px 15px;"><input class="textinput" maxlength="30" name="channel_name" id="channel_name" type="text"/></dd>\
+                        <dt style="color:#666; margin:0px 0px 5px 0px;">Channel description:</dt>\
+                          <dd style=" margin:0px 0px 10px 15px;"><input class="textinput" maxlength="60" name="channel_description" id="channel_description" type="text"/></dd>\
+                      </dl>\
+                    </div>\
             				<div style="height:14px"></div>\
             				<div class="nav_button">\
             					<a id="create_channel_create_public_button" class="nav_button_text" href="javascript:void(null);">Create Public Channel</a>\
@@ -56,71 +58,40 @@ ossi.createchannel = Class.create(ossi.base,{
     if (typeof(this.parent.channelsId) == 'undefined') return; // userId in the parent controller not set
     var userName = (typeof(self.parent.userName) != 'undefined') ? self.parent.userName : 'N/A'; 
     var params = options.priv ? { 
-                                      owner : this.parent.userId, 
-                                      priv : 'true', 
-                                      title : $F('channel_title'), 
-                                      tags : 'channel,private',
-                                      'metadata[creator]' : userName 
-                                    } : { 
-                                      owner : this.parent.userId, 
-                                      title : $F('channel_title'),
-                                      tags : 'channel',
-                                      'metadata[creator]' : userName 
-                                    };
-    var URL = BASE_URL+'/appdata/cWslSQyIyr3yiraaWPEYjL/@collections/'; // ossi app id hard coded
+      'channel[channel_type]' : 'friend',
+      'channel[name]' : $F('channel_name'), 
+      'channel[description]' : $F('channel_description')
+    } : { 
+      'channel[channel_type]' : 'public', 
+      'channel[name]' : $F('channel_name'), 
+      'channel[description]' : $F('channel_description')
+    };
+    var URL = BASE_URL+'/channels';
     self.parent.showLoading();
     new Ajax.Request(URL,{
       method : 'post',
       requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
       parameters : params,
       onSuccess : function(response) { // now post the new channel's collection ID and title to channel list collection
-        var channel = response.responseJSON;
-        if (options.priv) {
-          params = {  owner : this.parent.userId,
-                      content_type : 'collection',
-                      collection_id : channel.id
-                    };
-        } else {
-          params = {  content_type : 'collection',
-                      collection_id : channel.id
-                    };
-        }
-        URL = BASE_URL+'/appdata/cWslSQyIyr3yiraaWPEYjL/@collections/'+self.parent.channelsId; // ossi app Id hard-coded
-        new Ajax.Request(URL,{
-          method : 'post',
-          requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
-          parameters : params,
-          onSuccess : function(response) {
-            self.parent.hideLoading();
-            self.parent.case6({
-              message : "Channel created!",
-              buttonText : "Back",
-              backCase:self.parent.case18.bind(self.parent,{
-                out:true,
-                backCase:self.parent.case3.bind(self.parent,{out:true})
-              })
-            });            
-          },
-          onFailure : function(response) {
-            self.parent.hideLoading();
-            self.parent.case6({
-              message : "Error! Could not add channel to channel list!",
-              buttonText : "Back",
-              backCase : self.parent.case19.bind(self.parent,{
-                out:true,
-                backCase:self.parent.case18.bind(self.parent,{
-                  out:true,
-                  backCase:self.parent.case3.bind(self.parent,{out:true})
-                })
-              })
-            });
-          }
-        });
-      },
-      onFailure : function(response) {
         self.parent.hideLoading();
         self.parent.case6({
-          message : "Could not create channel.",
+          message : "Channel created!",
+          buttonText : "Back",
+          backCase:self.parent.case18.bind(self.parent,{
+            out:true,
+            backCase:self.parent.case3.bind(self.parent,{out:true})
+          })
+        });            
+      },
+      onFailure : function(response) {
+        var json = response.responseJSON;
+        var message = '';
+        json.messages.each(function(m) {
+          message += '<p>' + m + '</p>';
+        });
+        self.parent.hideLoading();
+        self.parent.case6({
+          message : message,
           buttonText : "Try again",
           backCase : self.parent.case19.bind(self.parent,{
             out:true,
@@ -132,13 +103,6 @@ ossi.createchannel = Class.create(ossi.base,{
         });
       }
     });
-
-
-
-
-
-
-
   },
   _addListeners: function() {
     $('create_channel_create_public_button').onclick = this._createHandler.bindAsEventListener(this,{'priv':false});

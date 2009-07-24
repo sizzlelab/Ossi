@@ -30,7 +30,8 @@ ossi.channellist = Class.create(ossi.base,{
     if (typeof(this.parent.channelsId) == 'undefined') return; // userId in the parent controller not set
     var self = this;
     // get channels
-    var URL = BASE_URL+'/appdata/cWslSQyIyr3yiraaWPEYjL/@collections/'+self.parent.channelsId; // ossi app Id hard-coded
+    var URL = BASE_URL+'/channels';
+//    var URL = BASE_URL+'/appdata/cWslSQyIyr3yiraaWPEYjL/@collections/'+self.parent.channelsId; // ossi app Id hard-coded
     var params = { startIndex : options.startIndex, count : options.count };
     self.parent.showLoading();
     new Ajax.Request(URL,{
@@ -100,13 +101,13 @@ ossi.channellist = Class.create(ossi.base,{
                   <div id="channels_placeholder">\
                   </div>\
           				<div class="nav_button" style="top: -1px; position: relative;" >\
-							<div id="channels_next_button_container" class="nav_button next_button" style="display:none">\
+							    <div id="channels_next_button_container" class="nav_button next_button" style="display:none">\
           						<a id="channels_next_button" class="nav_button_text" href="javascript:void(null);">Next Page</a>\
           					</div>\
-							<div id="channels_previous_button_container" class="nav_button previous_button" style="display:none">\
+							      <div id="channels_previous_button_container" class="nav_button previous_button" style="display:none">\
           						<a id="channels_previous_button" class="nav_button_text" href="javascript:void(null);">Previous Page</a>\
           					</div>\
-						</div>\
+						      </div>\
           				<div id="create_channel_button_container" class="nav_button">\
           					<a id="create_channel_button" class="nav_button_text" href="javascript:void(null);">Create New Channel</a>\
           				</div>\
@@ -136,16 +137,18 @@ ossi.channellist = Class.create(ossi.base,{
     }
 
     var ident_class = '';
-    if (channel.tags != null) {
-      ident_class = (channel.tags.match('private')) ? 'private' : 'public';
+    if (! Object.isUndefined(channel.channel_type)) {
+      ident_class = (channel.channel_type == 'public') ? 'public' : 'private';
     }
     
     var h =   '\
           				<div class="channel_button" id="channel_id_'+channel.id+'">\
                     <div class="channel_button_left_column '+ident_class+'"></div>\
                     <div class="channel_button_text">\
-        						  <div class="button_title"><a href="javascript:void(null);">'+channel.title+'</a></div>\
-        						  <div class="button_subtitle_text" style="padding-top:3px">'+channel.totalResults+' messages. Updated '+updated_text+'</div>\
+        						  <div class="button_title" style="font-size:11px; font-weight:bold;"><a href="javascript:void(null);">'+channel.name+'</a></div>\
+        						  <div class="button_subtitle_text" style="padding:3px 0px 0px 15px">'+channel.description+'</div>\
+        						  <div class="button_subtitle_text" style="padding:0px 0px 0px 15px">Created by '+channel.owner_name+'</div>\
+        						  <div class="button_subtitle_text" style="padding:0px 0px 0px 15px"><!--'+channel.totalResults+' messages.--> Updated '+updated_text+'</div>\
                     </div>\
           				</div>\
           			';

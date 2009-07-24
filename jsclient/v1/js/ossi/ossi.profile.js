@@ -81,7 +81,7 @@ ossi.profile = Class.create(ossi.base,{
 						        <div id="profile_remove_friend_button_container" style="display:none" class="nav_button">\
           					<a id="profile_remove_friend_button" class="nav_button_text" href="javascript:void(null);">Remove this Friend</a>\
           				</div>\
-              <div id="pending_nav" style="display:none">\
+                  <div id="pending_nav" style="display:none">\
             				<div class="nav_button">\
             					<a id="profile_accept_friendship_request_button" class="nav_button_text" href="javascript:void(null);">Accept Friendship Request</a>\
             				</div>\
