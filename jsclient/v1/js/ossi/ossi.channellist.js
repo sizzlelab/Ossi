@@ -9,9 +9,10 @@ ossi.channellist = Class.create(ossi.base,{
       hostElement : false
 	  },options);
     this.updateInterval = 15000;
-    this.updateOptions = {};
-    this.count = 8;
-	  this.startIndex = 1;
+    this.updateOptions = {
+      per_page : 8,
+      page : 1
+    };
 	  this.pane = false;
     this._draw();
     this._resetInterval(); // this resets the intervalled update call, if selfUpdate is enabled
@@ -21,18 +22,14 @@ ossi.channellist = Class.create(ossi.base,{
 	*
 	* does not handle XHR failure yet!
 	*/
-	update: function() {
-		var options = Object.extend({
-      startIndex : 1,
-      count : this.count
-	  },this.updateOptions);
+	update: function(options) {
     if (typeof(this.parent.userId) == 'undefined') return; // userId in the parent controller not set
     if (typeof(this.parent.channelsId) == 'undefined') return; // userId in the parent controller not set
     var self = this;
+
     // get channels
     var URL = BASE_URL+'/channels';
-//    var URL = BASE_URL+'/appdata/cWslSQyIyr3yiraaWPEYjL/@collections/'+self.parent.channelsId; // ossi app Id hard-coded
-    var params = { startIndex : options.startIndex, count : options.count };
+    var params = { per_page : this.updateOptions.per_page, page : this.updateOptions.page };
     self.parent.showLoading();
     new Ajax.Request(URL,{
       method : 'get',
@@ -43,21 +40,18 @@ ossi.channellist = Class.create(ossi.base,{
         if (typeof(json.entry) != 'undefined') {
           if (json.entry.length > 0) {
             self._drawContents(json.entry);
-            if (json.entry.length > 5) $('channels_back_button_2_container').show(); // show second back button at top of screen if more than 5 channels
-            if (options.startIndex + options.count < json.totalResults) {
-				$('channels_next_button_container').show();
-				Element.setStyle($('channels_previous_button_container'), { 'width': '50%' } );
-			} else {
-			  $('channels_next_button_container').hide();
-			  Element.setStyle($('channels_previous_button_container'), { 'width': '100%' });
-			} 
-			if (options.startIndex > 1) {
-			  $('channels_previous_button_container').show();
-			  Element.setStyle($('channels_next_button_container'), { 'width': '50%' });
-			} else {
-			  $('channels_previous_button_container').hide();
-			  Element.setStyle($('channels_next_button_container'), { 'width': '100%' });
-			}
+            if (self.updateOptions.page > 1) $('channels_back_button_2_container').show(); // show second back button at top of screen if more than 5 channels
+    			  $('channels_next_button_container').setStyle({ 'width': '100%' });
+    				$('channels_next_button_container').show();
+            if (self.updateOptions.page > 1) {
+      			  $('channels_previous_button_container').setStyle({ 'width': '50%' });
+      			  $('channels_next_button_container').setStyle({ 'width': '50%' });
+      			  $('channels_previous_button_container').show();
+            } else {
+      			  $('channels_previous_button_container').setStyle({ 'width': '0%' });
+    			    $('channels_next_button_container').setStyle({ 'width': '100%' });
+      			  $('channels_previous_button_container').hide();
+            }
           } else {
             $('channels_placeholder').replace('<div style="padding:10px; text-align:center">There are currently no channels available to you in the service. Please contact system administrators at: otasizzle-helpdesk@hiit.fi</div>');
           }
@@ -100,14 +94,15 @@ ossi.channellist = Class.create(ossi.base,{
           				</div>\
                   <div id="channels_placeholder">\
                   </div>\
-          				<div class="nav_button" style="top: -1px; position: relative;" >\
-							    <div id="channels_next_button_container" class="nav_button next_button" style="display:none">\
+          				<div style="top: 0px; position: relative;" >\
+  							    <div id="channels_next_button_container" class="nav_button next_button" style="display:none">\
           						<a id="channels_next_button" class="nav_button_text" href="javascript:void(null);">Next Page</a>\
           					</div>\
-							      <div id="channels_previous_button_container" class="nav_button previous_button" style="display:none">\
+  						      <div id="channels_previous_button_container" class="nav_button previous_button" style="display:none">\
           						<a id="channels_previous_button" class="nav_button_text" href="javascript:void(null);">Previous Page</a>\
           					</div>\
 						      </div>\
+						      <div style="clear:both"></div>\
           				<div id="create_channel_button_container" class="nav_button">\
           					<a id="create_channel_button" class="nav_button_text" href="javascript:void(null);">Create New Channel</a>\
           				</div>\
@@ -178,13 +173,13 @@ ossi.channellist = Class.create(ossi.base,{
     });
   },
   _nextHandler: function() {
-    this.updateOptions = { 'startIndex' : this.startIndex+this.count, 'count' : this.count };
+    this.updateOptions = { page : ++this.updateOptions.page, per_page : 8 };
     this.update();
     this._resetInterval(); // reset the interval as we just updated
     this.startIndex += this.count;
   },
   _previousHandler: function() {
-    this.updateOptions = { 'startIndex' : this.startIndex-this.count, 'count' : this.count };
+    this.updateOptions = { page : --this.updateOptions.page, per_page : 8  };
     this.update();
     this._resetInterval(); // reset the interval as we just updated
     this.startIndex -= this.count;
