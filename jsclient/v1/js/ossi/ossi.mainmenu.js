@@ -26,6 +26,7 @@ ossi.mainmenu = Class.create(ossi.base,{
       requestHeaders : (client.is_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
       onSuccess : function(response) {
         var json = response.responseJSON;
+								json = json.entry;
         var name = (json.name != null) ? json.name['unstructured'] : json.username; // if name has not been set
         self.parent.userName = name;
         $('mainmenu_profile_name').update(name);
@@ -64,6 +65,7 @@ ossi.mainmenu = Class.create(ossi.base,{
                 requestHeaders : (client.is_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
                 onSuccess : function(response) {
                   var json = response.responseJSON;
+																		json = json.entry;
                   if (Object.isNumber(json.latitude) && Object.isNumber(json.longitude)) {
                     $('mainmenu_profile_name').insert(' @ ' + self.parent.utils.roundNumber(json.latitude,4) + ' / ' + self.parent.utils.roundNumber(json.longitude,4) + ' ' + self.parent.utils.agoString(json.updated_at));
                   }
