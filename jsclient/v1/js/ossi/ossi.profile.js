@@ -28,6 +28,7 @@ ossi.profile = Class.create(ossi.base,{
       requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
       onSuccess : function(response) { // does not handle invalid responses
         var json = response.responseJSON;
+								json = json.entry;
         var h = self._getProfileHTML(json);
         $('profile_placeholder').replace(h);
 								// hide everything!
