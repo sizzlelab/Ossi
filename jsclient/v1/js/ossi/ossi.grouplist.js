@@ -91,8 +91,8 @@ ossi.grouplist = Class.create(ossi.base, {
   },
   
   _myOwnSorter: function(a, b){
-    a = a.group.is_member;
-    b = b.group.is_member;
+    a = a.is_member;
+    b = b.is_member;
     if (a < b) 
       return 1
     if (a > b) 
@@ -141,7 +141,6 @@ ossi.grouplist = Class.create(ossi.base, {
     return h;
   },
   _getButtonHTML: function(group){
-    var group = group.group;
     var updated_text = '';
     if (group.updated_at != 'undefined') {
       if (group.updated_at != null) {
