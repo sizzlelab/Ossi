@@ -58,9 +58,9 @@ ossi.creategroup = Class.create(ossi.base,{
   _createHandler: function() {
     var self = this;
     if (typeof(this.parent.userId) == 'undefined') return; // userId in the parent controller not set
-    var params = {  title : $F('group_title'),
-                    type : $F('group_type'),
-                    description : $F('group_description') };
+    var params = {  'group[title]' : $F('group_title'),
+                    'group[type]' : $F('group_type'),
+                    'group[description]' : $F('group_description') };
 
     var URL = BASE_URL+'/groups/'; // ossi app id hard coded
     self.parent.showLoading();
