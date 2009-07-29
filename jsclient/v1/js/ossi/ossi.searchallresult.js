@@ -19,7 +19,7 @@ ossi.searchallresult = Class.create(ossi.base,{
 	update: function() {
     if (typeof(this.parent.userId) == 'undefined') return; // userId in the parent controller not set
     if (this.options.search == false) return; // search terms not set
-    var result = new Array();
+    var result = [];
     var self = this;
     var URL = BASE_URL+'/people';
     var params =  { search : this.options.search };
@@ -101,12 +101,13 @@ ossi.searchallresult = Class.create(ossi.base,{
 							     // Write here a toButton and time functions for different classes
 												 entry = Object.extend( { 
 													toButton : function(){
+														   var description = this.description != null ? this.description : '';
   															var h =   '\
 												          				<div class="channel_button" id="search_uid_'+this.id+'" href="javascript:void(null);">\
 												                    <div class="post_button_left_column"></div>\
 												                    <div class="post_button_text">\
 												        						  							<div class="button_title">'+this.name+'</div>\
-												        						  							<div class="button_content_text"><a href="javascript:void(null);">'+this.description+'</a></div>\
+												        						  							<div class="button_content_text"><a href="javascript:void(null);">'+description+'</a></div>\
 												                    </div>\
 												          				</div>\
 												          			';
@@ -139,12 +140,13 @@ ossi.searchallresult = Class.create(ossi.base,{
 						     json.entry.each(function(entry){
 												 entry = Object.extend( { 
 													toButton : function(){
+														   var description = this.description != null ? this.description : '';
   															var h =   '\
-												          				<div class="group_button" id="search_uid_'+this.group.id+'" href="javascript:void(null);">\
+												          				<div class="group_button" id="search_uid_'+this.id+'" href="javascript:void(null);">\
 												                    <div class="post_button_left_column"></div>\
 												                    <div class="post_button_text">\
-												        						  							<div class="button_title">'+this.group.name+'</div>\
-												        						  							<div class="button_content_text"><a href="javascript:void(null);">'+this.group.description+'</a></div>\
+												        						  							<div class="button_title">'+this.title+'</div>\
+												        						  							<div class="button_content_text"><a href="javascript:void(null);">'+description+'</a></div>\
 												                    </div>\
 												          				</div>\
 												          			';
@@ -152,8 +154,8 @@ ossi.searchallresult = Class.create(ossi.base,{
 													} , 
 													getDate : function(){
 														 // Group ordering to be handled smarter!
-															if (this.group.is_member) {
-			   												return 1;
+															if (this.is_member) {
+			   											return 0;
 			    								} else {
 			   	           return 0;
 			            }
@@ -178,7 +180,7 @@ ossi.searchallresult = Class.create(ossi.base,{
   _getHTML: function() {
     var h =   '\
           			<div id="searchresultspane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
-													<div class="nav_button id="search_results_back_button_2_container" style="display: none">\
+													<div class="nav_button" id="search_results_back_button_2_container" style="display: none">\
           					<a id="search_results_back_button_2" class="nav_button_text" href="javascript:void(null);">Back</a>\
           				</div>\
                   <div id="search_results_placeholder">\
@@ -193,7 +195,7 @@ ossi.searchallresult = Class.create(ossi.base,{
 		_drawResults: function(data){
 			 data = data.sort( this._timeSorter );
 				var h = '';
-				data.each( function(element){
+			 data.each( function(element){
 					 h += element.toButton();
 				} );
 				if( data.length > 7 ) $('search_results_back_button_2_container').show();
