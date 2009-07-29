@@ -15,7 +15,8 @@ ossi.channel = Class.create(ossi.base, {
     this.count = this.options.count;
     this.updateInterval = 15000; //this.parent.options.refreshChannel;
     this.updateOptions = {
-      'startIndex': this.options.startIndex
+      per_page : 8,
+      page : 1
     };
     this.startIndex = this.options.startIndex;
     this.priv = true; // for moderator privilage check
@@ -29,22 +30,14 @@ ossi.channel = Class.create(ossi.base, {
    * does not handle XHR failure yet!
    */
   update: function(){
-    var options = Object.extend({
-      startIndex: 1,
-      count: this.count
-    }, this.updateOptions);
     if (!this.options.wall && typeof(this.parent.userId) == 'undefined') 
       return; // userId in the parent controller not set
     var self = this;
+    var params = { per_page : this.updateOptions.per_page, page : this.updateOptions.page };
+
     // get contents
-    var URL = BASE_URL + '/appdata/cWslSQyIyr3yiraaWPEYjL/@collections/' + self.options.channelId; // ossi app Id hard-coded
-    var params = {
-      startIndex: options.startIndex,
-      count: options.count
-    };
-    //    if(!self.options.wall) self.parent.showLoading();
+    var URL = BASE_URL + '/channels/' + self.options.channelId + '/@messages';
     self.parent.showLoading();
-    
     new Ajax.Request(URL, {
       method: 'get',
       requestHeaders: (client.is_widget) ? ['Cookie', self.parent.sessionCookie] : '',
@@ -78,46 +71,41 @@ ossi.channel = Class.create(ossi.base, {
             if ((!Object.isUndefined(self.parent.userId) || !self.options.wall) && json.entry.length > 5) 
               $('channel_back_button_2_container').show();
 			
-			var showNavBar = false;
-			  
+			      var showNavBar = false;
             if (options.startIndex + options.count < json.totalResults) {
               $('channel_next_button_container').show();
-			  showNavBar = true;
+			        showNavBar = true;
               Element.setStyle($('channel_previous_button_container'), {
                 'width': '50%'
               });
-            }
-            else {
+            } else {
               $('channel_next_button_container').hide();
               Element.setStyle($('channel_previous_button_container'), {
                 'width': '100%'
               });
             }
-			
+
             if (options.startIndex > 1) {
               $('channel_previous_button_container').show();
-			  showNavBar = true;
+			        showNavBar = true;
               Element.setStyle($('channel_next_button_container'), {
                 'width': '50%'
               });
-            }
-            else {
+            } else {
               $('channel_previous_button_container').hide();
               Element.setStyle($('channel_next_button_container'), {
                 'width': '100%'
               });
             }
 			
-			if( ! showNavBar ) {
-			  $('channel_nav_bar').hide();
-			}
+			      if( ! showNavBar ) {
+			        $('channel_nav_bar').hide();
+			      }
 			
-          }
-          else {
+          } else {
             $('channel_placeholder').update('<div style="padding:10px; text-align:center">This channel has no posts. Be the first poster by clicking \'Add Post\' below!</div>');
           }
-        }
-        else {
+        } else {
           $('channel_placeholder').update('<div style="padding:10px; text-align:center">Error occurred. Try again later.</div>');
           $('add_post_button_container').hide();
         }
@@ -257,13 +245,13 @@ ossi.channel = Class.create(ossi.base, {
     var updated_text = '';
     if (post.updated_at != 'undefined') {
       if (post.updated_at != null) {
-	    updated_text = this.parent.utils.dateToString(post.updated_at);
+	      updated_text = this.parent.utils.dateToString(post.updated_at);
       }
     }
     
-    var author_string = (typeof(post.metadata.author) != 'undefined') ? 'by ' + post.metadata.author + ' ' : '';
-    var stripped_message = post.metadata.body;
-    var avatar_src = (post.owner == null) ? anonymous_icon : BASE_URL + '/people/' + post.updated_by + '/@avatar/small_thumbnail';
+    var author_string = (typeof(post.poster_name) != 'undefined') ? 'by ' + post.poster_name + ' ' : '';
+    var stripped_message = post.body;
+    var avatar_src = (post.poster_id == null) ? anonymous_icon : BASE_URL + '/people/' + post.poster_id + '/@avatar/small_thumbnail';
     
     if (!this.options.wall) {
       stripped_message = stripped_message.replace(/<\/?[^>]+(>|$)/g, ""); //clean html-tags away
@@ -273,51 +261,34 @@ ossi.channel = Class.create(ossi.base, {
             				<div class="post_button" id="post_id_' + post.id + '">\
                       <div class="post_button_left_column">\
                       	<img style="margin:2px 0px 0px 2px; border:solid #eee 1px;"\
-                      	src="' +
-      avatar_src +
-      '"\
+                      	src="' + avatar_src + '"\
                       	width="50" height="50" border="0" />\
                       	</div>\
                       <div class="post_button_text">\
-          						  <div class="button_title"><a href="javascript:void(null);">' +
-      message_stub +
-      '</a></div>\
-          						  <div class="button_subtitle_text" style="padding-top:3px">' +
-      author_string +
-      ' ' +
-      updated_text +
-      '</div>\
+          						  <div class="button_title"><a href="javascript:void(null);">' + message_stub + '</a></div>\
+          						  <div class="button_subtitle_text" style="padding-top:3px">' + author_string + ' ' + updated_text + '</div>\
                       </div>\
             				</div>\
             			';
-    }
-    else {
+    } else {
       stripped_message = stripped_message.replace(/<\/?[^>]+(>|$)/g, ""); //clean html-tags away
       stripped_message = stripped_message.replace(/\[quote\].*\[\/quote\]/g, '').replace(/<br \/>/g, '');
       var message_stub = stripped_message.replace(/(ftp|http|https|file):\/\/[\S]+(\b|$)/gim, '<a href="$&" style="text-decoration: underline;" target="_blank">$&</a>').replace(/([^\/])(www[\S]+(\b|$))/gim, '$1<a href="http://$2" style="text-decoration: underline;" target="_blank">$2</a>');
       
       var h = '\
             		<div class="post_wall" id="post_id_' + post.id + '">\
-                      <div class="wall_post_button_left_column">\
-                      	<img style="margin:2px 0px 0px 2px; border:solid #eee 1px;"\
-                      	src="' +
-      avatar_src +
-      '"\
-                      	width="50" height="50" border="0" />\
-                      </div>\
-                      <div  style="height:55px; float:left;">&nbsp;</div>\
-                      <div class="wall_post_button_text">\
-          						  <div class="wall_button_title"><a href="javascript:void(null);">' +
-      message_stub +
-      '</a></div>\
-          						  <div class="wall_button_subtitle_text" style="padding-top:3px">' +
-      author_string +
-      ' , ' +
-      updated_text +
-      '</div>\
-                      </div><div style="clear:both;"></div>\
+                  <div class="wall_post_button_left_column">\
+                  	<img style="margin:2px 0px 0px 2px; border:solid #eee 1px;"\
+                  	src="' + avatar_src + '"\
+                  	width="50" height="50" border="0" />\
+                  </div>\
+                  <div  style="height:55px; float:left;">&nbsp;</div>\
+                  <div class="wall_post_button_text">\
+      						  <div class="wall_button_title"><a href="javascript:void(null);">' + message_stub + '</a></div>\
+      						  <div class="wall_button_subtitle_text" style="padding-top:3px">' + author_string + ' , ' + updated_text + '</div>\
+                  </div><div style="clear:both;"></div>\
             		</div>\
-            			';
+          			';
       
     }
     return h;

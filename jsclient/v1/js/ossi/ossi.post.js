@@ -21,7 +21,7 @@ ossi.post = Class.create(ossi.base,{
     if (typeof(this.parent.userId) == 'undefined') return; // userId in the parent controller not set
     var self = this;
     // get contents
-    var URL = BASE_URL+'/appdata/cWslSQyIyr3yiraaWPEYjL/@collections/'+self.options.postId; // ossi app Id hard-coded
+    var URL = BASE_URL+'/channels/'+self.options.channelId+'/@messages/'+self.options.postId; // ossi app Id hard-coded
     self.parent.showLoading();
     new Ajax.Request(URL,{
       method : 'get',
@@ -31,19 +31,17 @@ ossi.post = Class.create(ossi.base,{
         var json = response.responseJSON;
         if (typeof(json.entry) != 'undefined') {
           var updated_text = '';
-          if (json.updated_at != 'undefined') {
-            if (json.updated_at != null) {
-			  updated_text = json.updated_at;
-			  updated_text = self.parent.utils.dateToString( json.updated_at );
+          if (json.entry.updated_at != 'undefined') {
+            if (json.entry.updated_at != null) {
+      			  updated_text = self.parent.utils.dateToString(json.entry.updated_at);
             }
           }
-          var author_string = (typeof(json.metadata.author) != 'undefined') ? '<span style="color:#C0C0C0">By</span> '+json.metadata.author+'' : '';
-
-          var avatar_src = (json.owner == null) ? 'images/anon_icon.png' : BASE_URL+'/people/'+json.updated_by+'/@avatar/small_thumbnail';
+          var author_string = (typeof(json.entry.poster_name) != 'undefined') ? '<span style="color:#C0C0C0">By</span> '+json.entry.poster_name+'' : '';
+          var avatar_src = (json.entry.poster_id == null) ? 'images/anon_icon.png' : BASE_URL+'/people/'+json.entry.poster_id+'/@avatar/small_thumbnail';
           $('post_avatar').update('<img src="'+avatar_src+'" width="50" height="50" border="0" />');
           $('post_author_text').update(author_string);
           $('post_updated_text').update(updated_text);
-          $('post_content').update(self._parseBBCode(json.metadata.body));
+          $('post_content').update(self._parseBBCode(json.entry.body));
           if (typeof(json.metadata.author) != 'undefined' && json.owner != null) {
             $('post_profile_button').update(json.metadata.author+'\'s profile');
             $('post_profile_button_container').show();

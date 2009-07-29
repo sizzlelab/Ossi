@@ -24,7 +24,6 @@ ossi.channellist = Class.create(ossi.base,{
 	*/
 	update: function(options) {
     if (typeof(this.parent.userId) == 'undefined') return; // userId in the parent controller not set
-    if (typeof(this.parent.channelsId) == 'undefined') return; // userId in the parent controller not set
     var self = this;
 
     // get channels
