@@ -181,8 +181,8 @@ ossi.main = Class.create(ossi.base,{
       user_id : null,
       app_id : null
     },response.responseJSON);
-	  if (json.user_id != null) {
-  		this.userId = json.user_id;
+	  if (json.entry.user_id != null) {
+  		this.userId = json.entry.user_id;
   		// get username here instead of mainmenu or channel or whatever
   		new Ajax.Request(BASE_URL+'/people/'+this.userId+'/@self', {
   			method : 'get',
