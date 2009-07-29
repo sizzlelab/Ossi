@@ -25,6 +25,7 @@ ossi.myprofile = Class.create(ossi.base,{
       requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
       onSuccess : function(response) { // does not handle invalid responses
         var json = response.responseJSON;
+								json = json.entry;
         if (json.name != null) $('profile_first_name').value = json.name.given_name;
         if (json.name != null) $('profile_last_name').value = json.name.family_name;
         if (typeof(json.gender) != 'undefined') {
@@ -72,7 +73,7 @@ ossi.myprofile = Class.create(ossi.base,{
           requestHeaders : (client.is_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
           onSuccess : function(response) {
             var json = response.responseJSON;
-
+												// TODO: unddeeded AJAX request?!
             // print location here
 
             setTimeout(function() {
@@ -176,8 +177,6 @@ ossi.myprofile = Class.create(ossi.base,{
     var fn = $F('profile_first_name');
     var ln = $F('profile_last_name');
     var g = ($F('profile_gender') == 'MALE' || $F('profile_gender') == 'FEMALE') ? $F('profile_gender') : false;
-    var p = $F('profile_password');
-    var pc = $F('profile_password_confirm');
     var dob = false;
     if ($F('profile_day') != '' && $F('profile_month') != '' && $F('profile_year') != '') {
       var d = ($F('profile_day').length != 2) ? '0'+$F('profile_day') : $F('profile_day');
@@ -189,7 +188,7 @@ ossi.myprofile = Class.create(ossi.base,{
                   };
     if (g != false) params['person[gender]'] = g;
     if (dob) params['person[birthdate]'] = dob;
-    var URL = BASE_URL+'/people/'+this.parent.userId+'/@self';
+    var URL = BASE_URL+'/people/@me/@self';
     self.parent.loadingpane.show();
     new Ajax.Request(URL, {
       method : 'put',
@@ -247,7 +246,7 @@ ossi.myprofile = Class.create(ossi.base,{
   _addListeners: function() {
     $('save_button').onclick = this._saveHandler.bindAsEventListener(this);
     $('avatar_button').onclick = this._avatarHandler.bindAsEventListener(this);
-	$('password_button').onclick = this._passwordHandler.bindAsEventListener(this);
+	   $('password_button').onclick = this._passwordHandler.bindAsEventListener(this);
     $('cancel_button').onclick = this._cancelHandler.bindAsEventListener(this);
   },
   _removeListeners: function() {
