@@ -216,6 +216,17 @@ body.widget {
   cursor: pointer;
 }
 
+.group_button {
+  position:relative;
+  border: solid 1px black;
+  background: #323131 url(../images/button_bg.png) repeat-x top;
+  margin: 0px 0px 0px 0px;
+  color: #CBD58B;
+  height:55px;
+  text-align: left;
+  cursor: pointer;
+}
+
 .subscription_button_text {
   display:block;
 /*  #width:90%;*/

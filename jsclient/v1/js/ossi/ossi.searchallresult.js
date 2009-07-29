@@ -103,7 +103,7 @@ ossi.searchallresult = Class.create(ossi.base,{
 													toButton : function(){
 														   var description = this.description != null ? this.description : '';
   															var h =   '\
-												          				<div class="channel_button" id="search_uid_'+this.id+'" href="javascript:void(null);">\
+												          				<div class="channel_button" id="search_cid_'+this.id+'" href="javascript:void(null);">\
 												                    <div class="post_button_left_column"></div>\
 												                    <div class="post_button_text">\
 												        						  							<div class="button_title">'+this.name+'</div>\
@@ -142,7 +142,7 @@ ossi.searchallresult = Class.create(ossi.base,{
 													toButton : function(){
 														   var description = this.description != null ? this.description : '';
   															var h =   '\
-												          				<div class="group_button" id="search_uid_'+this.id+'" href="javascript:void(null);">\
+												          				<div class="group_button" id="search_gid_'+this.id+'" href="javascript:void(null);">\
 												                    <div class="post_button_left_column"></div>\
 												                    <div class="post_button_text">\
 												        						  							<div class="button_title">'+this.title+'</div>\
@@ -225,9 +225,9 @@ ossi.searchallresult = Class.create(ossi.base,{
 							} );
   },
 		_openGroupHandler: function(event, button_id) {
-			var gid = button_id.replace("search_uid_","");
+			var gid = button_id.replace("search_gid_","");
 			this.parent.	case27( {
-      grouplId : gid,
+      groupId : gid,
       search : this.options.search,
       backCase : this.parent.case32.bind(this.parent,{
         out : true,
@@ -236,7 +236,7 @@ ossi.searchallresult = Class.create(ossi.base,{
 							} );
 		},
 		_openChannelHandler: function(event, button_id) {
-			var cid = button_id.replace("search_uid_","");
+			var cid = button_id.replace("search_cid_","");
 			this.parent.	case20( {
       channelId : cid,
       search : this.options.search,
