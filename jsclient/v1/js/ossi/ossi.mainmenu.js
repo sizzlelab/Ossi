@@ -19,7 +19,7 @@ ossi.mainmenu = Class.create(ossi.base,{
 	update: function() {
     if (typeof(this.parent.userId) == 'undefined') return; // userId in the parent controller not set
     var self = this;
-    var URL = BASE_URL+'/people/'+this.parent.userId+'/@self';
+    var URL = BASE_URL+'/people/@me/@self';
     self.parent.showLoading();
     new Ajax.Request(URL, {
       method : 'get',
@@ -50,7 +50,7 @@ ossi.mainmenu = Class.create(ossi.base,{
           }
         }
         if (status_message) $('mainmenu_status_text').update(status_message);
-        URL = BASE_URL+'/people/'+self.parent.userId+'/@pending_friend_requests'
+        URL = BASE_URL+'/people/@me/@pending_friend_requests'
         new Ajax.Request(URL,{
           method : 'get',
           requestHeaders : (client.is_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
@@ -59,7 +59,7 @@ ossi.mainmenu = Class.create(ossi.base,{
             if (json.entry.length > 0) Element.insert($('friends_button'),' <span style="font-size:10px; font-weight:bold;">('+json.entry.length+' new)</span>');
 
               // get location
-              URL = BASE_URL+'/people/'+self.parent.userId+'/@location';
+              URL = BASE_URL+'/people/@me/@location';
               new Ajax.Request(URL,{
                 method : 'get',
                 requestHeaders : (client.is_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
