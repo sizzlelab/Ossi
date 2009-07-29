@@ -18,7 +18,7 @@ ossi.group = Class.create(ossi.base,{
 	*/
 	update: function() {
     var self = this;
-    var URL = BASE_URL+'/groups/'+this.options.groupId;
+    var URL = BASE_URL+'/groups/@public/'+this.options.groupId;
     self.parent.showLoading();
     new Ajax.Request(URL, {
       method : 'get',
