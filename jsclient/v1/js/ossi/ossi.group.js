@@ -139,13 +139,9 @@ ossi.group = Class.create(ossi.base,{
         self.parent.case6({
           message : "You have successfully left this group!",
           buttonText : "Back",
-          backCase:self.parent.case27.bind(self.parent,{
-            groupId : self.options.groupId,
+          backCase:self.parent.case25.bind(self.parent,{
             out:true,
-            backCase:self.parent.case25.bind(self.parent,{
-              out:true,
-              backCase:self.parent.case3.bind(self.parent,{out:true})
-            })
+            backCase:self.parent.case3.bind(self.parent,{out:true})
           })
         });
         self.parent.hideLoading();
