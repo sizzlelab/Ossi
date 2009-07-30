@@ -83,19 +83,21 @@ ossi.signup = Class.create(ossi.base,{
         self.parent.case3();
       },
       onFailure : function(response) {
-        var reasons = eval(response.responseText);
+        var reasons = response.responseJSON;
+								kissa = response.responseJSON;
         var reason_string = '';
-        for (var i=0; i<reasons.length; i++) {
-          reason_string += reasons[i];
-          if (i != (reasons.length-1)) reason_string += ', ';
-        }
+								// Might change?
+								// TODO FIXME
+        reasons.messages.each( function(error){
+          reason_string += error + " ";
+        }, self );
         self.parent.hideLoading();
         self.parent.case6({
           backCase : self.parent.case5.bind(self.parent,{
             out:true,
             backCase:self.parent.case2.bind(self.parent,{out:true}) // tells back button to go back to login screen
           }),
-          message : "Could not create user. Reason: "+reason_string,
+          message : "Could not create user. Reasons: "+reason_string,
           buttonText : "Try again"
         });
       },
