@@ -67,8 +67,7 @@ ossi.login = Class.create(ossi.base,{
                     'session[app_password]' : 'Z0ks51r'
                   };
     self.parent.showLoading();
-    new Ajax.Request('https://ossi.alpha.sizl.org/cos/session', { 
-//    new Ajax.Request(BASE_URL+'/session', { 
+    new Ajax.Request(BASE_URL+'/session', { 
       method : 'post',
       parameters : params,
       requestHeaders : (client.is_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
