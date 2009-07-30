@@ -95,10 +95,12 @@ ossi.utils = Class.create(ossi.base,{
   },
 
   dateToString: function(UTC_string) {
-    var d = UTC_string;
-	var a = Date.UTC(d.substring(0,4),d.substring(5,7),d.substring(8,10),d.substring(11,13),d.substring(14,16),d.substring(17,19));
-	a = new Date(a);
-	return a.getDate() + '.' + (a.getMonth()+1) + '.' + a.getFullYear() + ' ' + a.getHours() + ':' + a.getMinutes();
+  	return UTC_string.substring(8,10) + '.' + UTC_string.substring(5,7) + '.' + UTC_string.substring(0,4) + ' ' + UTC_string.substring(11,13) + ':' + UTC_string.substring(14,16) + ':' + UTC_string.substring(17,19);
+//    var d = UTC_string;
+//  	var a = Date.UTC(d.substring(0,4),parseInt(d.substring(5,7)),parseInt(d.substring(8,10)),d.substring(11,13),d.substring(14,16),d.substring(17,19));
+//    console.log(d.substring(0,4)+', '+d.substring(5,7)+', '+d.substring(8,10)+', '+d.substring(11,13)+', '+d.substring(14,16)+', '+d.substring(17,19));
+//  	a = new Date(a);
+//  	return a.getDate() + '.' + (a.getMonth()+1) + '.' + a.getFullYear() + ' ' + a.getHours() + ':' + a.getMinutes();
   },
   
   agoString: function(UTC_string) {

@@ -94,7 +94,7 @@ ossi.mypost = Class.create(ossi.base,{
       message = '@'+self.replyToUserName+": "+message;
     }
     var params = {  'message[body]' : message,
-                    'metadata[title]' : title
+                    'message[title]' : title
                  };
     if (this.options.replyToId) params.reference_to = this.options.replyToId;
     self.parent.showLoading();

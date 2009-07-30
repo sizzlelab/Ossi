@@ -134,8 +134,8 @@ ossi.main = Class.create(ossi.base,{
 
     // first do a POST to /session to get cookie info for widget
     // i.e. logging in without user
-    var params =  { 'session[app_name]' : 'ossi',
-                    'session[app_password]' : 'Z0ks51r'
+    var params =  { app_name : 'ossi',
+                    app_password : 'Z0ks51r'
                   };
     new Ajax.Request(BASE_URL+'/session', {
       method : 'post',
@@ -181,8 +181,8 @@ ossi.main = Class.create(ossi.base,{
       user_id : null,
       app_id : null
     },response.responseJSON);
-	  if (json.entry.user_id != null) {
-  		this.userId = json.entry.user_id;
+	  if (json.user_id != null) {
+  		this.userId = json.user_id;
   		// get username here instead of mainmenu or channel or whatever
   		new Ajax.Request(BASE_URL+'/people/'+this.userId+'/@self', {
   			method : 'get',
