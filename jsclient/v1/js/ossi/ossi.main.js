@@ -134,8 +134,8 @@ ossi.main = Class.create(ossi.base,{
 
     // first do a POST to /session to get cookie info for widget
     // i.e. logging in without user
-    var params =  { app_name : 'ossi',
-                    app_password : 'Z0ks51r'
+    var params =  { 'session[app_name]' : 'ossi',
+                    'session[app_password]' : 'Z0ks51r'
                   };
     new Ajax.Request(BASE_URL+'/session', {
       method : 'post',
