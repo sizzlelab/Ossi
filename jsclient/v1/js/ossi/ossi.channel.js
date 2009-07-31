@@ -68,8 +68,23 @@ ossi.channel = Class.create(ossi.base, {
           if (json.entry.length > 0) {
             self._drawContents(json.entry);
             // show second back button at top of screen if more than 5 channels
-            if ((!Object.isUndefined(self.parent.userId) || !self.options.wall) && json.entry.length > 5) 
-              $('channel_back_button_2_container').show();
+            if (self.updateOptions.page > 1) $('channel_back_button_2_container').show(); // show second back button at top of screen if more than 5 channels
+    			  $('channel_next_button_container').setStyle({ 'width': '100%' });
+    				$('channel_next_button_container').show();
+            if (self.updateOptions.page > 1) {
+      			  $('channel_previous_button_container').setStyle({ 'width': '50%' });
+      			  $('channel_next_button_container').setStyle({ 'width': '50%' });
+      			  $('channel_previous_button_container').show();
+            } else {
+      			  $('channel_previous_button_container').setStyle({ 'width': '0%' });
+    			    $('channel_next_button_container').setStyle({ 'width': '100%' });
+      			  $('channel_previous_button_container').hide();
+            }
+
+
+
+
+/*
 			
 			      var showNavBar = false;
             if (options.startIndex + options.count < json.totalResults) {
@@ -101,7 +116,7 @@ ossi.channel = Class.create(ossi.base, {
 			      if( ! showNavBar ) {
 			        $('channel_nav_bar').hide();
 			      }
-			
+*/			
           } else {
             $('channel_placeholder').update('<div style="padding:10px; text-align:center">This channel has no posts. Be the first poster by clicking \'Add Post\' below!</div>');
           }
@@ -330,19 +345,13 @@ ossi.channel = Class.create(ossi.base, {
     this.options.backCase.apply();
   },
   _nextHandler: function(){
-    this.updateOptions = {
-      'startIndex': this.startIndex + this.count,
-      'count': this.count
-    };
+    this.updateOptions = { page : ++this.updateOptions.page, per_page : 8 };
     this.update();
     this._resetInterval(); // reset the interval as we just updated
     this.startIndex += this.count;
   },
   _previousHandler: function(){
-    this.updateOptions = {
-      'startIndex': this.startIndex - this.count,
-      'count': this.count
-    };
+    this.updateOptions = { page : --this.updateOptions.page, per_page : 8  };
     this.update();
     this._resetInterval(); // reset the interval as we just updated
     this.startIndex -= this.count;
