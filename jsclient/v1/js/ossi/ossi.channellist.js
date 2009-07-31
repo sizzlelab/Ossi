@@ -8,7 +8,7 @@ ossi.channellist = Class.create(ossi.base,{
       selfUpdate : false,
       hostElement : false
 	  },options);
-    this.updateInterval = 15000;
+    this.updateInterval = 20000;
     this.updateOptions = {
       per_page : 8,
       page : 1

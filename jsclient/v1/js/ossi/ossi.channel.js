@@ -13,7 +13,7 @@ ossi.channel = Class.create(ossi.base, {
       count: 7
     }, options);
     this.count = this.options.count;
-    this.updateInterval = 15000; //this.parent.options.refreshChannel;
+    this.updateInterval = 20000;
     this.updateOptions = {
       per_page : 8,
       page : 1
