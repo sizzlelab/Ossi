@@ -28,11 +28,11 @@ ossi.channellist = Class.create(ossi.base,{
 
     // get channels
     var URL = BASE_URL+'/channels';
-    var params = { per_page : this.updateOptions.per_page, page : this.updateOptions.page };
+//    var params = { per_page : this.updateOptions.per_page, page : this.updateOptions.page };
     self.parent.showLoading();
     new Ajax.Request(URL,{
       method : 'get',
-      parameters : params,
+//      parameters : params,
       requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
       onSuccess : function(response) {
         var json = response.responseJSON;
