@@ -42,6 +42,8 @@ ossi.mypost = Class.create(ossi.base,{
       this.options.hostElement.insert(this._getHTML());
       this._addListeners();
       this.pane = $('mypostpane');
+      $('post_title').value = '';
+      $('post_message').value = '';
     } else {
       alert('ossi.mypost._draw() failed! this.options.hostElement not defined!');
     }
