@@ -97,7 +97,10 @@ ossi.utils = Class.create(ossi.base,{
   dateToString: function(UTC_string) {
 //  	return UTC_string.substring(8,10) + '.' + UTC_string.substring(5,7) + '.' + UTC_string.substring(0,4) + ' ' + UTC_string.substring(11,13) + ':' + UTC_string.substring(14,16) + ':' + UTC_string.substring(17,19);
     var d = UTC_string;
-  	var a = Date.UTC(d.substring(0,4),(parseInt(d.substring(5,7))-1),parseInt(d.substring(8,10)),d.substring(11,13),d.substring(14,16),d.substring(17,19));
+    var month = d.substring(5,6) == '0' ? d.substring(6,7) : d.substring(5,7);
+    var day = d.substring(8,9) == '0' ? d.substring(9,10) : d.substring(8,10);
+//    console.log(d.substring(0,4)+', '+month+', '+day+', '+d.substring(11,13)+', '+d.substring(14,16)+', '+d.substring(17,19));
+  	var a = Date.UTC(d.substring(0,4),(month-1),day,d.substring(11,13),d.substring(14,16),d.substring(17,19));
   	a = new Date(a);
   	return a.getDate() + '.' + (a.getMonth()+1) + '.' + a.getFullYear() + ' ' + a.getHours() + ':' + a.getMinutes();
   },

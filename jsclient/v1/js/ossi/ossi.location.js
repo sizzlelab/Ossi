@@ -21,8 +21,7 @@ ossi.location = Class.create(ossi.base,{
 	* update device location
 	*/
 	update: function() {
-    alert('running update');
-    // Obtain the location information (synchronous)
+    // Obtain the location information (synchronous, so will block device momentarily)
     var result = this.serviceObj.ILocation.GetLocation(this.criteria);
 
     // save location to main class
