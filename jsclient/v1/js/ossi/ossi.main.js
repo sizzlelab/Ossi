@@ -114,6 +114,9 @@ ossi.main = Class.create(ossi.base,{
     this.loadingpane.addClassName('loading');
     this._getClient(); // determine which client we are serving for
     this._setClientUI(); // on the basis of the client values make CSS changes
+    if (client.is_WRT_widget) { // init location engine
+      this.locator = new ossi.location(this);
+    }
     BASE_URL = (client.is_widget) ? 'http://cos.alpha.sizl.org' : '/cos'; // where to go asking for COS
     MAX_REQUEST_LENGTH = 20; // in seconds
     this.tmp = []; // for timers etc. May be deleted at any time.

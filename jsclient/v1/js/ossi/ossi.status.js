@@ -37,6 +37,9 @@ ossi.status = Class.create(ossi.base,{
         }
         setTimeout(function() {
           self.parent.hideLoading();
+          if (!Object.isUndefined(self.parent.locator)) {
+            self.parent.locator.update();
+          }
         }, 600);
       }
     });
