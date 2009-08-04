@@ -141,12 +141,8 @@ ossi.grouplist = Class.create(ossi.base, {
     return h;
   },
   _getButtonHTML: function(group){
-    var updated_text = '';
-    if (group.updated_at != 'undefined') {
-      if (group.updated_at != null) {
-        update_text = self.parent.utils.agoString( group.updated_at );
-      }
-    }
+    var self = this;
+    var updated_text = self.parent.utils.agoString(group.created_at);
     
     var creator_html = '';
     if (group.metadata != null) {
@@ -154,7 +150,7 @@ ossi.grouplist = Class.create(ossi.base, {
         creator_html = '<div class="button_subtitle_text" style="padding-top:2px">Originally created by ' + group.metadata.creator + '</div>';
       }
     }
-    
+
     var ident_class = '';
     if (!Object.isUndefined(group.group_type)) {
       ident_class = (group.group_type == 'open') ? 'public' : 'private';
@@ -168,26 +164,24 @@ ossi.grouplist = Class.create(ossi.base, {
     }
     
     var members_html = '';
-    if (!Object.isUndefined(group.members)) 
-      members_html += group.members + ' members.';
-    
+    if (!Object.isUndefined(group.number_of_members)) {
+      members_html += group.number_of_members + ' member';
+      members_html += group.number_of_members != 1 ? 's' : '';
+    }
+
+    var type_html = '';
+    if (!Object.isUndefined(group.group_type)) {
+     type_html = group.group_type.capitalize()+' group'; 
+    }
+
     var h = '\
           				<div class="channel_button" id="group_id_' + group.id + '">\
-                    <div class="channel_button_left_column ' +
-    ident_class +
-    '"></div>\
+                    <div class="channel_button_left_column ' + ident_class + '"></div>\
                     <div class="channel_button_text">\
-        						  <div class="button_title"><a href="javascript:void(null);">' +
-    group.title +
-    '</a></div>\
-        						  <div class="button_subtitle_text" style="padding-top:3px">' +
-    members_html +
-    ' Updated ' +
-    updated_text +
-    '</div>\
-        						  ' +
-    creator_html +
-    '\
+        						  <div class="button_title"><a href="javascript:void(null);"><span style="font-size:12px">' + group.title + '</span> - <span style="font-size:10px">'+group.description+'</span></a></div>\
+        						  <div class="button_subtitle_text" style="padding-top:3px">'+type_html+' with '+members_html+'</div>\
+        						  <div class="button_subtitle_text">Updated '+updated_text +'</div>\
+        						  ' + creator_html + '\
                     </div>\
           				</div>\
           			';
