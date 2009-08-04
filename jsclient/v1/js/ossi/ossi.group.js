@@ -41,10 +41,10 @@ ossi.group = Class.create(ossi.base,{
 		
     		if( json.is_member ) {
     		  $('leave_button_container').show();
-    				$('join_button_container').hide();
+  				$('join_button_container').hide();
     		} else {
-    		  $('join_button_container').show();
-    				$('leave_button_container').hide();
+    		  if (json.group_type != 'closed') $('join_button_container').show();
+  				$('leave_button_container').hide();
     		}
 
         setTimeout(function() {
