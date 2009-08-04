@@ -51,14 +51,17 @@ ossi.mypost = Class.create(ossi.base,{
   _getHTML: function() {
     var h =   '\
           			<div id="mypostpane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
-                  <form name="mypost_form" id="mypost_form">\
+                  <form name="mypost_form" action="'+BASE_URL+'/channels/'+this.options.channelId+'/@messages" id="mypost_form" method="post" target="testframe" enctype="multipart/form-data">\
                     <div style="margin: 18px auto 12px; text-align: left; width: 170px;">\
                       <dl>\
                         <dt style="color:#666; margin:0px 0px 5px 0px;">Message title:</dt>\
-                          <dd style=" margin:0px 0px 10px 15px;"><input class="textinput" maxlength="30" name="post_title" id="post_title" type="text"/></dd>\
+                          <dd style=" margin:0px 0px 10px 15px;"><input class="textinput" maxlength="30" name="message[title]" id="post_title" type="text"/></dd>\
                         <dt style="color:#666; margin:0px 0px 5px 0px;">Message body:</dt>\
-                          <dd style=" margin:0px 0px 10px 15px;"><textarea class="textinput" style="height:90px;" name="post_message" id="post_message"/></textarea></dd>\
+                          <dd style=" margin:0px 0px 10px 15px;"><textarea class="textinput" style="height:90px;" name="message[body]" id="post_message"/></textarea></dd>\
+                        <!--dt style="color:#666; margin:0px 0px 5px 0px;">Attachment:</dt>\
+                          <dd style=" margin:0px 0px 10px 15px;"><input type="file" name="message[attachment]" /></dd-->\
                       </dl>\
+                      <input type="hidden" name="message[content_type]" id="content_type" value="" />\
                     </div>\
             				<div style="height:14px"></div>\
             				<div class="nav_button">\
@@ -68,6 +71,7 @@ ossi.mypost = Class.create(ossi.base,{
             					<a id="mypost_back_button" class="nav_button_text" href="javascript:void(null);">Back</a>\
             				</div>\
                   </form>\
+                  <iframe name="testframe" style="display:none"></iframe>\
           			</div>\
           		';
     return h;
@@ -86,12 +90,19 @@ ossi.mypost = Class.create(ossi.base,{
     this.options.backCase.apply();
   },
   _saveHandler: function() {
+/*
+  // for image upload testing
+
+    $('content_type').value = 'image/jpeg';
+    document.forms['mypost_form'].submit();
+    return;
+*/
     var self = this;
     if (typeof(this.parent.userId) == 'undefined') return; // userId in the parent controller not set
     if (typeof(this.parent.channelsId) == 'undefined') return; // channelsId not set in main controller
     if (typeof(this.options.channelId) == 'undefined') return; // channelId not set
-    var title = $F('post_title');
-    var message = $F('post_message').replace(/\n/g,'<br />');
+    var title = $('post_title').value;
+    var message = $('post_message').value.replace(/\n/g,'<br />');
     if (typeof(self.replyToUserName) != 'undefined') {
       message = '@'+self.replyToUserName+": "+message;
     }
