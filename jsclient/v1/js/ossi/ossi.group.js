@@ -25,7 +25,7 @@ ossi.group = Class.create(ossi.base,{
       requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
       onSuccess : function(response) { // does not handle invalid responses
         var json = response.responseJSON;
-								json = json.entry;
+				json = json.entry;
 		
         // title
         if (! Object.isUndefined(json.title)) $('group_title').update(json.title);
@@ -39,13 +39,13 @@ ossi.group = Class.create(ossi.base,{
         if (! Object.isUndefined(json.group_type)) $('group_type').update(json.group_type + ' group');
         else $('group_type').update('N/A');
 		
-		if( json.is_member ) {
-		  $('leave_button_container').show();
-				$('join_button_container').hide();
-		} else {
-		  $('join_button_container').show();
-				$('leave_button_container').hide();
-		}
+    		if( json.is_member ) {
+    		  $('leave_button_container').show();
+    				$('join_button_container').hide();
+    		} else {
+    		  $('join_button_container').show();
+    				$('leave_button_container').hide();
+    		}
 
         setTimeout(function() {
           self.parent.hideLoading();
@@ -80,7 +80,7 @@ ossi.group = Class.create(ossi.base,{
             				<div id="join_button_container" class="nav_button" style="display:none"v>\
             					<a id="join_button" class="nav_button_text" href="javascript:void(null);">Join Group</a>\
             				</div>\
-							<div  id="leave_button_container"  class="nav_button" style="display:none" >\
+							      <div  id="leave_button_container"  class="nav_button" style="display:none" >\
             					<a id="leave_button" class="nav_button_text" href="javascript:void(null);">Leave Group</a>\
             				</div>\
             				<div class="nav_button">\
