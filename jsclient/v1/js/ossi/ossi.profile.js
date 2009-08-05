@@ -28,23 +28,23 @@ ossi.profile = Class.create(ossi.base,{
       requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
       onSuccess : function(response) { // does not handle invalid responses
         var json = response.responseJSON;
-								json = json.entry;
+				json = json.entry;
         var h = self._getProfileHTML(json);
         $('profile_placeholder').replace(h);
-								// hide everything!
-								$('profile_add_as_friend_button_container').hide();
-			     $('profile_remove_friend_button_container').hide();
-								$('pending_nav').hide();
+				// hide everything!
+				$('profile_add_as_friend_button_container').hide();
+  	     $('profile_remove_friend_button_container').hide();
+				$('pending_nav').hide();
         if (typeof(json.connection) != 'undefined') {
           switch (json.connection) {
             case "none": // not friends with
               // do nothing, default mode
-			           $('profile_remove_friend_button_container').hide();
-														$('profile_add_as_friend_button_container').show();
+              $('profile_remove_friend_button_container').hide();
+              $('profile_add_as_friend_button_container').show();
               break;
             case "friend":
               $('profile_add_as_friend_button_container').hide();
-			           $('profile_remove_friend_button_container').show();
+              $('profile_remove_friend_button_container').show();
               break;
             case "requested":
               $('profile_add_as_friend_button_container').hide();
