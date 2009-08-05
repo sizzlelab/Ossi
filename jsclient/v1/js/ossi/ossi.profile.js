@@ -105,6 +105,18 @@ ossi.profile = Class.create(ossi.base,{
         gender = json.gender.displayvalue.toLowerCase();
       }
     }
+    var website = false;
+    if (!Object.isUndefined(json.website)) {
+      if (json.website.length > 5) {
+        website = json.website;
+      }
+    }
+    var description = false;
+    if (!Object.isUndefined(json.description)) {
+      if (json.description.length > 5) {
+        description = json.description;
+      }
+    }
     var birthdate = false;
     if (typeof(json.birthdate) != 'undefined') {
       if (json.birthdate != null) {
@@ -122,20 +134,33 @@ ossi.profile = Class.create(ossi.base,{
                     </div>\
                     <div style="margin: 8px auto 12px; text-align: left; width: 170px;">\
                       <dl>\
-                        <dt style="color:#666;">Name:</dt>\
+                        <dt style="color:#666; margin-top:7px;">Name:</dt>\
                           <dd style="margin-left:15px;">'+name+'</dd>\
             	';
-
+    if (website) {
+      h +=    '\
+                        <dt style="color:#666; margin-top:7px;">Website:</dt>\
+                          <dd style="margin-left:15px;"><a href="'+website+'" target="_blank">'+website+'</a></dd>\
+            	';
+      
+    }
+    if (description) {
+      h +=    '\
+                        <dt style="color:#666; margin-top:7px;">About me:</dt>\
+                          <dd style="margin-left:15px;">'+description+'</dd>\
+            	';
+      
+    }
     if (gender) {
       h +=    '\
-                        <dt style="color:#666;">Gender:</dt>\
+                        <dt style="color:#666; margin-top:7px;">Gender:</dt>\
                           <dd style="margin-left:15px;">'+gender+'</dd>\
             	';
       
     }
     if (birthdate) {
       h +=    '\
-                        <dt style="color:#666;">D.O.B.:</dt>\
+                        <dt style="color:#666; margin-top:7px;">D.O.B.:</dt>\
                           <dd style="margin-left:15px;">'+birthdate+'</dd>\
             	';
       

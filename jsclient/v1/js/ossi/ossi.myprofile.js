@@ -28,6 +28,8 @@ ossi.myprofile = Class.create(ossi.base,{
 								json = json.entry;
         if (json.name != null) $('profile_first_name').value = json.name.given_name;
         if (json.name != null) $('profile_last_name').value = json.name.family_name;
+        if (json.description != null) $('profile_about_me').value = json.description;
+        if (json.website != null) $('profile_website').value = json.website;
         if (typeof(json.gender) != 'undefined') {
           switch(json.gender.key) {
             case "MALE":
@@ -128,6 +130,10 @@ ossi.myprofile = Class.create(ossi.base,{
                           <dd style=" margin:0px 0px 10px 15px;"><input id="profile_first_name" class="myprofile_input" maxlength="50" name="profile_first_name" type="text"/></dd>\
                         <dt style="color:#666; margin:0px 0px 5px 0px;">Last name:</dt>\
                           <dd style=" margin:0px 0px 10px 15px;"><input id="profile_last_name" class="myprofile_input" maxlength="50" name="profile_last_name" type="text"/></dd>\
+                        <dt style="color:#666; margin:0px 0px 5px 0px;">Website:</dt>\
+                          <dd style=" margin:0px 0px 10px 15px;"><input id="profile_website" class="myprofile_input" maxlength="100" name="profile_website" type="text"/></dd>\
+                        <dt style="color:#666; margin:0px 0px 5px 0px;">About me:</dt>\
+                          <dd style=" margin:0px 0px 10px 15px;"><textarea class="myprofile_input" name="profile_about_me" id="profile_about_me"></textarea></dd>\
                         <dt style="color:#666; margin:0px 0px 5px 0px;">Gender:</dt>\
                           <dd style=" margin:0px 0px 10px 15px;">\
                   					<select id="profile_gender" class="myprofile_input" name="profile_gender">\
@@ -176,6 +182,8 @@ ossi.myprofile = Class.create(ossi.base,{
     var self = this;
     var fn = $F('profile_first_name');
     var ln = $F('profile_last_name');
+    var am = $F('profile_about_me');
+    var website = $F('profile_website');
     var g = ($F('profile_gender') == 'MALE' || $F('profile_gender') == 'FEMALE') ? $F('profile_gender') : false;
     var dob = false;
     if ($F('profile_day') != '' && $F('profile_month') != '' && $F('profile_year') != '') {
@@ -184,7 +192,9 @@ ossi.myprofile = Class.create(ossi.base,{
       dob = $F('profile_year') + '-' + m + '-' + d;
     }
     var params =  { 'person[name][given_name]' : fn,
-                    'person[name][family_name]' : ln
+                    'person[name][family_name]' : ln,
+                    'person[website]' : website,
+                    'person[description]' : am
                   };
     if (g != false) params['person[gender]'] = g;
     if (dob) params['person[birthdate]'] = dob;
