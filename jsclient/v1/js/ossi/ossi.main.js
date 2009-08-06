@@ -395,7 +395,7 @@ ossi.main = Class.create(ossi.base,{
 
     this.sub2 = this.sub1;
     this.sub1 = new ossi.myprofile(this, {  'hostElement' : this.mainElement,
-                                          'backCase' : options.backCase});
+                                            'backCase' : options.backCase});
     if (options.out) {
       this.utils.out(this.sub2.pane,this.sub1.pane,function() {
         this.sub2.destroy();

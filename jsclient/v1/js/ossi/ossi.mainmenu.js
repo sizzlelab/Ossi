@@ -116,9 +116,6 @@ ossi.mainmenu = Class.create(ossi.base,{
           					<a id="search_button" class="nav_button_text" href="javascript:void(null);">Search</a>\
           				</div>\
           				<div class="nav_button">\
-          					<a id="profile_button" class="nav_button_text" href="javascript:void(null);">Profile settings</a>\
-          				</div>\
-          				<div class="nav_button">\
           					<a id="logout_button" class="nav_button_text" href="javascript:void(null);">Logout</a>\
           				</div>\
           			</div>\
@@ -162,9 +159,6 @@ ossi.mainmenu = Class.create(ossi.base,{
   },
   _feedsHandler: function() {
   },
-  _profileHandler: function() {
-    this.parent.case8({ backCase : this.parent.case3.bind(this.parent,{out:true}) });
-  },
   _microblogHandler: function() {
     this.parent.case7({ backCase : this.parent.case3.bind(this.parent,{out:true}) });
   },
@@ -180,9 +174,8 @@ ossi.mainmenu = Class.create(ossi.base,{
     $('groups_button').onclick = this._groupsHandler.bindAsEventListener(this);
     $('friends_button').onclick = this._friendsHandler.bindAsEventListener(this);
     $('feeds_button').onclick = this._feedsHandler.bindAsEventListener(this);
-    $('profile_button').onclick = this._profileHandler.bindAsEventListener(this);
     $('microblog_button').onclick = this._microblogHandler.bindAsEventListener(this);
-	$('search_button').onclick = this._searchHandler.bindAsEventListener(this);
+	  $('search_button').onclick = this._searchHandler.bindAsEventListener(this);
 	
 /*    $('logout_button').observe('click',this._logoutHandler.bindAsEventListener(this));
     $('channels_button').observe('click',this._channelsHandler.bindAsEventListener(this));
@@ -200,9 +193,8 @@ ossi.mainmenu = Class.create(ossi.base,{
     $('groups_button').onclick = function() { return }
     $('friends_button').onclick = function() { return }
     $('feeds_button').onclick = function() { return }
-    $('profile_button').onclick = function() { return }
     $('microblog_button').onclick = function() { return }
-	$('search_button').onclick = function() { return }
+	  $('search_button').onclick = function() { return }
 
 /*    $('logout_button').stopObserving('click',this._logoutHandler.bindAsEventListener(this));
     $('channels_button').stopObserving('click',this._channelsHandler.bindAsEventListener(this));

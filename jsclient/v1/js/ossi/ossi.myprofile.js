@@ -167,11 +167,11 @@ ossi.myprofile = Class.create(ossi.base,{
             				<div class="nav_button">\
             					<a id="avatar_button" class="nav_button_text" href="javascript:void(null);">Change avatar</a>\
             				</div>\
-							<div class="nav_button">\
+							      <div class="nav_button">\
             					<a id="password_button" class="nav_button_text" href="javascript:void(null);">Change password</a>\
             				</div>\
             				<div class="nav_button">\
-            					<a id="cancel_button" class="nav_button_text" href="javascript:void(null);">Back</a>\
+            					<a id="myprofile_cancel_button" class="nav_button_text" href="javascript:void(null);">Back</a>\
             				</div>\
                   </form>\
           			</div>\
@@ -257,13 +257,13 @@ ossi.myprofile = Class.create(ossi.base,{
     $('save_button').onclick = this._saveHandler.bindAsEventListener(this);
     $('avatar_button').onclick = this._avatarHandler.bindAsEventListener(this);
 	   $('password_button').onclick = this._passwordHandler.bindAsEventListener(this);
-    $('cancel_button').onclick = this._cancelHandler.bindAsEventListener(this);
+    $('myprofile_cancel_button').onclick = this._cancelHandler.bindAsEventListener(this);
   },
   _removeListeners: function() {
     $('save_button').onclick = function() { return }
     $('avatar_button').onclick = function() { return }
     $('password_button').onclick = function() { return }
-	$('cancel_button').onclick = function() { return }
+	$('myprofile_cancel_button').onclick = function() { return }
   },
   destroy: function () {
     this._removeListeners();

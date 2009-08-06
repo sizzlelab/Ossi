@@ -86,10 +86,13 @@ ossi.status = Class.create(ossi.base,{
             					<input type="text" id="status_textarea" name="status" />\
             				</div>\
             				<div class="nav_button">\
-            					<a id="done_button" class="nav_button_text" href="javascript:void(null);">Done</a>\
+            					<a id="done_button" class="nav_button_text" href="javascript:void(null);">Save</a>\
             				</div>\
             				<div class="nav_button">\
-            					<a id="cancel_button" class="nav_button_text" href="javascript:void(null);">Cancel</a>\
+            					<a id="profile_button" class="nav_button_text" href="javascript:void(null);">Profile settings</a>\
+            				</div>\
+            				<div class="nav_button">\
+            					<a id="cancel_button" class="nav_button_text" href="javascript:void(null);">Back</a>\
             				</div>\
                   </form>\
           			</div>\
@@ -104,15 +107,26 @@ ossi.status = Class.create(ossi.base,{
   _cancelHandler: function() {
     this.options.backCase.apply();
   },
+  _profileHandler: function() {
+    var self = this;
+    this.parent.case8({
+      backCase : self.parent.case7.bind(self.parent,{ 
+        out : true,
+        backCase : self.parent.case3.bind(self.parent,{out:true})
+      })
+    });
+  },
   _addListeners: function() {
     $('done_button').onclick = this._putStatus.bindAsEventListener(this);
     $('cancel_button').onclick = this._cancelHandler.bindAsEventListener(this);
     $('status_form').onsubmit = this._putStatus.bindAsEventListener(this);
+    $('profile_button').onclick = this._profileHandler.bindAsEventListener(this);
     $('status_textarea').observe('focus', this._focusHandler); // removed when entered
   },
   _removeListeners: function() {
     $('done_button').onclick = function() { return }
     $('cancel_button').onclick = function() { return }
+    $('profile_button').onclick = function() { return }
     $('status_form').onsubmit = function() { return }
   },
   destroy: function () {

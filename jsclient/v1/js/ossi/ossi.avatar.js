@@ -79,9 +79,12 @@ ossi.avatar = Class.create(ossi.base,{
       this.parent.case6({
         message : "Avatar uploaded!",
         buttonText : "Back to profile view",
-        backCase: this.parent.case8.bind(this.parent,{
+        backCase : this.parent.case8.bind(this.parent,{
           out:true,
-          backCase:this.parent.case3.bind(this.parent,{out:true})
+          backCase: this.parent.case7.bind(this.parent,{
+            out:true,
+            backCase:this.parent.case3.bind(this.parent,{out:true})
+          })
         })
       });
     }.bindAsEventListener(this);
