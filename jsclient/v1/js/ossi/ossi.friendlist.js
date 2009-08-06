@@ -43,7 +43,7 @@ ossi.friendlist = Class.create(ossi.base, {
           if (json.entry.length > 0) {
             var h = '';
             var max = options.startIndex + options.count > json.entry.length ? json.entry.length - options.startIndex : options.count;
-            for (i = 0; i < max; i++) {
+            for (var i = 0; i < max; i++) {
               h += self._getButtonHTML(json.entry[options.startIndex + i]);
             }
             $('friends_placeholder').update(h);
@@ -51,34 +51,33 @@ ossi.friendlist = Class.create(ossi.base, {
             if (json.entry.length > 5) 
               $('friend_list_back_button_2_container').show(); // show second back button at top of screen if more than 5 friends
             if (options.startIndex + options.count < json.entry.length) {
-													 $('friends_next_back_container').show();
+              $('friends_next_back_container').show();
               $('friends_next_button_container').show();
               Element.setStyle($('friends_previous_button_container'), {
                 'width': '50%'
               });
-            }
-            else {
+            } else {
               $('friends_next_button_container').hide();
               Element.setStyle($('friends_previous_button_container'), {
                 'width': '100%'
               });
             }
             if (options.startIndex > 1) {
-													 $('friends_next_back_container').show();
+              $('friends_next_back_container').show();
               $('friends_previous_button_container').show();
               Element.setStyle($('friends_next_button_container'), {
                 'width': '50%'
               });
-            }
-            else {
+            } else {
               $('friends_previous_button_container').hide();
               Element.setStyle($('friends_next_button_container'), {
                 'width': '100%'
               });
             }
+
             // now loop through results again and fetch user location (this is a temporary measure)
-            for (i = 0; i < max; i++) {
-              user = json.entry[options.startIndex + i];
+            var button_items = json.entry.slice(0,max);
+            button_items.each(function(user) {
               var URL = BASE_URL + '/people/' + user.id + '/@location';
               new Ajax.Request(URL, {
                 method: 'get',
@@ -86,16 +85,17 @@ ossi.friendlist = Class.create(ossi.base, {
                 onSuccess: function(response){
                   var json = response.responseJSON.entry;
                   if (json.label.length > 3) {
+                    console.log(user.name.unstructured +': '+json.label);
                     $('friend_uid_link_' + user.id).insert(' @ ' + json.label + ' ' + self.parent.utils.agoString(json.updated_at));
                   } else if (Object.isNumber(json.latitude) && Object.isNumber(json.longitude)) {
                     $('friend_uid_link_' + user.id).insert(' @ ' + self.parent.utils.roundNumber(json.latitude,4) + ' / ' + self.parent.utils.roundNumber(json.longitude,4) + ' ' + self.parent.utils.agoString(json.updated_at));
                   }
                 }
               });
-              setTimeout(function(){
-                self.parent.hideLoading();
-              }, 600);
-            }
+            });
+            setTimeout(function(){
+              self.parent.hideLoading();
+            }, 600);
           }
           else {
             $('friends_placeholder').replace('<div style="padding:10px; text-align:center">Your friend list is currently empty. Click on "Find Friends" to search for people in the network and add them onto your list.</div>');
