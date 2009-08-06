@@ -33,9 +33,8 @@ ossi.profile = Class.create(ossi.base,{
         $('profile_placeholder').replace(h);
 				// hide everything!
 				$('profile_add_as_friend_button_container').hide();
-  	     $('profile_remove_friend_button_container').hide();
+        $('profile_remove_friend_button_container').hide();
 				$('pending_nav').hide();
-        if (typeof(json.connection) != 'undefined') {
           switch (json.connection) {
             case "none": // not friends with
               // do nothing, default mode
@@ -55,10 +54,7 @@ ossi.profile = Class.create(ossi.base,{
               $('profile_add_as_friend_button_container').hide();
               break;
           }
-        }
-        setTimeout(function() {
-          self.parent.hideLoading();
-        }, 600);
+        self.parent.hideLoading();
       }
     });
 	},
@@ -106,13 +102,13 @@ ossi.profile = Class.create(ossi.base,{
       }
     }
     var website = false;
-    if (!Object.isUndefined(json.website)) {
+    if (!Object.isUndefined(json.website) && json.website != null) {
       if (json.website.length > 5) {
         website = json.website;
       }
     }
     var description = false;
-    if (!Object.isUndefined(json.description)) {
+    if (!Object.isUndefined(json.description) && json.description != null) {
       if (json.description.length > 5) {
         description = json.description;
       }
