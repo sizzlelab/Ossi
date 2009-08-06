@@ -65,15 +65,17 @@ ossi.mainmenu = Class.create(ossi.base,{
                 requestHeaders : (client.is_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
                 onSuccess : function(response) {
                   var json = response.responseJSON;
-																		json = json.entry;
-                  if (Object.isNumber(json.latitude) && Object.isNumber(json.longitude)) {
+  								json = json.entry;
+                  if (!Object.isUndefined(json.label) && json.label.length > 3) {
+                    $('mainmenu_profile_name').insert(' @ ' + json.label + ' ' + self.parent.utils.agoString(json.updated_at));
+                  } else if (Object.isNumber(json.latitude) && Object.isNumber(json.longitude)) {
                     $('mainmenu_profile_name').insert(' @ ' + self.parent.utils.roundNumber(json.latitude,4) + ' / ' + self.parent.utils.roundNumber(json.longitude,4) + ' ' + self.parent.utils.agoString(json.updated_at));
                   }
-                  setTimeout(function() {
-                    self.parent.hideLoading();
-                  }, 600);
                 }
               });
+              setTimeout(function() {
+                self.parent.hideLoading();
+              }, 600);
             }
         });
       }

@@ -84,15 +84,17 @@ ossi.friendlist = Class.create(ossi.base, {
                 method: 'get',
                 requestHeaders: (client.is_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
                 onSuccess: function(response){
-                  var json = response.responseJSON;
-                  if (Object.isNumber(json.latitude) && Object.isNumber(json.longitude)) {
-                    $('friend_uid_link_' + user.id).insert(' @ ' + self.parent.utils.roundNumber(json.latitude, 4) + ' / ' + self.parent.utils.roundNumber(json.longitude, 4) + ' ' + self.parent.utils.agoString(json.updated_at));
+                  var json = response.responseJSON.entry;
+                  if (json.label.length > 3) {
+                    $('friend_uid_link_' + user.id).insert(' @ ' + json.label + ' ' + self.parent.utils.agoString(json.updated_at));
+                  } else if (Object.isNumber(json.latitude) && Object.isNumber(json.longitude)) {
+                    $('friend_uid_link_' + user.id).insert(' @ ' + self.parent.utils.roundNumber(json.latitude,4) + ' / ' + self.parent.utils.roundNumber(json.longitude,4) + ' ' + self.parent.utils.agoString(json.updated_at));
                   }
-                  setTimeout(function(){
-                    self.parent.hideLoading();
-                  }, 600);
                 }
               });
+              setTimeout(function(){
+                self.parent.hideLoading();
+              }, 600);
             }
           }
           else {

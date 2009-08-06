@@ -18,17 +18,17 @@ ossi.status = Class.create(ossi.base,{
 	update: function() {
     if (typeof(this.parent.userId) == 'undefined') return; // userId in the parent controller not set
     var self = this;
-    var URL = BASE_URL+'/people/'+this.parent.userId+'/@self';
+    var URL = BASE_URL+'/people/@me/@self';
     self.parent.showLoading();
     new Ajax.Request(URL, {
       method : 'get',
       requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
       onSuccess : function(response) {
         var json = response.responseJSON;
-        if (typeof(json.status) != 'undefined') {
-          if (json.status.message != 'undefined') {
-            if (json.status.message != null) {
-              $('status_textarea').value = json.status.message;
+        if (typeof(json.entry.status) != 'undefined') {
+          if (json.entry.status.message != 'undefined') {
+            if (json.entry.status.message != null) {
+              $('status_input').value = json.entry.status.message;
               
               // a bit convoluted, but works for the time being
               setTimeout(function() { $('status_form').focusFirstElement() },500); // .delay() did not seem to work on Firefox
@@ -39,6 +39,21 @@ ossi.status = Class.create(ossi.base,{
           self.parent.hideLoading();
           if (!Object.isUndefined(self.parent.locator)) {
             self.parent.locator.update();
+          } else {
+            // get location
+            URL = BASE_URL+'/people/@me/@location';
+            new Ajax.Request(URL,{
+              method : 'get',
+              requestHeaders : (client.is_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
+              onSuccess : function(response) {
+                var json = response.responseJSON;
+								json = json.entry;
+                if (json.label.length > 3) $('location_input').value = json.label;
+                setTimeout(function() {
+                  self.parent.hideLoading();
+                }, 600);
+              }
+            });
           }
         }, 600);
       }
@@ -46,8 +61,8 @@ ossi.status = Class.create(ossi.base,{
 	},
 	_putStatus: function(e) {
     var self = this;
-    var s = $F('status_textarea');
-    var URL = BASE_URL+'/people/'+this.parent.userId+'/@self';
+    var s = $F('status_input');
+    var URL = BASE_URL+'/people/@me/@self';
     var params =  { 'person[status_message]' : s
                   };
     self.parent.loadingpane.show();
@@ -56,10 +71,33 @@ ossi.status = Class.create(ossi.base,{
       parameters : params,
       requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
       onSuccess : function(response) {
-        setTimeout(function() {
-          self.parent.hideLoading();
-          self.options.backCase.apply();
-        }, 600);
+
+        // also update the location
+        if ($F('location_input').length > 2) {
+          self.parent.location = {
+            label: $F('location_input'),
+            latitude : '',
+            longitude : '',
+            datetime : new Date().toUTCString()
+          };
+
+          // send location to server
+          var URL = BASE_URL+'/people/@me/@location';
+          var params =  { 
+            'location[label]' : self.parent.location.label,
+            'location[latitude]' : self.parent.location.latitude,
+            'location[longitude]' : self.parent.location.longitude
+          };
+          new Ajax.Request(URL, {
+            method : 'put',
+            parameters : params,
+            requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
+            onSuccess : function(response) {
+              self.parent.loadingpane.hide();
+              self.options.backCase.apply();
+            }
+          });
+        }          
       },
       onFailure : function() {
         alert('XHR to set status message failed!');
@@ -81,10 +119,20 @@ ossi.status = Class.create(ossi.base,{
     var h =   '\
           		 	<div id="statuspane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
                   <form id="status_form">\
-                    <div align="center" style="margin-top:10px;">What\'s going on?</div>\
-            				<div align="center" style="margin-top:10px;">\
-            					<input type="text" id="status_textarea" name="status" />\
-            				</div>\
+                    <div style="margin: 12px auto 12px auto; text-align: left; width: 205px;">\
+                      <dl>\
+                        <dt style="color:#666; margin:0px 0px 5px 0px;">What\'s going on?</dt>\
+                          <dd style=" margin:0px 0px 5px 15px;"><input type="text" class="myprofile_input" id="status_input" name="status" />\</dd>\
+              ';
+    if (Object.isUndefined(self.parent.locator)) {
+      h +=    '\
+                        <dt style="color:#666; margin:0px 0px 5px 0px;">Where are ya?</dt>\
+                          <dd style=" margin:0px 0px 5px 15px;"><input type="text" class="myprofile_input" id="location_input" name="location" />\</dd>\
+              ';
+    }
+    h +=      '\
+                      </dl>\
+                    </div>\
             				<div class="nav_button">\
             					<a id="done_button" class="nav_button_text" href="javascript:void(null);">Save</a>\
             				</div>\
@@ -100,9 +148,9 @@ ossi.status = Class.create(ossi.base,{
     return h;
   },
   _focusHandler: function() {
-    $('status_textarea').select();
-    $('status_textarea').setStyle({color: '#000'})
-    $('status_textarea').stopObserving('focus', this._focusHandler); // clears handler to fix issue with N95 calling focus again when blur is supposed to be called
+    $('status_input').select();
+    $('status_input').setStyle({color: '#000'})
+    $('status_input').stopObserving('focus', this._focusHandler); // clears handler to fix issue with N95 calling focus again when blur is supposed to be called
   },
   _cancelHandler: function() {
     this.options.backCase.apply();
@@ -121,7 +169,7 @@ ossi.status = Class.create(ossi.base,{
     $('cancel_button').onclick = this._cancelHandler.bindAsEventListener(this);
     $('status_form').onsubmit = this._putStatus.bindAsEventListener(this);
     $('profile_button').onclick = this._profileHandler.bindAsEventListener(this);
-    $('status_textarea').observe('focus', this._focusHandler); // removed when entered
+    $('status_input').observe('focus', this._focusHandler); // removed when entered
   },
   _removeListeners: function() {
     $('done_button').onclick = function() { return }
