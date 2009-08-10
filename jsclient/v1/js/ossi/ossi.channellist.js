@@ -42,10 +42,6 @@ ossi.channellist = Class.create(ossi.base,{
             if (self.updateOptions.page > 1) $('channels_back_button_2_container').show(); // show second back button at top of screen if more than 5 channels
     			  $('channels_next_button_container').setStyle({ 'width': '100%' });
     				$('channels_next_button_container').show();
-            console.log("page: "+self.updateOptions.page);
-            console.log("per page: "+self.updateOptions.per_page);
-            console.log("messages: "+self.updateOptions.per_page*(self.updateOptions.page-1)+' - '+self.updateOptions.per_page*self.updateOptions.page);
-            console.log("size: "+json.pagination.size);
             if (self.updateOptions.per_page*self.updateOptions.page >= json.pagination.size) { // on the last page
       			  $('channels_previous_button_container').setStyle({ 'width': '100%' });
 //      			  $('channels_next_button_container').setStyle({ 'width': '0%' });

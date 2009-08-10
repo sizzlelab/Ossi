@@ -84,7 +84,6 @@ ossi.signup = Class.create(ossi.base,{
       },
       onFailure : function(response) {
         var reasons = response.responseJSON;
-								kissa = response.responseJSON;
         var reason_string = '';
 								// Might change?
 								// TODO FIXME

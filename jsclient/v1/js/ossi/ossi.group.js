@@ -28,16 +28,16 @@ ossi.group = Class.create(ossi.base,{
 				json = json.entry;
 		
         // title
-        if (! Object.isUndefined(json.title)) $('group_title').update(json.title);
-        else $('group_title').update('N/A');
+        if (! Object.isUndefined(json.title)) $('view_group_title').update(json.title);
+        else $('view_group_title').update('N/A');
 
         // description
-        if (! Object.isUndefined(json.description)) $('group_description').update(json.description);
-        else $('group_description').update('N/A');
+        if (! Object.isUndefined(json.description)) $('view_group_description').update(json.description);
+        else $('view_group_description').update('N/A');
 
         // type
-        if (! Object.isUndefined(json.group_type)) $('group_type').update(json.group_type + ' group');
-        else $('group_type').update('N/A');
+        if (! Object.isUndefined(json.group_type)) $('view_group_type').update(json.group_type + ' group');
+        else $('view_group_type').update('N/A');
 		
     		if( json.is_member ) {
     		  $('leave_button_container').show();
@@ -71,9 +71,9 @@ ossi.group = Class.create(ossi.base,{
                   <form>\
                     <div style="margin: 12px auto 12px auto; text-align: left; width: 205px;">\
                       <div>\
-                          <p id="group_title" style=" margin:0px 0px 10px 15px; color: #58bb3d; font-size: 120%;">loading...</p>\
-                          <p id="group_description" style=" margin:0px 0px 10px 15px;">loading...</p>\
-                          <p id="group_type" style=" margin:0px 0px 10px 15px;">loading...</p>\
+                          <p id="view_group_title" style=" margin:0px 0px 10px 15px; color: #58bb3d; font-size: 120%;">loading...</p>\
+                          <p id="view_group_description" style=" margin:0px 0px 10px 15px;">loading...</p>\
+                          <p id="view_group_type" style=" margin:0px 0px 10px 15px;">loading...</p>\
                       </div>\
             				</div>\
             				<div style="height:14px"></div>\

@@ -83,9 +83,14 @@ ossi.creategroup = Class.create(ossi.base,{
         });
       },
       onFailure : function(response) {
+        var json = response.responseJSON;
+        var reason_string = '';
+        json.messages.each( function(error){
+          reason_string += error + " ";
+        }, self );
         self.parent.hideLoading();
         self.parent.case6({
-          message : "For some reason could not create group. If this problem persist, please please post a comment on Ossi\'s \"Features & Bugs\" channel, or email us at <a href=\"mailto:helpdesk-otasizzle@hiit.fi\">helpdesk-otasizzle@hiit.fi</a>.</p>",
+          message : "Could not create group: "+reason_string+"<br /><br>If this problem persist, please please post a comment on Ossi's \"Features & Bugs\" channel, or email us at <a href=\"mailto:otasizzle-helpdesk@hiit.fi\">otasizzle-helpdesk@hiit.fi</a>.</p>",
           buttonText : "Try again",
           backCase : self.parent.case26.bind(self.parent,{
             out:true,
@@ -115,6 +120,8 @@ ossi.creategroup = Class.create(ossi.base,{
   },
   destroy: function () {
     this._removeListeners();
+    console.log(this.pane);
     this.pane.remove();
+    console.log(this.pane);
   }
 });
