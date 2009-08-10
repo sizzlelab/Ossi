@@ -8,7 +8,7 @@ ossi.friendlist = Class.create(ossi.base, {
       hostElement: false
     }, options);
     this.pane = false;
-    this.count = 5;
+    this.count = 7;
     this.startIndex = 0;
     this._draw();
   },

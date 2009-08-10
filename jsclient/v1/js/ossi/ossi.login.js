@@ -18,6 +18,7 @@ ossi.login = Class.create(ossi.base,{
       new ossi.sloganizer(this,{targetElement:$('slogan_text')});
       this._addListeners();
       this.pane = $('loginpane');
+      setTimeout(function() { $('login_form').focusFirstElement() },500); // .delay() did not seem to work on Firefox
     } else {
       alert('ossi.login._draw() failed! this.options.hostElement not defined!');
     }
@@ -52,6 +53,7 @@ ossi.login = Class.create(ossi.base,{
             				<div class="nav_button">\
             					<a id="about_button" class="nav_button_text" href="javascript:void(null);">About Ossi</a>\
             				</div>\
+                    <input type="submit" style="display:none" />\
                   </form>\
           			</div>\
           		';
@@ -249,11 +251,11 @@ ossi.login = Class.create(ossi.base,{
     this.parent.case4({ backCase : this.parent.case2.bind(this.parent,{out:true}) });
   },
   _addListeners: function() {
+    $('login_form').observe('submit',this._loginHandler.bindAsEventListener(this));
     $('login_button').onclick = this._loginHandler.bindAsEventListener(this);
     $('signup_button').onclick = this._signupHandler.bindAsEventListener(this);
     $('about_button').onclick = this._aboutHandler.bindAsEventListener(this);
     $('wappu_button').onclick = this._wappuHandler.bindAsEventListener(this);
-    $('login_form').onsubmit = this._loginHandler.bindAsEventListener(this);
   },
   _removeListeners: function() {
     $('login_button').onclick = function() { return }

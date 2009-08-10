@@ -53,8 +53,7 @@ ossi.channel = Class.create(ossi.base, {
         json.tags != null &&
         json.tags.match('private') == 'private') {
           self.priv = true;
-        }
-        else 
+        } else 
           if ((!Object.isUndefined(self.parent.userId) || !self.options.wall) &&
           self.parent.userRole == 'moderator') {
             self.priv = false;
@@ -66,6 +65,7 @@ ossi.channel = Class.create(ossi.base, {
         //        if (json.owner != null) self.owner = json.owner; // if channel has an owner it is a private channel!
         if (typeof(json.entry) != 'undefined') {
           if (json.entry.length > 0) {
+		        $('channel_nav_bar').show();
             self._drawContents(json.entry);
             // show second back button at top of screen if more than 5 channels
             if (self.updateOptions.page > 1) $('channel_back_button_2_container').show(); // show second back button at top of screen if more than 5 channels
@@ -227,7 +227,7 @@ ossi.channel = Class.create(ossi.base, {
        		    ';
     }
     h += '\
-				<div id="channel_nav_bar" class="nav_button" style="top: -1px; position: relative;">\
+				<div id="channel_nav_bar" class="nav_button" style="top: -1px; position: relative; display:none;">\
     		  	      <div id="channel_next_button_container" class="nav_button next_button" style="display:none">\
           				<a id="channel_next_button" class="nav_button_text" href="javascript:void(null);">Next Page</a>\
           		  	</div>\

@@ -28,11 +28,11 @@ ossi.channellist = Class.create(ossi.base,{
 
     // get channels
     var URL = BASE_URL+'/channels';
-//    var params = { per_page : this.updateOptions.per_page, page : this.updateOptions.page };
+    var params = { per_page : this.updateOptions.per_page, page : this.updateOptions.page };
     self.parent.showLoading();
     new Ajax.Request(URL,{
       method : 'get',
-//      parameters : params,
+      parameters : params,
       requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
       onSuccess : function(response) {
         var json = response.responseJSON;
@@ -42,11 +42,20 @@ ossi.channellist = Class.create(ossi.base,{
             if (self.updateOptions.page > 1) $('channels_back_button_2_container').show(); // show second back button at top of screen if more than 5 channels
     			  $('channels_next_button_container').setStyle({ 'width': '100%' });
     				$('channels_next_button_container').show();
-            if (self.updateOptions.page > 1) {
+            console.log("page: "+self.updateOptions.page);
+            console.log("per page: "+self.updateOptions.per_page);
+            console.log("messages: "+self.updateOptions.per_page*(self.updateOptions.page-1)+' - '+self.updateOptions.per_page*self.updateOptions.page);
+            console.log("size: "+json.pagination.size);
+            if (self.updateOptions.per_page*self.updateOptions.page >= json.pagination.size) { // on the last page
+      			  $('channels_previous_button_container').setStyle({ 'width': '100%' });
+//      			  $('channels_next_button_container').setStyle({ 'width': '0%' });
+      			  $('channels_previous_button_container').show();
+      			  $('channels_next_button_container').hide();
+            } else if (self.updateOptions.page > 1) { // between first and last page
       			  $('channels_previous_button_container').setStyle({ 'width': '50%' });
       			  $('channels_next_button_container').setStyle({ 'width': '50%' });
       			  $('channels_previous_button_container').show();
-            } else {
+            } else { // first page
       			  $('channels_previous_button_container').setStyle({ 'width': '0%' });
     			    $('channels_next_button_container').setStyle({ 'width': '100%' });
       			  $('channels_previous_button_container').hide();

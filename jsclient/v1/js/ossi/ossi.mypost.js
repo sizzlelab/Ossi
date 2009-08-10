@@ -44,6 +44,7 @@ ossi.mypost = Class.create(ossi.base,{
       this.pane = $('mypostpane');
       $('post_title').value = '';
       $('post_message').value = '';
+      setTimeout(function() { $('mypost_form').focusFirstElement() },500); // .delay() did not seem to work on Firefox
     } else {
       alert('ossi.mypost._draw() failed! this.options.hostElement not defined!');
     }

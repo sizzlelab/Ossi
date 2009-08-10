@@ -60,6 +60,7 @@ ossi.status = Class.create(ossi.base,{
     });
 	},
 	_putStatus: function(e) {
+    Event.stop(e);
     var self = this;
     var s = $F('status_input');
     var URL = BASE_URL+'/people/@me/@self';
@@ -72,31 +73,36 @@ ossi.status = Class.create(ossi.base,{
       requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
       onSuccess : function(response) {
 
-        // also update the location
-        if ($F('location_input').length > 2) {
-          self.parent.location = {
-            label: $F('location_input'),
-            latitude : '',
-            longitude : '',
-            datetime : new Date().toUTCString()
-          };
+        if (Object.isUndefined(self.parent.locator)) {
+          // also update the location
+          if ($F('location_input').length > 2) {
+            self.parent.location = {
+              label: $F('location_input'),
+              latitude : '',
+              longitude : '',
+              datetime : new Date().toUTCString()
+            };
 
-          // send location to server
-          var URL = BASE_URL+'/people/@me/@location';
-          var params =  { 
-            'location[label]' : self.parent.location.label,
-            'location[latitude]' : self.parent.location.latitude,
-            'location[longitude]' : self.parent.location.longitude
-          };
-          new Ajax.Request(URL, {
-            method : 'put',
-            parameters : params,
-            requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
-            onSuccess : function(response) {
-              self.parent.loadingpane.hide();
-              self.options.backCase.apply();
-            }
-          });
+            // send location to server
+            var URL = BASE_URL+'/people/@me/@location';
+            var params =  { 
+              'location[label]' : self.parent.location.label,
+              'location[latitude]' : self.parent.location.latitude,
+              'location[longitude]' : self.parent.location.longitude
+            };
+            new Ajax.Request(URL, {
+              method : 'put',
+              parameters : params,
+              requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
+              onSuccess : function(response) {
+                self.parent.loadingpane.hide();
+                self.options.backCase.apply();
+              }
+            });
+          }
+        } else {
+          self.parent.loadingpane.hide();
+          self.options.backCase.apply();
         }          
       },
       onFailure : function() {
@@ -104,7 +110,6 @@ ossi.status = Class.create(ossi.base,{
         self.parent.hideLoading();
       }
     });
-    Event.stop(e);
 	},
   _draw: function() {
     if (this.options.hostElement) {
@@ -132,6 +137,7 @@ ossi.status = Class.create(ossi.base,{
     }
     h +=      '\
                       </dl>\
+                      <input type="submit" style="display:none" />\
                     </div>\
             				<div class="nav_button">\
             					<a id="done_button" class="nav_button_text" href="javascript:void(null);">Save</a>\
@@ -165,9 +171,9 @@ ossi.status = Class.create(ossi.base,{
     });
   },
   _addListeners: function() {
+    $('status_form').observe('submit',this._putStatus.bindAsEventListener(this));
     $('done_button').onclick = this._putStatus.bindAsEventListener(this);
     $('cancel_button').onclick = this._cancelHandler.bindAsEventListener(this);
-    $('status_form').onsubmit = this._putStatus.bindAsEventListener(this);
     $('profile_button').onclick = this._profileHandler.bindAsEventListener(this);
     $('status_input').observe('focus', this._focusHandler); // removed when entered
   },
