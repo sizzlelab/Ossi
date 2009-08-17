@@ -13,6 +13,7 @@ ossi.main = Class.create(ossi.base,{
       wall : false
     },options);
     WIDGET_VIEWPORT = { height : 428, width : 313 }; // set these to same values as for #content_area.widget in main.css
+    this.stack = []; // array stack for use cases queue
 
     // if this is a wall then create chrome for the window
     if (this.options.wall) {
@@ -121,6 +122,13 @@ ossi.main = Class.create(ossi.base,{
     MAX_REQUEST_LENGTH = 20; // in seconds
     this.tmp = []; // for timers etc. May be deleted at any time.
 	  this.case1(); // go to first use case
+	},
+	/**
+	* reset stack
+	*/
+	stackReset: function(current) {
+    if (! Object.isUndefined(current)) this.stack = [current];
+	  else this.stack = [];
 	},
 		/**
 	* application start
@@ -270,6 +278,13 @@ ossi.main = Class.create(ossi.base,{
       backCase : false
 	  },options);
 
+    // stack stuff
+    this.stackReset();
+    var opt = Object.clone(options);
+    opt.out = true;
+    opt.start = false;
+    this.stack.push(this.case3.bind(this,opt));
+		
     if (options.start) {
       this.sub1 = new ossi.mainmenu(this, {
         'hostElement' : this.mainElement,
@@ -304,10 +319,20 @@ ossi.main = Class.create(ossi.base,{
       backCase : false
 	  },options);
 
+    // manage stack
+    if (options.out) this.stack.pop();
+    else {
+      var opt = Object.clone(options);
+      opt.out = true;
+      this.stack.push(this.case4.bind(this,opt));
+    }
+
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.about(this,  { 'hostElement' : this.mainElement,
-	                                      'backCase' : options.backCase
-	                                    });
+    this.sub1 = new ossi.about(this, {
+      'hostElement' : this.mainElement,
+      'backCase' : this.stack[this.stack.length-2]
+    });
+
     this.utils.into(this.sub2.pane,this.sub1.pane,function() {
       this.sub2.destroy();
     }.bind(this));
@@ -325,9 +350,20 @@ ossi.main = Class.create(ossi.base,{
       backCase : false
 	  },options);
 
+    // manage stack
+    if (options.out) this.stack.pop();
+    else {
+      var opt = Object.clone(options);
+      opt.out = true;
+      this.stack.push(this.case5.bind(this,opt));
+    }
+
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.signup(this, { 'hostElement' : this.mainElement,
-                                        'backCase' : options.backCase});
+    this.sub1 = new ossi.signup(this, { 
+      'hostElement' : this.mainElement,
+      'backCase' : this.stack[this.stack.length-2]
+    });
+
     if (options.out) {
       this.utils.out(this.sub2.pane,this.sub1.pane,function() {
         this.sub2.destroy();
@@ -345,15 +381,26 @@ ossi.main = Class.create(ossi.base,{
 		var options = Object.extend({
       backCase : false,
       message : false,
+      skipPrevious : false,
       buttonText : false
 	  },options);
 
+    // manage stack
+    if (options.out) this.stack.pop();
+    else {
+      var opt = Object.clone(options);
+      opt.out = true;
+      if (options.skipPrevious == false) this.stack.push(this.case6.bind(this,opt));
+    }
+
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.dialog(this,  {  'hostElement' : this.mainElement,
-	                                        'backCase' : options.backCase,
-	                                        'message' : options.message,
-	                                        'buttonText' : options.buttonText
-	                                    });
+    this.sub1 = new ossi.dialog(this,  {  
+      'hostElement' : this.mainElement,
+      'backCase' : this.stack[this.stack.length-2],
+      'message' : options.message,
+      'buttonText' : options.buttonText
+    });
+
     this.utils.into(this.sub2.pane,this.sub1.pane,function() {
 // DO NOT DESTROY sub2
 // IT IS USED AGAIN WHEN GETTING BACK TO USER PROFILE TO KEEP USER BROWSING PATH INTACT
@@ -371,9 +418,20 @@ ossi.main = Class.create(ossi.base,{
       backCase : false
 	  },options);
 
+    // manage stack
+    if (options.out) this.stack.pop();
+    else {
+      var opt = Object.clone(options);
+      opt.out = true;
+      this.stack.push(this.case7.bind(this,opt));
+    }
+
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.status(this, {  'hostElement' : this.mainElement,
-                                            'backCase' : options.backCase});
+    this.sub1 = new ossi.status(this, {
+      'hostElement' : this.mainElement,
+      'backCase' : this.stack[this.stack.length-2]
+    });
+
     if (options.out) {
       this.utils.out(this.sub2.pane,this.sub1.pane,function() {
         this.sub2.destroy();
@@ -395,9 +453,20 @@ ossi.main = Class.create(ossi.base,{
       backCase : false
 	  },options);
 
+    // manage stack
+    if (options.out) this.stack.pop();
+    else {
+      var opt = Object.clone(options);
+      opt.out = true;
+      this.stack.push(this.case8.bind(this,opt));
+    }
+
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.myprofile(this, {  'hostElement' : this.mainElement,
-                                            'backCase' : options.backCase});
+    this.sub1 = new ossi.myprofile(this, {  
+      'hostElement' : this.mainElement,
+      'backCase' : this.stack[this.stack.length-2]
+    });
+
     if (options.out) {
       this.utils.out(this.sub2.pane,this.sub1.pane,function() {
         this.sub2.destroy();
@@ -419,9 +488,20 @@ ossi.main = Class.create(ossi.base,{
       backCase : false
 	  },options);
 
+    // manage stack
+    if (options.out) this.stack.pop();
+    else {
+      var opt = Object.clone(options);
+      opt.out = true;
+      this.stack.push(this.case9.bind(this,opt));
+    }
+
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.friendlist(this, {   'hostElement' : this.mainElement,
-                                              'backCase' : options.backCase});
+    this.sub1 = new ossi.friendlist(this, {   
+      'hostElement' : this.mainElement,
+      'backCase' : this.stack[this.stack.length-2]
+    });
+
     if (options.out) {
       this.utils.out(this.sub2.pane,this.sub1.pane,function() {
         this.sub2.destroy();
@@ -443,9 +523,20 @@ ossi.main = Class.create(ossi.base,{
       backCase : false
 	  },options);
 
+    // manage stack
+    if (options.out) this.stack.pop();
+    else {
+      var opt = Object.clone(options);
+      opt.out = true;
+      this.stack.push(this.case11.bind(this,opt));
+    }
+
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.findusers(this, {  'hostElement' : this.mainElement,
-                                            'backCase' : options.backCase});
+    this.sub1 = new ossi.findusers(this, {  
+      'hostElement' : this.mainElement,
+      'backCase' : this.stack[this.stack.length-2]
+    });
+
     if (options.out) {
       this.utils.out(this.sub2.pane,this.sub1.pane,function() {
         this.sub2.destroy();
@@ -466,10 +557,21 @@ ossi.main = Class.create(ossi.base,{
       backCase : false
 	  },options);
 
+    // manage stack
+    if (options.out) this.stack.pop();
+    else {
+      var opt = Object.clone(options);
+      opt.out = true;
+      this.stack.push(this.case12.bind(this,opt));
+    }
+
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.searchresults(this, {  'hostElement' : this.mainElement,
-                                                'search' : options.search,
-                                                'backCase' : options.backCase});
+    this.sub1 = new ossi.searchresults(this, {
+      'hostElement' : this.mainElement,
+      'search' : options.search,
+      'backCase' : this.stack[this.stack.length-2]
+    });
+
     if (options.out) {
       this.utils.out(this.sub2.pane,this.sub1.pane,function() {
         this.sub2.destroy();
@@ -494,12 +596,23 @@ ossi.main = Class.create(ossi.base,{
       backCase : false
 	  },options);
 
+    // manage stack
+    if (options.out) this.stack.pop();
+    else {
+      var opt = Object.clone(options);
+      opt.out = true;
+      this.stack.push(this.case13.bind(this,opt));
+    }
+
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.profile(this, {  'hostElement' : this.mainElement,
-                                          'pendingNav' : options.pendingNav,
-                                          'search' : options.search,
-                                          'userId' : options.userId,
-                                          'backCase' : options.backCase});
+    this.sub1 = new ossi.profile(this, {
+      'hostElement' : this.mainElement,
+      'pendingNav' : options.pendingNav,
+      'search' : options.search,
+      'userId' : options.userId,
+      'backCase' : this.stack[this.stack.length-2]
+    });
+
     if (options.out) {
       this.utils.out(this.sub2.pane,this.sub1.pane,function() {
         this.sub2.destroy();
@@ -521,9 +634,20 @@ ossi.main = Class.create(ossi.base,{
       backCase : false
 	  },options);
 
+    // manage stack
+    if (options.out) this.stack.pop();
+    else {
+      var opt = Object.clone(options);
+      opt.out = true;
+      this.stack.push(this.case14.bind(this,opt));
+    }
+
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.pendingfriends(this, {   'hostElement' : this.mainElement,
-                                                  'backCase' : options.backCase});
+    this.sub1 = new ossi.pendingfriends(this, { 
+      'hostElement' : this.mainElement,
+      'backCase' : this.stack[this.stack.length-2]
+    });
+
     if (options.out) {
       this.utils.out(this.sub2.pane,this.sub1.pane,function() {
         this.sub2.destroy();
@@ -544,10 +668,20 @@ ossi.main = Class.create(ossi.base,{
       backCase : false
 	  },options);
 
+    // manage stack
+    if (options.out) this.stack.pop();
+    else {
+      var opt = Object.clone(options);
+      opt.out = true;
+      this.stack.push(this.case15.bind(this,opt));
+    }
+
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.terms(this,  { 'hostElement' : this.mainElement,
-	                                      'backCase' : options.backCase
-	                                    });
+    this.sub1 = new ossi.terms(this, {
+      'hostElement' : this.mainElement,
+      'backCase' : this.stack[this.stack.length-2]
+    });
+
     this.utils.into(this.sub2.pane,this.sub1.pane,function() {
       this.sub2.destroy();
     }.bind(this));
@@ -560,10 +694,20 @@ ossi.main = Class.create(ossi.base,{
       backCase : false
 	  },options);
 
+    // manage stack
+    if (options.out) this.stack.pop();
+    else {
+      var opt = Object.clone(options);
+      opt.out = true;
+      this.stack.push(this.case16.bind(this,opt));
+    }
+
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.consent(this, {  'hostElement' : this.mainElement,
-	                                        'backCase' : options.backCase
-	                                    });
+    this.sub1 = new ossi.consent(this, {
+      'hostElement' : this.mainElement,
+      'backCase' : this.stack[this.stack.length-2]
+    });
+
     if (options.out) {
       this.utils.out(this.sub2.pane,this.sub1.pane,function() {
         this.sub2.destroy();
@@ -582,10 +726,19 @@ ossi.main = Class.create(ossi.base,{
       backCase : false
 	  },options);
 
+    // manage stack
+    if (options.out) this.stack.pop();
+    else {
+      var opt = Object.clone(options);
+      opt.out = true;
+      this.stack.push(this.case17.bind(this,opt));
+    }
+
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.information(this, {  'hostElement' : this.mainElement,
-	                                            'backCase' : options.backCase
-	                                    });
+    this.sub1 = new ossi.information(this, {
+      'hostElement' : this.mainElement,
+      'backCase' : this.stack[this.stack.length-2]
+    });
     this.utils.into(this.sub2.pane,this.sub1.pane,function() {
       this.sub2.destroy();
     }.bind(this));
@@ -595,14 +748,24 @@ ossi.main = Class.create(ossi.base,{
 	*/
 	case18: function(options) {
 		var options = Object.extend({
+      groupId : false,
       out : false,
       backCase : false
 	  },options);
 
+    // stack stuff
+    if (options.out) this.stack.pop();
+    else { 
+      var opt = Object.clone(options);
+      opt.out = true;
+      this.stack.push(this.case18.bind(this,opt));
+    }
+		
     this.sub2 = this.sub1;
     this.sub1 = new ossi.channellist(this, {  'hostElement' : this.mainElement,
+                                              'groupId' : options.groupId,
                                               'selfUpdate' : true,
-                                              'backCase' : options.backCase});
+                                              'backCase' : this.stack[this.stack.length-2]});
     if (options.out) {
       this.utils.out(this.sub2.pane,this.sub1.pane,function() {
         this.sub2.destroy();
@@ -624,9 +787,20 @@ ossi.main = Class.create(ossi.base,{
       backCase : false
 	  },options);
 
+    // manage stack
+    if (options.out) this.stack.pop();
+    else {
+      var opt = Object.clone(options);
+      opt.out = true;
+      this.stack.push(this.case19.bind(this,opt));
+    }
+
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.createchannel(this, {  'hostElement' : this.mainElement,
-                                                'backCase' : options.backCase});
+    this.sub1 = new ossi.createchannel(this, {
+      'hostElement' : this.mainElement,
+      'backCase' : this.stack[this.stack.length-2]
+    });
+
     if (options.out) {
       this.utils.out(this.sub2.pane,this.sub1.pane,function() {
         this.sub2.destroy();
@@ -642,19 +816,32 @@ ossi.main = Class.create(ossi.base,{
 	*/
 	case20: function(options) {
 		var options = Object.extend({
-    	  start : false,
-    	  out : false,
-    	  channelId : false,
-    	  backCase : false,
+  	  start : false,
+  	  out : false,
+  	  groupId : false,
+  	  channelId : false,
+  	  backCase : false,
 		  startIndex : 1
 		},options);
+
+    // manage stack
+    if (options.out) this.stack.pop();
+    else {
+      var opt = Object.clone(options);
+      opt.out = true;
+      this.stack.push(this.case20.bind(this,opt));
+    }
+
 		this.sub2 = this.sub1;
-  	this.sub1 = new ossi.channel(this, {  'hostElement' : this.mainElement,
-                                          'selfUpdate' : true,
-          	                           	  'channelId' : options.channelId,
-							                            'wall' : this.options.wall,
-                  	                  	  'backCase' : options.backCase,
-										  'startIndex' : options.startIndex
+  	this.sub1 = new ossi.channel(this, {  
+  	  'hostElement' : this.mainElement,
+      'selfUpdate' : true,
+   	  'groupId' : options.groupId,
+   	  'channelId' : options.channelId,
+      'wall' : this.options.wall,
+  	  'backCase' : this.stack[this.stack.length-2],
+//  	  'backCase' : options.backCase,
+      'startIndex' : options.startIndex
 		});
 		if (options.start) {
   		this.sub1.pane.show();
@@ -685,13 +872,24 @@ ossi.main = Class.create(ossi.base,{
       postId : false,
       backCase : false
 	  },options);
+
+    // manage stack
+    if (options.out) this.stack.pop();
+    else {
+      var opt = Object.clone(options);
+      opt.out = true;
+      this.stack.push(this.case21.bind(this,opt));
+    }
+
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.mypost(this, {   'hostElement' : this.mainElement,
-                                          'priv' : options.priv,
-                                          'channelId' : options.channelId,
-                                          'replyToId' : options.replyToId,
-                                          'postId' : options.postId,
-                                          'backCase' : options.backCase});
+    this.sub1 = new ossi.mypost(this, {   
+      'hostElement' : this.mainElement,
+      'priv' : options.priv,
+      'channelId' : options.channelId,
+      'replyToId' : options.replyToId,
+      'postId' : options.postId,
+      'backCase' : this.stack[this.stack.length-2]
+    });
     if (options.out) {
       this.utils.out(this.sub2.pane,this.sub1.pane,function() {
         this.sub2.destroy();
@@ -716,12 +914,23 @@ ossi.main = Class.create(ossi.base,{
 	  startIndex : 1
 	  },options);
 
+    // manage stack
+    if (options.out) this.stack.pop();
+    else {
+      var opt = Object.clone(options);
+      opt.out = true;
+      this.stack.push(this.case22.bind(this,opt));
+    }
+
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.post(this, {   'hostElement' : this.mainElement,
-                                        'channelId' : options.channelId,
-                                        'postId' : options.postId,
-                                        'backCase' : options.backCase,
-										'startIndex' : options.startIndex});
+    this.sub1 = new ossi.post(this, {
+      'hostElement' : this.mainElement,
+      'channelId' : options.channelId,
+      'postId' : options.postId,
+      'backCase' : this.stack[this.stack.length-2],
+			'startIndex' : options.startIndex
+		});
+
     if (options.out) {
       this.utils.out(this.sub2.pane,this.sub1.pane,function() {
         this.sub2.destroy();
@@ -742,9 +951,20 @@ ossi.main = Class.create(ossi.base,{
       out : false
 	  },options);
 
+    // manage stack
+    if (options.out) this.stack.pop();
+    else {
+      var opt = Object.clone(options);
+      opt.out = true;
+      this.stack.push(this.case23.bind(this,opt));
+    }
+
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.avatar(this, {   'hostElement' : this.mainElement,
-                                          'backCase' : options.backCase});
+    this.sub1 = new ossi.avatar(this, {
+      'hostElement' : this.mainElement,
+      'backCase' : this.stack[this.stack.length-2]
+    });
+
     if (options.out) {
       this.utils.out(this.sub2.pane,this.sub1.pane,function() {
         this.sub2.destroy();
@@ -758,7 +978,7 @@ ossi.main = Class.create(ossi.base,{
     }
 	},
 	/**
-	* show channel contents without session
+	* show channel contents without session - NOT IN STACK!!!
 	*/
 	case24: function(options) {
 		var options = Object.extend({
@@ -785,9 +1005,20 @@ ossi.main = Class.create(ossi.base,{
       backCase : false
 	  },options);
 
+    // manage stack
+    if (options.out) this.stack.pop();
+    else {
+      var opt = Object.clone(options);
+      opt.out = true;
+      this.stack.push(this.case25.bind(this,opt));
+    }
+		
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.grouplist(this, {  'hostElement' : this.mainElement,
-                                            'backCase' : options.backCase});
+    this.sub1 = new ossi.grouplist(this, {
+      'hostElement' : this.mainElement,
+      'backCase' : this.stack[this.stack.length-2]
+    });
+
     if (options.out) {
       this.utils.out(this.sub2.pane,this.sub1.pane,function() {
         this.sub2.destroy();
@@ -809,9 +1040,17 @@ ossi.main = Class.create(ossi.base,{
       backCase : false
 	  },options);
 
+    // manage stack
+    if (options.out) this.stack.pop();
+    else {
+      var opt = Object.clone(options);
+      opt.out = true;
+      this.stack.push(this.case26.bind(this,opt));
+    }
+		
     this.sub2 = this.sub1;
     this.sub1 = new ossi.creategroup(this, {  'hostElement' : this.mainElement,
-                                              'backCase' : options.backCase});
+                                              'backCase' : this.stack[this.stack.length-2]});
     if (options.out) {
       this.utils.out(this.sub2.pane,this.sub1.pane,function() {
         this.sub2.destroy();
@@ -831,10 +1070,22 @@ ossi.main = Class.create(ossi.base,{
     	  groupId : false,
     	  backCase : false
 		},options);
+
+    // manage stack
+    if (options.out) this.stack.pop();
+    else {
+      var opt = Object.clone(options);
+      opt.out = true;
+      this.stack.push(this.case27.bind(this,opt));
+    }
+		
 		this.sub2 = this.sub1;
-  	this.sub1 = new ossi.group(this, {  'hostElement' : this.mainElement,
-        	                              'groupId' : options.groupId,
-                	                      'backCase' : options.backCase });
+  	this.sub1 = new ossi.group(this, {  
+  	  'hostElement' : this.mainElement,
+      'groupId' : options.groupId,
+      'backCase' : this.stack[this.stack.length-2]
+    });
+
     if (options.out) {
       this.utils.out(this.sub2.pane,this.sub1.pane,function() {
         this.sub2.destroy();
@@ -856,11 +1107,23 @@ ossi.main = Class.create(ossi.base,{
     	  groupId : false,
     	  backCase : false
 		},options);
+
+    // manage stack
+    if (options.out) this.stack.pop();
+    else {
+      var opt = Object.clone(options);
+      opt.out = true;
+      this.stack.push(this.case28.bind(this,opt));
+    }
+
 		this.sub2 = this.sub1;
-  	this.sub1 = new ossi.groupmembers(this, { 'hostElement' : this.mainElement,
-      	                                      'selfUpdate' : true,
-      	                                      'groupId' : options.groupId,
-              	                              'backCase' : options.backCase });
+  	this.sub1 = new ossi.groupmembers(this, { 
+  	  'hostElement' : this.mainElement,
+      'selfUpdate' : true,
+      'groupId' : options.groupId,
+      'backCase' : this.stack[this.stack.length-2]
+    });
+
     if (options.out) {
       this.utils.out(this.sub2.pane,this.sub1.pane,function() {
         this.sub2.destroy();
@@ -882,9 +1145,20 @@ ossi.main = Class.create(ossi.base,{
         out : false
       },options);
 
+    // manage stack
+    if (options.out) this.stack.pop();
+    else {
+      var opt = Object.clone(options);
+      opt.out = true;
+      this.stack.push(this.case29.bind(this,opt));
+    }
+
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.changepassword(this, {   'hostElement' : this.mainElement,
-                                          'backCase' : options.backCase});
+    this.sub1 = new ossi.changepassword(this, { 
+      'hostElement' : this.mainElement,
+      'backCase' : this.stack[this.stack.length-2]
+    });
+
     if (options.out) {
       this.utils.out(this.sub2.pane,this.sub1.pane,function() {
         this.sub2.destroy();
@@ -902,13 +1176,21 @@ ossi.main = Class.create(ossi.base,{
 	* search
 	*/
 	case30: function(options) {
-      var options = Object.extend({
-        out : false
-      },options);
+    var options = Object.extend({
+      out : false
+    },options);
+
+    // manage stack
+    if (options.out) this.stack.pop();
+    else {
+      var opt = Object.clone(options);
+      opt.out = true;
+      this.stack.push(this.case30.bind(this,opt));
+    }
 
     this.sub2 = this.sub1;
     this.sub1 = new ossi.search(this, {   'hostElement' : this.mainElement,
-                                          'backCase' : options.backCase});
+                                          'backCase' : this.stack[this.stack.length-2]});
     if (options.out) {
       this.utils.out(this.sub2.pane,this.sub1.pane,function() {
         this.sub2.destroy();
@@ -946,10 +1228,21 @@ ossi.main = Class.create(ossi.base,{
       backCase : false
 	  },options);
 
+    // manage stack
+    if (options.out) this.stack.pop();
+    else {
+      var opt = Object.clone(options);
+      opt.out = true;
+      this.stack.push(this.case32.bind(this,opt));
+    }
+
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.searchallresult(this, {  'hostElement' : this.mainElement,
-                                                'search' : options.search,
-                                                'backCase' : options.backCase});
+    this.sub1 = new ossi.searchallresult(this, {
+      'hostElement' : this.mainElement,
+      'search' : options.search,
+      'backCase' : this.stack[this.stack.length-2]
+    });
+
     if (options.out) {
       this.utils.out(this.sub2.pane,this.sub1.pane,function() {
         this.sub2.destroy();
@@ -1001,6 +1294,32 @@ ossi.main = Class.create(ossi.base,{
       document.body.addClassName('widget');
       this.mainElement.addClassName('widget');
       this.loadingpane.addClassName('widget');
+
+    } else if (client.is_WRT_widget) {
+      alert('ennen');
+      try {
+        this.serviceInfo = device.getServiceObject("Service.SysInfo", "ISysInfo");
+      } catch (ex) {
+        delete this.serviceInfo;
+      }
+
+      alert('jälkeen');
+
+      var self = this;
+    	new PeriodicalExecuter(function(pe) {
+        var criteria = new Object();
+        criteria.Entity = "Display";
+        criteria.Key = "DisplayOrientation";
+        if (window.widget.isrotationsupported) {
+          try {
+            var result = self.serviceInfo.ISysInfo.GetInfo(criteria);
+          } catch (ex) {
+            return;
+          }
+          alert(result.ReturnValue.Status);
+        }
+    	}, 15);
+      
     } else if (this.options.wall) {
       this.loadingpane.addClassName('wall');
     } else if (this.options.width && this.options.height) {

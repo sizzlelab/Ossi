@@ -5,6 +5,7 @@ ossi.channellist = Class.create(ossi.base,{
 	initialize: function(parent,options) {
     this.parent = parent;
 		this.options = Object.extend({
+      groupId : false,
       selfUpdate : false,
       hostElement : false
 	  },options);
@@ -15,6 +16,7 @@ ossi.channellist = Class.create(ossi.base,{
     };
 	  this.pane = false;
     this._draw();
+    if (this.options.groupId != false) $('create_channel_button_container').hide();
     this._resetInterval(); // this resets the intervalled update call, if selfUpdate is enabled
 	},
 	/**
@@ -27,8 +29,10 @@ ossi.channellist = Class.create(ossi.base,{
     var self = this;
 
     // get channels
+    console.log(self.options);
     var URL = BASE_URL+'/channels';
     var params = { per_page : this.updateOptions.per_page, page : this.updateOptions.page };
+    if (self.options.groupId != false) params.group_id = self.options.groupId;
     self.parent.showLoading();
     new Ajax.Request(URL,{
       method : 'get',
@@ -170,7 +174,9 @@ ossi.channellist = Class.create(ossi.base,{
     var channel_id = button_id.replace("channel_id_","");
     self.parent.case20({
       channelId : channel_id,
+      groupId : self.options.groupId,
       backCase : self.parent.case18.bind(self.parent,{
+        groupId : self.options.groupId,
         out : true,
         backCase : self.parent.case3.bind(self.parent,{out:true}) 
       })

@@ -191,9 +191,7 @@ ossi.profile = Class.create(ossi.base,{
     		  backCase2 : self.options.backCase,
     		  userId : self.options.userId,
     		  hostElement: self.options.hostElement,
-          backCase : function() {
-            this.parent.case31();
-          }.bind(self)
+          backCase : self.backCase
         });
 
         setTimeout(function() {
@@ -219,11 +217,9 @@ ossi.profile = Class.create(ossi.base,{
         self.parent.case6({
           message : "Friendship has been removed.",
           buttonText : "Back",
-		        userId : self.options.userId,
-		        hostElement: self.options.hostElement,
-          backCase : function() {
-            this.parent.case31();
-          }.bind(self)
+	        userId : self.options.userId,
+	        hostElement: self.options.hostElement,
+          backCase : self.backCase
         });
 
         setTimeout(function() {
@@ -247,9 +243,7 @@ ossi.profile = Class.create(ossi.base,{
         self.parent.case6({
           message : "Friend request accepted!",
           buttonText : "Back",
-          backCase : function() {
-            this.parent.case31();
-          }.bind(self)
+          backCase : self.backCase
         });
         setTimeout(function() {
           self.parent.hideLoading();
@@ -270,9 +264,7 @@ ossi.profile = Class.create(ossi.base,{
         self.parent.case6({
           message : "Friend request rejected!",
           buttonText : "Back",
-          backCase : function() {
-            this.parent.case31();
-          }.bind(self)
+          backCase : self.backCase
         });
 
         setTimeout(function() {

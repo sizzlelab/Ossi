@@ -6,13 +6,14 @@ ossi.location = Class.create(ossi.base,{
     this.parent = parent;
 		this.options = Object.extend({
 	  },options);
-    this.serviceObj = null;
-    try {
-      this.serviceObj = device.getServiceObject("Service.Location", "ILocation");
-      this.unavailable = false;
-    } catch (ex) {
-      this.unavailable = true;
-      alert("Service object cannot be found.");
+    if (Object.isUndefined(this.parent.serviceObj)) {
+      try {
+        this.parent.serviceObj = device.getServiceObject("Service.Location", "ILocation");
+        this.unavailable = false;
+      } catch (ex) {
+        this.unavailable = true;
+        alert("Service object cannot be found.");
+      }
     }
     this.criteria = new Object();
     this.criteria.LocationInformationClass = "BasicLocationInformation";
@@ -26,7 +27,7 @@ ossi.location = Class.create(ossi.base,{
 	  if (this.unavailable) return false;
 	  
     // Obtain the location information (synchronous, so will block device momentarily)
-    var result = this.serviceObj.ILocation.GetLocation(this.criteria);
+    var result = this.parent.serviceObj.ILocation.GetLocation(this.criteria);
 
     // save location to main class
     this.parent.location = {

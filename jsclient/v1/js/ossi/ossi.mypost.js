@@ -122,14 +122,7 @@ ossi.mypost = Class.create(ossi.base,{
         self.parent.case6({
           message : "Post added.",
           buttonText : "Back",
-          backCase:self.parent.case20.bind(self.parent,{
-            channelId:self.options.channelId,
-            out:true,
-            backCase:self.parent.case18.bind(self.parent,{
-              out:true,
-              backCase:self.parent.case3.bind(self.parent,{out:true})
-            })
-          })
+          skipPrevious : true
         });
       },
       onFailure : function(response) {
@@ -137,19 +130,7 @@ ossi.mypost = Class.create(ossi.base,{
         self.parent.case6({
           message : "Could not create post.",
           buttonText : "Try again",
-          backCase : self.parent.case21.bind(self.parent,{
-            postId:self.options.postId,
-            channelId:self.options.channelId,
-            out:true,
-            backCase:self.parent.case20.bind(self.parent,{
-              channelId:self.options.channelId,
-              out:true,
-              backCase:self.parent.case18.bind(self.parent,{
-                out:true,
-                backCase:self.parent.case3.bind(self.parent,{out:true})
-              })
-            })
-          })
+          skipPrevious : true
         });
       }
     });

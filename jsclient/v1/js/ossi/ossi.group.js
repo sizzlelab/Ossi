@@ -47,6 +47,19 @@ ossi.group = Class.create(ossi.base,{
   				$('leave_button_container').hide();
     		}
 
+        // now check if group has channels and display channels button accordingly
+        URL = BASE_URL+'/channels?group_id='+self.options.groupId;
+        new Ajax.Request(URL, {
+          method : 'get',
+          requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
+          onSuccess : function(response) { // does not handle invalid responses
+            var json = response.responseJSON;
+            if (json.entry.length > 0) {
+              $('group_channels_button_container').show();
+            }
+          }
+        });
+
         setTimeout(function() {
           self.parent.hideLoading();
         }, 600);
@@ -85,6 +98,9 @@ ossi.group = Class.create(ossi.base,{
             				</div>\
             				<div class="nav_button">\
             					<a id="members_button" class="nav_button_text" href="javascript:void(null);">Members</a>\
+            				</div>\
+            				<div id="group_channels_button_container" class="nav_button" style="display:none">\
+            					<a id="group_channels_button" class="nav_button_text" href="javascript:void(null);">Group\'s Sizzle</a>\
             				</div>\
             				<div class="nav_button">\
             					<a id="back_button" class="nav_button_text" href="javascript:void(null);">Back</a>\
@@ -125,7 +141,6 @@ ossi.group = Class.create(ossi.base,{
       }
     });
   },
-  
   _leaveHandler: function() {
     var self = this;
     if (typeof(this.parent.userId) == 'undefined') return; // userId in the parent controller not set
@@ -151,7 +166,6 @@ ossi.group = Class.create(ossi.base,{
       }
     });
   },
-  
   _backHandler: function() {
     this.options.backCase.apply();
   },
@@ -171,13 +185,31 @@ ossi.group = Class.create(ossi.base,{
       })
     });
   },
+  _channelsHandler: function() {
+    var self = this;
+    self.parent.case18({
+      groupId : self.options.groupId,
+      backCase : self.parent.case27.bind(self.parent,{
+        out:true,
+        groupId:self.options.groupId,
+        backCase : self.parent.case25.bind(self.parent,{
+          out:true,
+          backCase : self.parent.case3.bind(self.parent,{
+            out:true
+          })
+        })
+      })
+    });
+  },
   _addListeners: function() {
+    $('group_channels_button').onclick = this._channelsHandler.bindAsEventListener(this);
     $('members_button').onclick = this._membersHandler.bindAsEventListener(this);
     $('join_button').onclick = this._joinHandler.bindAsEventListener(this);
     $('leave_button').onclick = this._leaveHandler.bindAsEventListener(this);
     $('back_button').onclick = this._backHandler.bindAsEventListener(this);
   },
   _removeListeners: function() {
+    $('group_channels_button').onclick = function() { return }
     $('members_button').onclick = function() { return }
     $('join_button').onclick = function() { return }
     $('leave_button').onclick = function() { return }

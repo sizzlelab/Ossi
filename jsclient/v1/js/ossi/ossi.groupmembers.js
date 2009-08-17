@@ -133,20 +133,8 @@ ossi.groupmembers = Class.create(ossi.base,{
     var uid = button_id.replace("person_uid_","");
     this.parent.case13({
       userId : uid,
-	  out: true,
-	  groupId : this.options.groupId,
-      backCase : this.parent.case28.bind(this.parent,{
-        out : true,
-		groupId : this.options.groupId,
-        backCase : this.parent.case27.bind(this.parent,{
-		  out: true,
-		  groupId : this.options.groupId,
-		  backCase : this.parent.case25.bind(this.parent, {
-			out: true,
-			backCase : this.parent.case3.bind(this.parent, {out: true}),
-		  })
-		})
-      }) 
+  	  groupId : this.options.groupId,
+      backCase : this.backCase
     });
 
   },

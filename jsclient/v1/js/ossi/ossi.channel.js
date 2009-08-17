@@ -6,11 +6,12 @@ ossi.channel = Class.create(ossi.base, {
     this.parent = parent;
     this.options = Object.extend({
       hostElement: false,
-      channelId: false,
-      selfUpdate: false,
-      wall: false,
-      startIndex: 1,
-      count: 7
+      groupId : false,
+      channelId : false,
+      selfUpdate : false,
+      wall : false,
+      startIndex : 1,
+      count : 7
     }, options);
     this.count = this.options.count;
     this.updateInterval = 20000;
@@ -70,26 +71,25 @@ ossi.channel = Class.create(ossi.base, {
             // show second back button at top of screen if more than 5 channels
             if (self.updateOptions.page > 1) $('channel_back_button_2_container').show(); // show second back button at top of screen if more than 5 channels
             
-									// by default, show everyhing
-									$('channel_next_button_container').show();
-									$('channel_previous_button_container').show();
-									$('channel_previous_button_container').setStyle({ 'width': '50%' });
+						// by default, show everyhing
+						$('channel_next_button_container').show();
+						$('channel_previous_button_container').show();
+						$('channel_previous_button_container').setStyle({ 'width': '50%' });
       			$('channel_next_button_container').setStyle({ 'width': '50%' });
-									// no more next, hide nex, set previus big
-									if( self.updateOptions.page * self.updateOptions.per_page >= json.pagination.size ){
-										 $('channel_next_button_container').hide();	
-											$('channel_previous_button_container').setStyle({ 'width': '100%' });
-									}
-									// if no previous, set next big
-         if (self.updateOptions.page <= 1) {
-      			  $('channel_next_button_container').setStyle({ 'width': '100%' });
-      			  $('channel_previous_button_container').hide();
-         } 
-									// if messages fit in one page, hide whole next/previous
-									if( json.pagination.size <= self.updateOptions.per_page  ) {
-										  console.log('Hide everything!');
-										 $('channel_nav_bar').hide();
-									}
+						// no more next, hide nex, set previus big
+						if( self.updateOptions.page * self.updateOptions.per_page >= json.pagination.size ){
+              $('channel_next_button_container').hide();	
+              $('channel_previous_button_container').setStyle({ 'width': '100%' });
+						}
+						// if no previous, set next big
+            if (self.updateOptions.page <= 1) {
+              $('channel_next_button_container').setStyle({ 'width': '100%' });
+              $('channel_previous_button_container').hide();
+            } 
+            // if messages fit in one page, hide whole next/previous
+            if( json.pagination.size <= self.updateOptions.per_page  ) {
+            	 $('channel_nav_bar').hide();
+            }
 
 
 
