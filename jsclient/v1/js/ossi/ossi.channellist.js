@@ -42,20 +42,30 @@ ossi.channellist = Class.create(ossi.base,{
         if (typeof(json.entry) != 'undefined') {
           if (json.entry.length > 0) {
             self._drawContents(json.entry);
-            if (self.updateOptions.page > 1) $('channels_back_button_2_container').show(); // show second back button at top of screen if more than 5 channels
     			  $('channels_next_button_container').setStyle({ 'width': '100%' });
-    				$('channels_next_button_container').show();
-            if (self.updateOptions.per_page*self.updateOptions.page >= json.pagination.size) { // on the last page
-      			  $('channels_previous_button_container').setStyle({ 'width': '100%' });
-//      			  $('channels_next_button_container').setStyle({ 'width': '0%' });
-      			  $('channels_previous_button_container').show();
-      			  $('channels_next_button_container').hide();
+            if (self.updateOptions.per_page*self.updateOptions.page >= json.pagination.size) { // on the last page or less than one page of results
+              console.log('1');
+              if (json.pagination.size > self.updateOptions.per_page) { // last page
+                $('channels_back_button_2_container').show();
+        			  $('channels_previous_button_container').setStyle({ 'width': '100%' });
+        			  $('channels_previous_button_container').show();
+        			  $('channels_next_button_container').hide();
+              } else { // first page and not enough results for pagination
+        			  $('channels_previous_button_container').hide();
+        			  $('channels_next_button_container').hide();
+              }
             } else if (self.updateOptions.page > 1) { // between first and last page
+              console.log('2');
+              $('channels_back_button_2_container').show();
       			  $('channels_previous_button_container').setStyle({ 'width': '50%' });
       			  $('channels_next_button_container').setStyle({ 'width': '50%' });
+      			  $('channels_next_button_container').show();
       			  $('channels_previous_button_container').show();
             } else { // first page
+              console.log('3');
+              $('channels_back_button_2_container').show();
       			  $('channels_previous_button_container').setStyle({ 'width': '0%' });
+    			    $('channels_next_button_container').show();
     			    $('channels_next_button_container').setStyle({ 'width': '100%' });
       			  $('channels_previous_button_container').hide();
             }

@@ -77,10 +77,7 @@ ossi.createchannel = Class.create(ossi.base,{
         self.parent.case6({
           message : "Channel created!",
           buttonText : "Back",
-          backCase:self.parent.case18.bind(self.parent,{
-            out:true,
-            backCase:self.parent.case3.bind(self.parent,{out:true})
-          })
+          skipPrevious : true
         });            
       },
       onFailure : function(response) {
@@ -92,14 +89,7 @@ ossi.createchannel = Class.create(ossi.base,{
         self.parent.hideLoading();
         self.parent.case6({
           message : message,
-          buttonText : "Try again",
-          backCase : self.parent.case19.bind(self.parent,{
-            out:true,
-            backCase:self.parent.case18.bind(self.parent,{
-              out:true,
-              backCase:self.parent.case3.bind(this.parent,{out:true})
-            })
-          })
+          buttonText : "Try again"
         });
       }
     });
