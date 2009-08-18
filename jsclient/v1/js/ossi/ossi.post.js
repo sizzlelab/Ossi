@@ -200,7 +200,7 @@ ossi.post = Class.create(ossi.base, {
   },
   _previousHandler: function(){
     var self = this;
-    self.parent.stack.pop();
+    self.parent.stack.push( self.parent.case22.bind(self.parent,self.options) );
     var channel_id = self.options.channelId;
     var post_id = self.options.previous;
     self.parent.case22({
