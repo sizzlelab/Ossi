@@ -15,6 +15,7 @@ ossi.createchannel = Class.create(ossi.base,{
       this.options.hostElement.insert(this._getHTML());
       this._addListeners();
       this.pane = $('createchannelpane');
+      setTimeout(function() { $('create_channel_form').focusFirstElement() },500); // .delay() did not seem to work on Firefox
     } else {
       alert('ossi.createchannel._draw() failed! this.options.hostElement not defined!');
     }
@@ -22,7 +23,7 @@ ossi.createchannel = Class.create(ossi.base,{
   _getHTML: function() {
     var h =   '\
           			<div id="createchannelpane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
-                  <form>\
+                  <form id="create_channel_form" name="create_channel_form">\
                     <div style="margin: 18px auto 12px; text-align: left; width: 170px;">\
                       <dl>\
                         <dt style="color:#666; margin:0px 0px 5px 0px;">Channel name:</dt>\

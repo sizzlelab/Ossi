@@ -15,6 +15,7 @@ ossi.creategroup = Class.create(ossi.base,{
       this.options.hostElement.insert(this._getHTML());
       this._addListeners();
       this.pane = $('creategrouppane');
+      setTimeout(function() { $('create_group_form').focusFirstElement() },500); // .delay() did not seem to work on Firefox
     } else {
       alert('ossi.creategroup._draw() failed! this.options.hostElement not defined!');
     }
@@ -22,7 +23,7 @@ ossi.creategroup = Class.create(ossi.base,{
   _getHTML: function() {
     var h =   '\
           			<div id="creategrouppane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
-                  <form>\
+                  <form name="create_group_form" id="create_group_form">\
                     <div style="margin: 12px auto 12px auto; text-align: left; width: 205px;">\
                       <dl>\
                         <dt style="color:#666; margin:0px 0px 5px 0px;">Group title:</dt>\
@@ -102,13 +103,6 @@ ossi.creategroup = Class.create(ossi.base,{
         });
       }
     });
-
-
-
-
-
-
-
   },
   _addListeners: function() {
     $('create_group_create_button').onclick = this._createHandler.bindAsEventListener(this);
