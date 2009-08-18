@@ -120,8 +120,6 @@ ossi.creategroup = Class.create(ossi.base,{
   },
   destroy: function () {
     this._removeListeners();
-    console.log(this.pane);
     this.pane.remove();
-    console.log(this.pane);
   }
 });
