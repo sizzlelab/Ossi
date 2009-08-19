@@ -62,7 +62,6 @@ ossi.status = Class.create(ossi.base, {
       parameters: params,
       requestHeaders: (client.is_widget) ? ['Cookie', self.parent.sessionCookie] : '',
       onSuccess: function(response){
-      
         if (Object.isUndefined(self.parent.locator)) {
           // also update the location
           if ($F('location_input').length > 2) {
@@ -72,7 +71,6 @@ ossi.status = Class.create(ossi.base, {
               longitude: '',
               datetime: new Date().toUTCString()
             };
-            
             // send location to server
             var URL = BASE_URL + '/people/@me/@location';
             var params = {
@@ -89,6 +87,10 @@ ossi.status = Class.create(ossi.base, {
                 self.options.backCase.apply();
               }
             });
+          }
+          else {
+            self.parent.loadingpane.hide();
+            self.options.backCase.apply();
           }
         }
         else {
@@ -158,14 +160,7 @@ ossi.status = Class.create(ossi.base, {
   },
   _profileHandler: function(){
     var self = this;
-    this.parent.case8({
-      backCase: self.parent.case7.bind(self.parent, {
-        out: true,
-        backCase: self.parent.case3.bind(self.parent, {
-          out: true
-        })
-      })
-    });
+    this.parent.case8({});
   },
   _addListeners: function(){
     $('status_form').observe('submit', this._putStatus.bindAsEventListener(this));
