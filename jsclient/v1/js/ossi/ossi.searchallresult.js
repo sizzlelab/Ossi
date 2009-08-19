@@ -135,7 +135,7 @@ ossi.searchallresult = Class.create(ossi.base, {
         var description = element.description != null ? element.description : '';
         var h = '\
 												          				<div class="group_button" id="search_gid_' + element.id + '" href="javascript:void(null);">\
-												                    <div class="post_button_left_column"></div>\
+												                    <div class="post_button_left_column"><img style="margin:2px 0px 0px 2px; border:solid #eee 1px;" src="./images/group.png" width="50" height="50" border="0" /></div>\
 												                    <div class="post_button_text">\
 												        						  							<div class="button_title">' +
         element.title +
@@ -153,7 +153,7 @@ ossi.searchallresult = Class.create(ossi.base, {
         var description = element.description != null ? element.description : '';
         var h = '\
 												          				<div class="channel_button" id="search_cid_' + element.id + '" href="javascript:void(null);">\
-												                    <div class="post_button_left_column"></div>\
+												                    <div class="post_button_left_column"><img style="margin:2px 0px 0px 2px; border:solid #eee 1px;" src="./images/channel.png" width="50" height="50" border="0" /></div>\
 												                    <div class="post_button_text">\
 												        						  							<div class="button_title">' +
         element.name +
