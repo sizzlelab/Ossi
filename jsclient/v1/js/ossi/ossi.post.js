@@ -43,7 +43,8 @@ ossi.post = Class.create(ossi.base, {
           $('post_avatar').update('<img src="' + avatar_src + '" width="50" height="50" border="0" />');
           $('post_author_text').update(author_string);
           $('post_updated_text').update(updated_text);
-          $('post_content').update(self._parseBBCode(json.entry.body));
+          var k = '<b>'+json.entry.title+'</b><br /><br />' + self._parseBBCode(json.entry.body);
+          $('post_content').update(k);
           if (typeof(json.metadata.author) != 'undefined' && json.owner != null) {
             $('post_profile_button').update(json.metadata.author + '\'s profile');
             $('post_profile_button_container').show();
