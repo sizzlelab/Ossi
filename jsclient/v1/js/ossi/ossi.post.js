@@ -45,11 +45,10 @@ ossi.post = Class.create(ossi.base, {
           $('post_updated_text').update(updated_text);
           var k = '<b>'+json.entry.title+'</b><br /><br />' + self._parseBBCode(json.entry.body);
           $('post_content').update(k);
-          if (typeof(json.metadata.author) != 'undefined' && json.owner != null) {
-            $('post_profile_button').update(json.metadata.author + '\'s profile');
-            $('post_profile_button_container').show();
+          // Show delete, if I'm the poster
+          if( self.options.posterId == self.parent.userId ) {
+             $('post_delete_container_' + self.options.postId).show();
           }
-          self.userId = json.updated_by; // save user id into instance
         }
         else {
           $('post_placeholder').update('<div style="padding:10px; text-align:center">Error occurred. Try again later.</div>');
@@ -107,22 +106,7 @@ ossi.post = Class.create(ossi.base, {
       }
     });
   },
-  
-  _getModeratorHTML: function(){
-    var m = '';
-    //moderator privileges
-    if (this.parent.userRole == 'moderator') {
-      m = '<div class="nav_button">\
-                <a id="post_allow_delete_button" class="nav_button_text" href="javascript:void(null);">Delete this post</a>\
-        </div>\
-        <div class="nav_button" id="post_delete_post" style="visibility: hidden;">\
-                <a id="post_delete_button" class="nav_button_text" href="javascript:void(null);">Delete for good.</a>\
-        </div>\
-        ';
-    }
-    return m;
-  },
-  
+    
   _getHTML: function(){
     var id = this.options.postId;
     var h = '\
@@ -161,24 +145,26 @@ ossi.post = Class.create(ossi.base, {
     '" class="nav_button_text" href="javascript:void(null);">Previous post</a>\
           		  	</div>\
 				</div>\
-                ';
-    h += this._getModeratorHTML();
-    h += '    		<div class="nav_button">\
+            <div id="post_delete_container_' + id + '"  class="nav_button" style="display: none">\
+          					<a id="post_delete_button_' + id + '" class="nav_button_text" href="javascript:void(null);">Delete Post</a>\
+          				</div>\
+              <div class="nav_button">\
           					<a id="post_back_button_' + id + '" class="nav_button_text" href="javascript:void(null);">Back</a>\
           				</div>\
           			</div>\
           		';
     return h;
   },
+  
   _parseBBCode: function(value){
     var search = new Array(/\n/g, /\[quote\]/g, /\[\/quote\]/g);
-    
     var replace = new Array("<br />", '<span class="quoted_block">', '</span>');
     for (i = 0; i < search.length; i++) {
       var value = value.replace(search[i], replace[i]);
     }
     return value;
   },
+  
   _openProfileHandler: function(){
     var self = this;
     var poster_id = self.options.posterId;
@@ -186,9 +172,11 @@ ossi.post = Class.create(ossi.base, {
       userId: poster_id
     });
   },
+  
   _backHandler: function(){
     this.options.backCase.apply();
   },
+  
   _nextHandler: function(){
     var self = this;
     self.parent.stack.pop();
@@ -223,7 +211,7 @@ ossi.post = Class.create(ossi.base, {
       return; // userId in the parent controller not set
     var self = this;
     // get contents
-    var URL = BASE_URL + '/appdata/cWslSQyIyr3yiraaWPEYjL/@collections/' + self.options.postId; // ossi app Id hard-coded
+    var URL = BASE_URL + '/channels/' + self.options.channelId + '/@messages/' + self.options.postId;
     self.parent.showLoading();
     new Ajax.Request(URL, {
       method: 'delete',
@@ -239,20 +227,6 @@ ossi.post = Class.create(ossi.base, {
     });
     
   },
-  _allowDeleteHandler: function(){
-    if (!this.allowDelete) {
-      this.allowDelete = true;
-      $('post_allow_delete_button').update('Cancel delete');
-      $('post_delete_post').setStyle('visibility: visible');
-    }
-    else {
-      this.allowDelete = false;
-      $('post_allow_delete_button').update('Delete this post');
-      $('post_delete_post').setStyle('visibility: hidden');
-    }
-    
-  },
-  
   
   _addListeners: function(){
     var id = this.options.postId;
@@ -261,12 +235,9 @@ ossi.post = Class.create(ossi.base, {
     $('post_back_button_' + id).onclick = this._backHandler.bindAsEventListener(this);
     $('post_next_button_' + id).onclick = this._nextHandler.bindAsEventListener(this);
     $('post_previous_button_' + id).onclick = this._previousHandler.bindAsEventListener(this);
-    /*
-     if (this.parent.userRole == 'moderator') {
-     $('post_delete_button_' + id ).onclick = this._deleteHandler.bindAsEventListener(this);
-     $('post_allow_delete_button_' + id ).onclick = this._allowDeleteHandler.bindAsEventListener(this);
-     }*/
+    $('post_delete_button_' + id ).onclick = this._deleteHandler.bindAsEventListener(this);
   },
+  
   _removeListeners: function(){
     var id = this.options.postId;
     $('post_reply_button_' + id).onclick = function(){
@@ -284,13 +255,8 @@ ossi.post = Class.create(ossi.base, {
     $('post_previous_button_' + id).onclick = function(){
       return
     }
-    if (this.parent.userRole == 'moderator') {
-      $('post_delete_button').onclick = function(){
-        return
-      }
-      $('post_allow_delete_button').onclick = function(){
-        return
-      }
+    $('post_delete_button_' + id).onclick = function(){
+     return
     }
   },
   destroy: function(){
