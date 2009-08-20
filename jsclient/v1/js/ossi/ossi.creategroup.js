@@ -32,8 +32,8 @@ ossi.creategroup = Class.create(ossi.base,{
                           <dd style=" margin:0px 0px 10px 15px;">\
                             <select name="group_type" id="group_type" style="color:#000;">\
                               <option value="open">open</option>\
-                              <option value="closed">closed</option>\
-                              <option value="hidden">hidden</option>\
+                              <!--option value="closed">closed</option>\
+                              <option value="hidden">hidden</option-->\
                               <!--option value="personal">personal</option-->\
                             </select>\
                           </dd>\
