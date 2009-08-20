@@ -43,11 +43,11 @@ ossi.post = Class.create(ossi.base, {
           $('post_avatar').update('<img src="' + avatar_src + '" width="50" height="50" border="0" />');
           $('post_author_text').update(author_string);
           $('post_updated_text').update(updated_text);
-          var k = '<b>'+json.entry.title+'</b><br /><br />' + self._parseBBCode(json.entry.body);
+          var k = '<b>' + json.entry.title + '</b><br /><br />' + self._parseBBCode(json.entry.body);
           $('post_content').update(k);
           // Show delete, if I'm the poster
-          if( self.options.posterId == self.parent.userId ) {
-             $('post_delete_container_' + self.options.postId).show();
+          if (self.options.posterId == self.parent.userId) {
+            $('post_delete_container_' + self.options.postId).show();
           }
         }
         else {
@@ -106,7 +106,7 @@ ossi.post = Class.create(ossi.base, {
       }
     });
   },
-    
+  
   _getHTML: function(){
     var id = this.options.postId;
     var h = '\
@@ -145,11 +145,17 @@ ossi.post = Class.create(ossi.base, {
     '" class="nav_button_text" href="javascript:void(null);">Previous post</a>\
           		  	</div>\
 				</div>\
-            <div id="post_delete_container_' + id + '"  class="nav_button" style="display: none">\
-          					<a id="post_delete_button_' + id + '" class="nav_button_text" href="javascript:void(null);">Delete Post</a>\
+            <div id="post_delete_container_' +
+    id +
+    '"  class="nav_button" style="display: none">\
+          					<a id="post_delete_button_' +
+    id +
+    '" class="nav_button_text" href="javascript:void(null);">Delete Post</a>\
           				</div>\
               <div class="nav_button">\
-          					<a id="post_back_button_' + id + '" class="nav_button_text" href="javascript:void(null);">Back</a>\
+          					<a id="post_back_button_' +
+    id +
+    '" class="nav_button_text" href="javascript:void(null);">Back</a>\
           				</div>\
           			</div>\
           		';
@@ -189,7 +195,7 @@ ossi.post = Class.create(ossi.base, {
   },
   _previousHandler: function(){
     var self = this;
-    self.parent.stack.push( self.parent.case22.bind(self.parent,self.options) );
+    self.parent.stack.push(self.parent.case22.bind(self.parent, self.options));
     var channel_id = self.options.channelId;
     var post_id = self.options.previous;
     self.parent.case22({
@@ -235,7 +241,7 @@ ossi.post = Class.create(ossi.base, {
     $('post_back_button_' + id).onclick = this._backHandler.bindAsEventListener(this);
     $('post_next_button_' + id).onclick = this._nextHandler.bindAsEventListener(this);
     $('post_previous_button_' + id).onclick = this._previousHandler.bindAsEventListener(this);
-    $('post_delete_button_' + id ).onclick = this._deleteHandler.bindAsEventListener(this);
+    $('post_delete_button_' + id).onclick = this._deleteHandler.bindAsEventListener(this);
   },
   
   _removeListeners: function(){
@@ -256,7 +262,7 @@ ossi.post = Class.create(ossi.base, {
       return
     }
     $('post_delete_button_' + id).onclick = function(){
-     return
+      return
     }
   },
   destroy: function(){
