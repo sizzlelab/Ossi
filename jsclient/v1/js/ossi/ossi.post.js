@@ -22,10 +22,12 @@ ossi.post = Class.create(ossi.base, {
       return; // userId in the parent controller not set
     var self = this;
     // get contents
-    var URL = BASE_URL + '/channels/' + self.options.channelId + '/@messages/' + self.options.postId; // ossi app Id hard-coded
+    var URL = BASE_URL + '/channels/' + self.options.channelId + '/@messages/' + self.options.postId;
+    var params = {event_id: 'Ossi::BrowseChannelList'};
     self.parent.showLoading();
     new Ajax.Request(URL, {
       method: 'get',
+      parameters: params,
       requestHeaders: (client.is_widget) ? ['Cookie', self.parent.sessionCookie] : '',
       onSuccess: function(response){
         self.parent.hideLoading();
@@ -72,8 +74,10 @@ ossi.post = Class.create(ossi.base, {
     var self = this;
     // Get next and previous message ids
     // XXX: Ugly
+    var params = {event_id: 'Ossi::BrowseChannelList'};
     new Ajax.Request(BASE_URL + '/channels/' + self.options.channelId + '/@messages/', {
       method: 'get',
+      parameters : params,
       requestHeaders: (client.is_widget) ? ['Cookie', self.parent.sessionCookie] : '',
       onSuccess: function(response){
         var json = response.responseJSON;
@@ -218,9 +222,11 @@ ossi.post = Class.create(ossi.base, {
     var self = this;
     // get contents
     var URL = BASE_URL + '/channels/' + self.options.channelId + '/@messages/' + self.options.postId;
+    var params = {event_id: 'Ossi::BrowseChannelList'};
     self.parent.showLoading();
     new Ajax.Request(URL, {
       method: 'delete',
+      parameters: params,
       requestHeaders: (client.is_widget) ? ['Cookie', self.parent.sessionCookie] : '',
       onSuccess: function(response){
         self.parent.hideLoading();

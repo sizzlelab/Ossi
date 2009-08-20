@@ -6,18 +6,18 @@ ossi.channel = Class.create(ossi.base, {
     this.parent = parent;
     this.options = Object.extend({
       hostElement: false,
-      groupId : false,
-      channelId : false,
-      selfUpdate : false,
-      wall : false,
-      startIndex : 1,
-      count : 7
+      groupId: false,
+      channelId: false,
+      selfUpdate: false,
+      wall: false,
+      startIndex: 1,
+      count: 7
     }, options);
     this.count = this.options.count;
     this.updateInterval = 20000;
     this.updateOptions = {
-      per_page : 8,
-      page : 1
+      per_page: 8,
+      page: 1
     };
     this.startIndex = this.options.startIndex;
     this.priv = true; // for moderator privilage check
@@ -34,8 +34,12 @@ ossi.channel = Class.create(ossi.base, {
     if (!this.options.wall && typeof(this.parent.userId) == 'undefined') 
       return; // userId in the parent controller not set
     var self = this;
-    var params = { per_page : this.updateOptions.per_page, page : this.updateOptions.page };
-
+    var params = {
+      per_page: this.updateOptions.per_page,
+      page: this.updateOptions.page,
+      event_id: 'Ossi::BrowseChannel'
+    };
+    
     // get contents
     var URL = BASE_URL + '/channels/' + self.options.channelId + '/@messages';
     self.parent.showLoading();
@@ -54,7 +58,8 @@ ossi.channel = Class.create(ossi.base, {
         json.tags != null &&
         json.tags.match('private') == 'private') {
           self.priv = true;
-        } else 
+        }
+        else 
           if ((!Object.isUndefined(self.parent.userId) || !self.options.wall) &&
           self.parent.userRole == 'moderator') {
             self.priv = false;
@@ -66,74 +71,41 @@ ossi.channel = Class.create(ossi.base, {
         //        if (json.owner != null) self.owner = json.owner; // if channel has an owner it is a private channel!
         if (typeof(json.entry) != 'undefined') {
           if (json.entry.length > 0) {
-		        $('channel_nav_bar').show();
+            $('channel_nav_bar').show();
             self._drawContents(json.entry);
             // show second back button at top of screen if more than 5 channels
-            if (self.updateOptions.page > 1) $('channel_back_button_2_container').show(); // show second back button at top of screen if more than 5 channels
-            
-						// by default, show everyhing
-						$('channel_next_button_container').show();
-						$('channel_previous_button_container').show();
-						$('channel_previous_button_container').setStyle({ 'width': '50%' });
-      			$('channel_next_button_container').setStyle({ 'width': '50%' });
-						// no more next, hide nex, set previus big
-						if( self.updateOptions.page * self.updateOptions.per_page >= json.pagination.size ){
-              $('channel_next_button_container').hide();	
+            if (self.updateOptions.page > 1) 
+              $('channel_back_button_2_container').show(); // show second back button at top of screen if more than 5 channels
+            // by default, show everyhing
+            $('channel_next_button_container').show();
+            $('channel_previous_button_container').show();
+            $('channel_previous_button_container').setStyle({ 'width': '50%' });
+            $('channel_next_button_container').setStyle({ 'width': '50%' });
+            // no more next, hide nex, set previus big
+            if (self.updateOptions.page * self.updateOptions.per_page >= json.pagination.size) {
+              $('channel_next_button_container').hide();
               $('channel_previous_button_container').setStyle({ 'width': '100%' });
-						}
-						// if no previous, set next big
+            }
+            // if no previous, set next big
             if (self.updateOptions.page <= 1) {
               $('channel_next_button_container').setStyle({ 'width': '100%' });
               $('channel_previous_button_container').hide();
-            } 
+            }
             // if messages fit in one page, hide whole next/previous
-            if( json.pagination.size <= self.updateOptions.per_page  ) {
-            	 $('channel_nav_bar').hide();
+            if (json.pagination.size <= self.updateOptions.per_page) {
+              $('channel_nav_bar').hide();
             }
-
-
-
-/*
-			
-			      var showNavBar = false;
-            if (options.startIndex + options.count < json.totalResults) {
-              $('channel_next_button_container').show();
-			        showNavBar = true;
-              Element.setStyle($('channel_previous_button_container'), {
-                'width': '50%'
-              });
-            } else {
-              $('channel_next_button_container').hide();
-              Element.setStyle($('channel_previous_button_container'), {
-                'width': '100%'
-              });
-            }
-
-            if (options.startIndex > 1) {
-              $('channel_previous_button_container').show();
-			        showNavBar = true;
-              Element.setStyle($('channel_next_button_container'), {
-                'width': '50%'
-              });
-            } else {
-              $('channel_previous_button_container').hide();
-              Element.setStyle($('channel_next_button_container'), {
-                'width': '100%'
-              });
-            }
-			
-			      if( ! showNavBar ) {
-			        $('channel_nav_bar').hide();
-			      }
-*/			
-          } else {
+          }
+          else {
             $('channel_placeholder').update('<div style="padding:10px; text-align:center">This channel has no posts. Be the first poster by clicking \'Add Post\' below!</div>');
           }
-        } else {
+        }
+        else {
           $('channel_placeholder').update('<div style="padding:10px; text-align:center">Error occurred. Try again later.</div>');
           $('add_post_button_container').hide();
         }
       },
+      // SHOULD NOT HAPPEN
       on404: function(response){ // channel was not found, now creating it
         var userName = (Object.isUndefined(self.parent.userName)) ? 'Anonymous' : self.parent.userName;
         var params = {
@@ -269,7 +241,7 @@ ossi.channel = Class.create(ossi.base, {
     var updated_text = '';
     if (post.updated_at != 'undefined') {
       if (post.updated_at != null) {
-	      updated_text = this.parent.utils.dateToString(post.updated_at);
+        updated_text = this.parent.utils.dateToString(post.updated_at);
       }
     }
     
@@ -285,16 +257,25 @@ ossi.channel = Class.create(ossi.base, {
             				<div class="post_button" id="post_id_' + post.id + '">\
                       <div class="post_button_left_column">\
                       	<img style="margin:2px 0px 0px 2px; border:solid #eee 1px;"\
-                      	src="' + avatar_src + '"\
+                      	src="' +
+      avatar_src +
+      '"\
                       	width="50" height="50" border="0" />\
                       	</div>\
                       <div class="post_button_text">\
-          						  <div class="button_title"><a href="javascript:void(null);">' + message_stub + '</a></div>\
-          						  <div class="button_subtitle_text" style="padding-top:3px">' + author_string + ' ' + updated_text + '</div>\
+          						  <div class="button_title"><a href="javascript:void(null);">' +
+      message_stub +
+      '</a></div>\
+          						  <div class="button_subtitle_text" style="padding-top:3px">' +
+      author_string +
+      ' ' +
+      updated_text +
+      '</div>\
                       </div>\
             				</div>\
             			';
-    } else {
+    }
+    else {
       stripped_message = stripped_message.replace(/<\/?[^>]+(>|$)/g, ""); //clean html-tags away
       stripped_message = stripped_message.replace(/\[quote\].*\[\/quote\]/g, '').replace(/<br \/>/g, '');
       var message_stub = stripped_message.replace(/(ftp|http|https|file):\/\/[\S]+(\b|$)/gim, '<a href="$&" style="text-decoration: underline;" target="_blank">$&</a>').replace(/([^\/])(www[\S]+(\b|$))/gim, '$1<a href="http://$2" style="text-decoration: underline;" target="_blank">$2</a>');
@@ -303,13 +284,21 @@ ossi.channel = Class.create(ossi.base, {
             		<div class="post_wall" id="post_id_' + post.id + '">\
                   <div class="wall_post_button_left_column">\
                   	<img style="margin:2px 0px 0px 2px; border:solid #eee 1px;"\
-                  	src="' + avatar_src + '"\
+                  	src="' +
+      avatar_src +
+      '"\
                   	width="50" height="50" border="0" />\
                   </div>\
                   <div  style="height:55px; float:left;">&nbsp;</div>\
                   <div class="wall_post_button_text">\
-      						  <div class="wall_button_title"><a href="javascript:void(null);">' + message_stub + '</a></div>\
-      						  <div class="wall_button_subtitle_text" style="padding-top:3px">' + author_string + ' , ' + updated_text + '</div>\
+      						  <div class="wall_button_title"><a href="javascript:void(null);">' +
+      message_stub +
+      '</a></div>\
+      						  <div class="wall_button_subtitle_text" style="padding-top:3px">' +
+      author_string +
+      ' , ' +
+      updated_text +
+      '</div>\
                   </div><div style="clear:both;"></div>\
             		</div>\
           			';
@@ -325,42 +314,32 @@ ossi.channel = Class.create(ossi.base, {
     self.parent.case22({
       channelId: channel_id,
       postId: post_id,
-      startIndex: startIndex,
-      backCase: self.parent.case20.bind(self.parent, {
-        out: true,
-        channelId: channel_id,
-        postId: post_id,
-        startIndex: startIndex,
-        backCase: self.parent.case18.bind(self.parent, {
-          out: true,
-          backCase: self.parent.case3.bind(self.parent, {
-            out: true
-          })
-        })
-      })
-    })
+      startIndex: startIndex
+    });
   },
   _loginHandler: function(){
     var self = this;
     self.parent.case2({
       channelId: self.options.channelId,
-      backCase: self.parent.case24.bind(self.parent, {
-        channelId: self.options.channelId,
-        out: true
-      })
     });
   },
   _backHandler: function(){
     this.options.backCase.apply();
   },
   _nextHandler: function(){
-    this.updateOptions = { page : ++this.updateOptions.page, per_page : 8 };
+    this.updateOptions = {
+      page: ++this.updateOptions.page,
+      per_page: 8
+    };
     this.update();
     this._resetInterval(); // reset the interval as we just updated
     this.startIndex += this.count;
   },
   _previousHandler: function(){
-    this.updateOptions = { page : --this.updateOptions.page, per_page : 8  };
+    this.updateOptions = {
+      page: --this.updateOptions.page,
+      per_page: 8
+    };
     this.update();
     this._resetInterval(); // reset the interval as we just updated
     this.startIndex -= this.count;
@@ -370,16 +349,6 @@ ossi.channel = Class.create(ossi.base, {
     self.parent.case21({
       channelId: self.options.channelId,
       priv: (typeof(self.priv) != 'undefined') ? self.priv : false,
-      backCase: self.parent.case20.bind(self.parent, {
-        channelId: self.options.channelId,
-        out: true,
-        backCase: self.parent.case18.bind(self.parent, {
-          out: true,
-          backCase: self.parent.case3.bind(self.parent, {
-            out: true
-          })
-        })
-      })
     });
   },
   _deleteHandler: function(){

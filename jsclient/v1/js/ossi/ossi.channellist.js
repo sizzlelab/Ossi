@@ -34,7 +34,8 @@ ossi.channellist = Class.create(ossi.base, {
     var URL = BASE_URL + '/channels';
     var params = {
       per_page: this.updateOptions.per_page,
-      page: this.updateOptions.page
+      page: this.updateOptions.page,
+      event_id: 'Ossi::BrowseChannelList'
     };
     if (self.options.groupId != false) 
       params.group_id = self.options.groupId;
