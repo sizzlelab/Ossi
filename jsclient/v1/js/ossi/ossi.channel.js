@@ -51,17 +51,10 @@ ossi.channel = Class.create(ossi.base, {
         self.parent.hideLoading();
         var json = response.responseJSON;
         
-        //for moderator privilege check. there must be a userId - also now wall view, atm
-        if ((!Object.isUndefined(self.parent.userId) || !self.options.wall) &&
-        self.parent.userRole == 'moderator' &&
-        json.tags != null &&
-        json.tags.match('private') == 'private') {
-          self.priv = true;
+        if ((!Object.isUndefined(self.parent.userId) || !self.options.wall)) {
+          self._setModeratorHTML();
         }
-        else 
-          if ((!Object.isUndefined(self.parent.userId) || !self.options.wall)) {
-            self._setModeratorHTML();
-          }
+        
         if (json.priv != null) 
           self.priv = json.priv; // if channel has an owner it is a private channel!
         //        if (json.owner != null) self.owner = json.owner; // if channel has an owner it is a private channel!
@@ -109,47 +102,9 @@ ossi.channel = Class.create(ossi.base, {
           $('add_post_button_container').hide();
         }
       },
-      // SHOULD NOT HAPPEN
-      on404: function(response){ // channel was not found, now creating it
-        var userName = (Object.isUndefined(self.parent.userName)) ? 'Anonymous' : self.parent.userName;
-        var params = {
-          owner: self.parent.userId,
-          title: self.options.channelId,
-          id: self.options.channelId,
-          tags: 'channel',
-          'metadata[creator]': userName
-        };
-        var URL = BASE_URL + '/appdata/cWslSQyIyr3yiraaWPEYjL/@collections/'; // ossi app id hard coded
-        self.parent.showLoading();
-        new Ajax.Request(URL, {
-          method: 'post',
-          requestHeaders: (client.is_widget) ? ['Cookie', self.parent.sessionCookie] : '',
-          parameters: params,
-          onSuccess: function(response){ // now post the new channel's collection ID and title to channel list collection
-            params = {
-              content_type: 'collection',
-              collection_id: self.options.channelId
-            };
-            URL = BASE_URL + '/appdata/cWslSQyIyr3yiraaWPEYjL/@collections/' + self.parent.channelsId; // ossi app Id hard-coded
-            new Ajax.Request(URL, {
-              method: 'post',
-              requestHeaders: (client.is_widget) ? ['Cookie', self.parent.sessionCookie] : '',
-              parameters: params,
-              onSuccess: function(response){
-                self.parent.hideLoading();
-                self.update();
-              },
-              onFailure: function(response){
-                self.parent.hideLoading();
-                alert('Could not add channel to channel list');
-              }
-            });
-          },
-          onFailure: function(response){
-            self.parent.hideLoading();
-            alert('Could not create channel!');
-          }
-        });
+      on404: function(response){
+        // Channel not found
+        // FIXME: define action
       }
     });
   },
