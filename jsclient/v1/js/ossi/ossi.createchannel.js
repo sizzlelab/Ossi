@@ -40,7 +40,7 @@ ossi.createchannel = Class.create(ossi.base,{
                     </div>\
             				<div style="height:14px"></div>\
             				<div class="nav_button" id="create_group_channel_container" style="display:none">\
-            					<a id="create_channel_create_public_button" class="nav_button_text" href="javascript:void(null);">Create Group Channel</a>\
+            					<a id="create_channel_create_group_button" class="nav_button_text" href="javascript:void(null);">Create Group Channel</a>\
             				</div>\
             				<div class="nav_button" id="create_public_channel_container">\
             					<a id="create_channel_create_public_button" class="nav_button_text" href="javascript:void(null);">Create Public Channel</a>\
@@ -115,11 +115,13 @@ ossi.createchannel = Class.create(ossi.base,{
     });
   },
   _addListeners: function() {
+    $('create_channel_create_group_button').onclick = this._createHandler.bindAsEventListener(this,{'priv':false});
     $('create_channel_create_public_button').onclick = this._createHandler.bindAsEventListener(this,{'priv':false});
     $('create_channel_create_private_button').onclick = this._createHandler.bindAsEventListener(this,{'priv':true});
     $('create_channel_back_button').onclick = this._backHandler.bindAsEventListener(this);
   },
   _removeListeners: function() {
+    $('create_channel_create_group_button').onclick = function() { return };
     $('create_channel_create_public_button').onclick = function() { return };
     $('create_channel_create_private_button').onclick = function() { return };
     $('create_channel_back_button').onclick = function() { return };
