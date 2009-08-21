@@ -272,7 +272,6 @@ ossi.main = Class.create(ossi.base,{
 	* main screen
 	*/
 	case3: function(options) {
-    console.log(this.stack);
 		var options = Object.extend({
       out : false,
       backCase : false
@@ -315,7 +314,6 @@ ossi.main = Class.create(ossi.base,{
 	* about screen
 	*/
 	case4: function(options) {
-    console.log(this.stack);
 		var options = Object.extend({
       backCase : false
 	  },options);

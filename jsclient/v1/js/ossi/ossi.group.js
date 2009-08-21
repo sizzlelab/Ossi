@@ -28,33 +28,26 @@ ossi.group = Class.create(ossi.base, {
         json = json.entry;
         
         // title
-        if (!Object.isUndefined(json.title)) 
-          $('view_group_title').update(json.title);
-        else 
-          $('view_group_title').update('N/A');
+        if (!Object.isUndefined(json.title)) $('view_group_title').update(json.title);
+        else $('view_group_title').update('N/A');
         
         // description
-        if (!Object.isUndefined(json.description)) 
-          $('view_group_description').update(json.description);
-        else 
-          $('view_group_description').update('N/A');
+        if (!Object.isUndefined(json.description)) $('view_group_description').update(json.description);
+        else $('view_group_description').update('N/A');
         
         // type
-        if (!Object.isUndefined(json.group_type)) 
-          $('view_group_type').update(json.group_type + ' group');
-        else 
-          $('view_group_type').update('N/A');
+        if (!Object.isUndefined(json.group_type)) $('view_group_type').update(json.group_type + ' group');
+        else $('view_group_type').update('N/A');
         
         if (json.is_member) {
           $('leave_button_container').show();
           $('join_button_container').hide();
-        }
-        else {
-          if (json.group_type != 'closed') 
-            $('join_button_container').show();
+        } else {
+          if (json.group_type != 'closed') $('join_button_container').show();
           $('leave_button_container').hide();
         }
         
+        /*
         // now check if group has channels and display channels button accordingly
         URL = BASE_URL + '/channels?group_id=' + self.options.groupId;
         new Ajax.Request(URL, {
@@ -67,6 +60,7 @@ ossi.group = Class.create(ossi.base, {
             }
           }
         });
+        */
         
         setTimeout(function(){
           self.parent.hideLoading();
@@ -82,8 +76,7 @@ ossi.group = Class.create(ossi.base, {
       this.options.hostElement.insert(this._getHTML());
       this._addListeners();
       this.pane = $('grouppane');
-    }
-    else {
+    } else {
       alert('ossi.group._draw() failed! this.options.hostElement not defined!');
     }
   },
@@ -108,7 +101,7 @@ ossi.group = Class.create(ossi.base, {
             				<div class="nav_button">\
             					<a id="members_button" class="nav_button_text" href="javascript:void(null);">Members</a>\
             				</div>\
-            				<div id="group_channels_button_container" class="nav_button" style="display:none">\
+            				<div id="group_channels_button_container" class="nav_button">\
             					<a id="group_channels_button" class="nav_button_text" href="javascript:void(null);">Group\'s Sizzle</a>\
             				</div>\
             				<div class="nav_button">\
