@@ -20,7 +20,6 @@ ossi.channel = Class.create(ossi.base, {
       page: 1
     };
     this.startIndex = this.options.startIndex;
-    this.priv = true; // for moderator privilage check
     this.pane = false;
     this._draw();
     this._resetInterval(); // this resets the intervalled update call, if selfUpdate is enabled
@@ -60,11 +59,8 @@ ossi.channel = Class.create(ossi.base, {
           self.priv = true;
         }
         else 
-          if ((!Object.isUndefined(self.parent.userId) || !self.options.wall) &&
-          self.parent.userRole == 'moderator') {
-            self.priv = false;
+          if ((!Object.isUndefined(self.parent.userId) || !self.options.wall)) {
             self._setModeratorHTML();
-            self._addModeListeners();
           }
         if (json.priv != null) 
           self.priv = json.priv; // if channel has an owner it is a private channel!
@@ -79,16 +75,24 @@ ossi.channel = Class.create(ossi.base, {
             // by default, show everyhing
             $('channel_next_button_container').show();
             $('channel_previous_button_container').show();
-            $('channel_previous_button_container').setStyle({ 'width': '50%' });
-            $('channel_next_button_container').setStyle({ 'width': '50%' });
+            $('channel_previous_button_container').setStyle({
+              'width': '50%'
+            });
+            $('channel_next_button_container').setStyle({
+              'width': '50%'
+            });
             // no more next, hide nex, set previus big
             if (self.updateOptions.page * self.updateOptions.per_page >= json.pagination.size) {
               $('channel_next_button_container').hide();
-              $('channel_previous_button_container').setStyle({ 'width': '100%' });
+              $('channel_previous_button_container').setStyle({
+                'width': '100%'
+              });
             }
             // if no previous, set next big
             if (self.updateOptions.page <= 1) {
-              $('channel_next_button_container').setStyle({ 'width': '100%' });
+              $('channel_next_button_container').setStyle({
+                'width': '100%'
+              });
               $('channel_previous_button_container').hide();
             }
             // if messages fit in one page, hide whole next/previous
@@ -169,19 +173,25 @@ ossi.channel = Class.create(ossi.base, {
     }
   },
   _setModeratorHTML: function(){
-    var m = '';
-    //moderator privileges
-    if (this.parent.userRole == 'moderator' && this.priv != true) {
-      m = '<div id="moderator_placeholder"><div class="nav_button">\
-                <a id="channel_allow_delete_button" class="nav_button_text" href="javascript:void(null);">Delete this channel</a>\
+    var self = this;
+    var URL = BASE_URL + '/channels/' + self.options.channelId;
+    new Ajax.Request(URL, {
+      method: 'get',
+      requestHeaders: (client.is_widget) ? ['Cookie', self.parent.sessionCookie] : '',
+      onSuccess: function(response){
+        response = response.responseJSON;
+        var m = '';
+        //moderator privileges
+        if (self.parent.userId == response.entry.owner_id) {
+          m = '<div id="moderator_placeholder"><div class="nav_button">\
+                <a id="channel_delete_button" class="nav_button_text" href="javascript:void(null);">Delete this channel</a>\
         </div>\
-        <div class="nav_button" id="channel_delete_channel" style="visibility: hidden;">\
-                <a id="channel_delete_button" class="nav_button_text" href="javascript:void(null);">Delete for good.</a>\
-        </div></div>\
         ';
-    }
-    $('moderator_placeholder').replace(m);
-    // return m;
+        }
+        $('moderator_placeholder').replace(m);
+        self._addModeListeners();
+      }
+    });
   },
   
   _getHTML: function(){
@@ -357,7 +367,7 @@ ossi.channel = Class.create(ossi.base, {
     var self = this;
     
     // get contents
-    var URL = BASE_URL + '/appdata/cWslSQyIyr3yiraaWPEYjL/@collections/' + self.options.channelId; // this page. ossi app Id hard-coded
+    var URL = BASE_URL + '/channels/' + self.options.channelId; // this page. ossi app Id hard-coded
     self.parent.showLoading();
     new Ajax.Request(URL, {
       method: 'delete',
