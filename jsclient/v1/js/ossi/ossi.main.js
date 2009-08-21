@@ -126,9 +126,8 @@ ossi.main = Class.create(ossi.base,{
 	/**
 	* reset stack
 	*/
-	stackReset: function(current) {
-    if (! Object.isUndefined(current)) this.stack = [current];
-	  else this.stack = [];
+	stackReset: function() {
+    this.stack = [];
 	},
 		/**
 	* application start
@@ -273,6 +272,7 @@ ossi.main = Class.create(ossi.base,{
 	* main screen
 	*/
 	case3: function(options) {
+    console.log(this.stack);
 		var options = Object.extend({
       out : false,
       backCase : false
@@ -315,6 +315,7 @@ ossi.main = Class.create(ossi.base,{
 	* about screen
 	*/
 	case4: function(options) {
+    console.log(this.stack);
 		var options = Object.extend({
       backCase : false
 	  },options);
@@ -330,7 +331,7 @@ ossi.main = Class.create(ossi.base,{
     this.sub2 = this.sub1;
     this.sub1 = new ossi.about(this, {
       'hostElement' : this.mainElement,
-      'backCase' : this.stack[this.stack.length-2]
+      'backCase' : this.stack[0]
     });
 
     this.utils.into(this.sub2.pane,this.sub1.pane,function() {
@@ -784,6 +785,7 @@ ossi.main = Class.create(ossi.base,{
 	case19: function(options) {
 		var options = Object.extend({
       out : false,
+      groupId : false,
       backCase : false
 	  },options);
 
@@ -797,6 +799,7 @@ ossi.main = Class.create(ossi.base,{
 
     this.sub2 = this.sub1;
     this.sub1 = new ossi.createchannel(this, {
+      'groupId' : options.groupId,
       'hostElement' : this.mainElement,
       'backCase' : this.stack[this.stack.length-2]
     });

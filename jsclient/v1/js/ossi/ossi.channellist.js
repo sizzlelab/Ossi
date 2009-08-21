@@ -16,8 +16,8 @@ ossi.channellist = Class.create(ossi.base, {
     };
     this.pane = false;
     this._draw();
-    if (this.options.groupId != false) 
-      $('create_channel_button_container').hide();
+//    if (this.options.groupId != false) 
+//      $('create_channel_button_container').hide();
     this._resetInterval(); // this resets the intervalled update call, if selfUpdate is enabled
   },
   /**
@@ -207,6 +207,7 @@ ossi.channellist = Class.create(ossi.base, {
   _createChannelHandler: function(){
     var self = this;
     self.parent.case19({
+      groupId : self.options.groupId,
       backCase: self.parent.case18.bind(self.parent, {
         out: true,
         backCase: self.parent.case3.bind(self.parent, {

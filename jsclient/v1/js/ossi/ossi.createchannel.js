@@ -5,6 +5,7 @@ ossi.createchannel = Class.create(ossi.base,{
 	initialize: function(parent,options) {
     this.parent = parent;
 		this.options = Object.extend({
+      groupId: false,
       hostElement : false
 	  },options);
 	  this.pane = false;
@@ -15,6 +16,11 @@ ossi.createchannel = Class.create(ossi.base,{
       this.options.hostElement.insert(this._getHTML());
       this._addListeners();
       this.pane = $('createchannelpane');
+      if (this.options.groupId != false) {
+        $('create_public_channel_container').hide();
+        $('create_friends_channel_container').hide();
+        $('create_group_channel_container').show();
+      }
       setTimeout(function() { $('create_channel_form').focusFirstElement() },500); // .delay() did not seem to work on Firefox
     } else {
       alert('ossi.createchannel._draw() failed! this.options.hostElement not defined!');
@@ -33,10 +39,13 @@ ossi.createchannel = Class.create(ossi.base,{
                       </dl>\
                     </div>\
             				<div style="height:14px"></div>\
-            				<div class="nav_button">\
+            				<div class="nav_button" id="create_group_channel_container" style="display:none">\
+            					<a id="create_channel_create_public_button" class="nav_button_text" href="javascript:void(null);">Create Group Channel</a>\
+            				</div>\
+            				<div class="nav_button" id="create_public_channel_container">\
             					<a id="create_channel_create_public_button" class="nav_button_text" href="javascript:void(null);">Create Public Channel</a>\
             				</div>\
-            				<div class="nav_button">\
+            				<div class="nav_button" id="create_friends_channel_container">\
             					<a id="create_channel_create_private_button" class="nav_button_text" href="javascript:void(null);">Create Friends Only Channel</a>\
             				</div>\
             				<div class="nav_button">\
@@ -58,15 +67,25 @@ ossi.createchannel = Class.create(ossi.base,{
     if (typeof(this.parent.userId) == 'undefined') return; // userId in the parent controller not set
     if (typeof(this.parent.channelsId) == 'undefined') return; // userId in the parent controller not set
     var userName = (typeof(self.parent.userName) != 'undefined') ? self.parent.userName : 'N/A'; 
-    var params = options.priv ? { 
-      'channel[channel_type]' : 'friend',
-      'channel[name]' : $F('channel_name'), 
-      'channel[description]' : $F('channel_description')
-    } : { 
-      'channel[channel_type]' : 'public', 
-      'channel[name]' : $F('channel_name'), 
-      'channel[description]' : $F('channel_description')
-    };
+    var params = {};
+    if (self.options.groupId != false) {
+      params = { 
+        'channel[channel_type]' : 'group',
+        'channel[group_id]' : self.options.groupId,
+        'channel[name]' : $F('channel_name'), 
+        'channel[description]' : $F('channel_description')
+      }      
+    } else {
+      params = options.priv ? { 
+        'channel[channel_type]' : 'friend',
+        'channel[name]' : $F('channel_name'), 
+        'channel[description]' : $F('channel_description')
+      } : { 
+        'channel[channel_type]' : 'public', 
+        'channel[name]' : $F('channel_name'), 
+        'channel[description]' : $F('channel_description')
+      };
+    }
     var URL = BASE_URL+'/channels';
     self.parent.showLoading();
     new Ajax.Request(URL,{
