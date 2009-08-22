@@ -29,7 +29,7 @@ ossi.channellist = Class.create(ossi.base, {
     if (typeof(this.parent.userId) == 'undefined') 
       return; // userId in the parent controller not set
     var self = this;
-    
+    console.log( this.updateOptions );
     // get channels
     var URL = BASE_URL + '/channels';
     var params = {
@@ -208,12 +208,6 @@ ossi.channellist = Class.create(ossi.base, {
     var self = this;
     self.parent.case19({
       groupId : self.options.groupId,
-      backCase: self.parent.case18.bind(self.parent, {
-        out: true,
-        backCase: self.parent.case3.bind(self.parent, {
-          out: true
-        })
-      })
     });
   },
   _openChannelHandler: function(event, button_id){
@@ -222,13 +216,6 @@ ossi.channellist = Class.create(ossi.base, {
     self.parent.case20({
       channelId: channel_id,
       groupId: self.options.groupId,
-      backCase: self.parent.case18.bind(self.parent, {
-        groupId: self.options.groupId,
-        out: true,
-        backCase: self.parent.case3.bind(self.parent, {
-          out: true
-        })
-      })
     });
   },
   _nextHandler: function(){
@@ -260,12 +247,6 @@ ossi.channellist = Class.create(ossi.base, {
     this.parent.case6({
       message: m,
       buttonText: "Back",
-      backCase: this.parent.case18.bind(this.parent, {
-        out: true,
-        backCase: this.parent.case3.bind(this.parent, {
-          out: true
-        })
-      })
     });
   },
   _addListeners: function(){
