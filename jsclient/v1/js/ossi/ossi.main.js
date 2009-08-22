@@ -237,6 +237,10 @@ ossi.main = Class.create(ossi.base,{
 	      start : false
 		  },options);
     
+    // Add this item to stack
+    this.mainElement.update();
+    this.stack.push(this.case2.bind(this,options));
+    
 	    if (options.start) { // login without effects (first time)
 			if (options.channelId) {
 				this.sub1 = new ossi.login(this, {	'hostElement' : this.mainElement,
@@ -316,20 +320,20 @@ ossi.main = Class.create(ossi.base,{
 	case4: function(options) {
 		var options = Object.extend({
       backCase : false
-	  },options);
+	  },options)
 
     // manage stack
     if (options.out) this.stack.pop();
     else {
-      var opt = Object.clone(options);
-      opt.out = true;
-      this.stack.push(this.case4.bind(this,opt));
+     var opt = Object.clone(options);
+     opt.out = true;
+     this.stack.push(this.case4.bind(this, opt));
     }
 
     this.sub2 = this.sub1;
     this.sub1 = new ossi.about(this, {
       'hostElement' : this.mainElement,
-      'backCase' : this.stack[0]
+      'backCase' : this.stack[this.stack.length-2]
     });
 
     this.utils.into(this.sub2.pane,this.sub1.pane,function() {
