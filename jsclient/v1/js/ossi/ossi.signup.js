@@ -1,26 +1,27 @@
 /**
-* ossi signup class
-*/
-ossi.signup = Class.create(ossi.base,{
-	initialize: function(parent,options) {
+ * ossi signup class
+ */
+ossi.signup = Class.create(ossi.base, {
+  initialize: function(parent, options){
     this.parent = parent;
-		this.options = Object.extend({
-      hostElement : false
-	  },options);
-	  this.pane = false;
+    this.options = Object.extend({
+      hostElement: false
+    }, options);
+    this.pane = false;
     this._draw();
-	},
-  _draw: function() {
+  },
+  _draw: function(){
     if (this.options.hostElement) {
       this.options.hostElement.insert(this._getHTML());
       this._addListeners();
       this.pane = $('signuppane');
-    } else {
+    }
+    else {
       alert('ossi.signup._draw() failed! this.options.hostElement not defined!');
     }
   },
-  _getHTML: function() {
-    var h =   '\
+  _getHTML: function(){
+    var h = '\
           			<div id="signuppane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
                   <form>\
             				<div style="height:33px; text-align:center; padding-top:20px;">\
@@ -54,7 +55,7 @@ ossi.signup = Class.create(ossi.base,{
           		';
     return h;
   },
-  _doneHandler: function() {
+  _doneHandler: function(){
     var self = this;
     var u = $F('signup_username');
     var e = $F('signup_email');
@@ -64,75 +65,67 @@ ossi.signup = Class.create(ossi.base,{
       alert('passwords do not match!')
       return;
     }
-
+    
     //19.1.2009 ADDED CONSENT parameter.
-    var params =  { 'person[username]' : u,
-                    'person[password]' : p,
-                    'person[email]' : e,
-		                'person[consent]' : 'EN1.0'
-                  };
+    var params = {
+      'person[username]': u,
+      'person[password]': p,
+      'person[email]': e,
+      'person[consent]': 'EN1.0'
+    };
     self.parent.showLoading();
-    new Ajax.Request(BASE_URL+'/people', {
-      method : 'post',
-      parameters : params,
-      requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
-      onSuccess : function(response) { // will probably have to save cookie here as well... check!
+    new Ajax.Request(BASE_URL + '/people', {
+      method: 'post',
+      parameters: params,
+      requestHeaders: (client.is_widget) ? ['Cookie', self.parent.sessionCookie] : '',
+      onSuccess: function(response){ // will probably have to save cookie here as well... check!
         var json = response.responseJSON;
         self.parent.hideLoading();
-        self.parent.userId = json.id;
+        self.parent.userId = json.entry.id;
         self.parent.case3();
       },
-      onFailure : function(response) {
+      onFailure: function(response){
         var reasons = response.responseJSON;
         var reason_string = '';
-								// Might change?
-								// TODO FIXME
-        reasons.messages.each( function(error){
+        // Might change?
+        // TODO FIXME
+        reasons.messages.each(function(error){
           reason_string += error + " ";
-        }, self );
+        }, self);
         self.parent.hideLoading();
         self.parent.case6({
-          backCase : self.parent.case5.bind(self.parent,{
-            out:true,
-            backCase:self.parent.case2.bind(self.parent,{out:true}) // tells back button to go back to login screen
-          }),
-          message : "Could not create user. Reasons: "+reason_string,
-          buttonText : "Try again"
+          message: "Could not create user. Reasons: " + reason_string,
+          buttonText: "Try again"
         });
       },
-      on401 : function() {
+      on401: function(){
         self.parent.hideLoading();
         self.parent.case6({
-          backCase : self.parent.case5.bind(self.parent,{
-            out:true,
-            backCase:self.parent.case2.bind(self.parent,{out:true}) // tells back button to go back to login screen
-          }),
-          message : "Could not create user. Reason: "+reason_string,
-          buttonText : "Try again"
+          message: "Could not create user. Reason: " + reason_string,
+          buttonText: "Try again"
         });
       }
     });
   },
-  _cancelHandler: function() {
+  _cancelHandler: function(){
     this.options.backCase.apply();
   },
-  _termsHandler: function() {
-    this.parent.case15({
-      backCase : this.parent.case5.bind(this.parent,{
-        out:true,
-        backCase:this.parent.case2.bind(this.parent,{out:true}) // tells back button to go back to login screen
-      })
-    });
+  _termsHandler: function(){
+    this.parent.case15({});
   },
-  _addListeners: function() {
+  _addListeners: function(){
     $('done_button').onclick = this._doneHandler.bindAsEventListener(this);
     $('cancel_button').onclick = this._cancelHandler.bindAsEventListener(this);
   },
-  _removeListeners: function() {
-    $('done_button').onclick = function() { return }
-    $('cancel_button').onclick = function() { return }
+  _removeListeners: function(){
+    $('done_button').onclick = function(){
+      return
+    }
+    $('cancel_button').onclick = function(){
+      return
+    }
   },
-  destroy: function () {
+  destroy: function(){
     this._removeListeners();
     this.pane.remove();
   }
