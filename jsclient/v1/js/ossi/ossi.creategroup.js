@@ -70,15 +70,15 @@ ossi.creategroup = Class.create(ossi.base, {
       method: 'post',
       requestHeaders: (client.is_widget) ? ['Cookie', self.parent.sessionCookie] : '',
       parameters: params,
-      onSuccess: function(response){ // now post the new group's collection ID and title to group list collection
+      onSuccess: function(response) { // now post the new group's collection ID and title to group list collection
         self.parent.hideLoading();
         self.parent.stack.pop();
         self.parent.case6({
           message: "Group created!",
-          buttonText: "Back to group list",
+          buttonText: "Back to group list"
         });
       },
-      onFailure: function(response){
+      onFailure: function(response) {
         var json = response.responseJSON;
         var reason_string = '';
         json.messages.each(function(error){
@@ -87,7 +87,7 @@ ossi.creategroup = Class.create(ossi.base, {
         self.parent.hideLoading();
         self.parent.case6({
           message: "Could not create group: " + reason_string + "<br /><br>If this problem persist, please please post a comment on Ossi's \"Features & Bugs\" channel, or email us at <a href=\"mailto:otasizzle-helpdesk@hiit.fi\">otasizzle-helpdesk@hiit.fi</a>.</p>",
-          buttonText: "Try again",
+          buttonText: "Try again"
         });
       }
     });

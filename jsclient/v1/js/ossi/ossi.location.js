@@ -24,6 +24,7 @@ ossi.location = Class.create(ossi.base,{
 	* update device location
 	*/
 	update: function() {
+    var self = this;
 	  if (this.unavailable) return false;
 	  
     // Obtain the location information (synchronous, so will block device momentarily)
@@ -35,24 +36,35 @@ ossi.location = Class.create(ossi.base,{
       longitude : result.ReturnValue.Longitude,
       datetime : new Date().toUTCString()
     };
-
-    // send location to server
-    var self = this;
-    var URL = BASE_URL+'/people/'+this.parent.userId+'/@location';
-    var params =  { 
-      'location[latitude]' : self.parent.location.latitude,
-      'location[longitude]' : self.parent.location.longitude
-    };
-    new Ajax.Request(URL, {
-      method : 'put',
+    
+    // get OpenStreetMap semantic location from OpenNetMap server
+    var ONM_API_URL = 'http://fi.opennetmap.org/api/';
+    var params = {
+      'operation' : 'get_osm',
+      'lat' : this.parent.location.latitude,
+      'lon' : this.parent.location.longitude
+    }
+      
+    new Ajax.Request(ONM_API_URL, {
+      method : 'get',
       parameters : params,
-      requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : ''
+      onSuccess : function(response) { // now post the new channel's collection ID and title to channel list collection
+        alert(response);
+
+        // send location to ASI
+        var URL = BASE_URL+'/people/'+this.parent.userId+'/@location';
+        var params =  { 
+          'location[latitude]' : self.parent.location.latitude,
+          'location[longitude]' : self.parent.location.longitude
+        };
+        new Ajax.Request(URL, {
+          method : 'put',
+          parameters : params,
+          requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : ''
+        });
+      }
     });
   },
   destroy: function () {
   }
 });
-
-
-
-
