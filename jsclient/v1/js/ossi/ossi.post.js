@@ -49,6 +49,8 @@ ossi.post = Class.create(ossi.base, {
           $('post_content').update(k);
           // Show delete, if I'm the poster
           if (self.options.posterId == self.parent.userId) {
+            console.log(self.options.posterId);
+            console.log(self.parent.userId);
             $('post_delete_container_' + self.options.postId).show();
           }
         }
@@ -124,42 +126,24 @@ ossi.post = Class.create(ossi.base, {
                   </div>\
                   <div id="post_content"></div>\
           				<div class="nav_button">\
-          					<a id="post_reply_button_' +
-    id +
-    '" class="nav_button_text" href="javascript:void(null);">Reply</a>\
+          					<a id="post_reply_button_' + id + '" class="nav_button_text" href="javascript:void(null);">Reply</a>\
           				</div>\
           				<div id="post_profile_button_container" class="nav_button" style="">\
-          					<a id="post_profile_button_' +
-    id +
-    '" class="nav_button_text" href="javascript:void(null);">See profile</a>\
+          					<a id="post_profile_button_' + id + '" class="nav_button_text" href="javascript:void(null);">See profile</a>\
           				</div>\
-              <div id="post_nav_bar" class="nav_button" style="top: -1px; position: relative;">\
-    		  	      <div id="post_next_button_container_' +
-    id +
-    '" class="nav_button next_button" style="display:none">\
-          				    <a id="post_next_button_' +
-    id +
-    '" class="nav_button_text" href="javascript:void(null);">Next post</a>\
+                  <div id="post_nav_bar" class="nav_button" style="top: -1px; position: relative;">\
+    		  	      <div id="post_next_button_container_' + id + '" class="nav_button next_button" style="display:none">\
+        				    <a id="post_next_button_' + id + '" class="nav_button_text" href="javascript:void(null);">Next post</a>\
           		  	</div>\
-          		  	<div id="post_previous_button_container_' +
-    id +
-    '" class="nav_button previous_button" style="display:none">\
-          				     <a id="post_previous_button_' +
-    id +
-    '" class="nav_button_text" href="javascript:void(null);">Previous post</a>\
+          		  	<div id="post_previous_button_container_' + id + '" class="nav_button previous_button" style="display:none">\
+        				     <a id="post_previous_button_' + id + '" class="nav_button_text" href="javascript:void(null);">Previous post</a>\
           		  	</div>\
-				</div>\
-            <div id="post_delete_container_' +
-    id +
-    '"  class="nav_button" style="display: none">\
-          					<a id="post_delete_button_' +
-    id +
-    '" class="nav_button_text" href="javascript:void(null);">Delete Post</a>\
+				          </div>\
+                    <div id="post_delete_container_' + id + '"  class="nav_button" style="display: none">\
+          					<a id="post_delete_button_' + id + '" class="nav_button_text" href="javascript:void(null);">Delete Post</a>\
           				</div>\
-              <div class="nav_button">\
-          					<a id="post_back_button_' +
-    id +
-    '" class="nav_button_text" href="javascript:void(null);">Back</a>\
+                  <div class="nav_button">\
+          					<a id="post_back_button_' + id + '" class="nav_button_text" href="javascript:void(null);">Back</a>\
           				</div>\
           			</div>\
           		';
@@ -252,24 +236,12 @@ ossi.post = Class.create(ossi.base, {
   
   _removeListeners: function(){
     var id = this.options.postId;
-    $('post_reply_button_' + id).onclick = function(){
-      return
-    }
-    $('post_back_button_' + id).onclick = function(){
-      return
-    }
-    $('post_profile_button_' + id).onclick = function(){
-      return
-    }
-    $('post_next_button_' + id).onclick = function(){
-      return
-    }
-    $('post_previous_button_' + id).onclick = function(){
-      return
-    }
-    $('post_delete_button_' + id).onclick = function(){
-      return
-    }
+    $('post_reply_button_' + id).onclick = function() { return }
+    $('post_back_button_' + id).onclick = function(){ return }
+    $('post_profile_button_' + id).onclick = function(){ return }
+    $('post_next_button_' + id).onclick = function(){ return }
+    $('post_previous_button_' + id).onclick = function(){ return }
+    $('post_delete_button_' + id).onclick = function(){ return }
   },
   destroy: function(){
     this._removeListeners();
