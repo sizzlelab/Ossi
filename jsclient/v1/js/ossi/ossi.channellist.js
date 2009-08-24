@@ -29,7 +29,6 @@ ossi.channellist = Class.create(ossi.base, {
     if (typeof(this.parent.userId) == 'undefined') 
       return; // userId in the parent controller not set
     var self = this;
-    console.log( this.updateOptions );
     // get channels
     var URL = BASE_URL + '/channels';
     var params = {
@@ -207,7 +206,7 @@ ossi.channellist = Class.create(ossi.base, {
   _createChannelHandler: function(){
     var self = this;
     self.parent.case19({
-      groupId : self.options.groupId,
+      groupId : self.options.groupId
     });
   },
   _openChannelHandler: function(event, button_id){
@@ -215,7 +214,7 @@ ossi.channellist = Class.create(ossi.base, {
     var channel_id = button_id.replace("channel_id_", "");
     self.parent.case20({
       channelId: channel_id,
-      groupId: self.options.groupId,
+      groupId: self.options.groupId
     });
   },
   _nextHandler: function(){
@@ -246,7 +245,7 @@ ossi.channellist = Class.create(ossi.base, {
     ';
     this.parent.case6({
       message: m,
-      buttonText: "Back",
+      buttonText: "Back"
     });
   },
   _addListeners: function(){
