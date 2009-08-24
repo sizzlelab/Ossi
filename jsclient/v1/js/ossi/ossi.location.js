@@ -15,8 +15,9 @@ ossi.location = Class.create(ossi.base,{
         alert("Service object cannot be found.");
       }
     }
-    this.criteria = new Object();
-    this.criteria.LocationInformationClass = "BasicLocationInformation";
+    this.criteria = {
+      LocationInformationClass : "BasicLocationInformation"
+    }
 	},
 	/**
 	* update
@@ -24,6 +25,7 @@ ossi.location = Class.create(ossi.base,{
 	* update device location
 	*/
 	update: function() {
+
     var self = this;
 	  if (this.unavailable) return false;
 	  
@@ -48,15 +50,31 @@ ossi.location = Class.create(ossi.base,{
     new Ajax.Request(ONM_API_URL, {
       method : 'get',
       parameters : params,
+      evalJSON : 'force',
       onSuccess : function(response) { // now post the new channel's collection ID and title to channel list collection
-        alert(response);
+        var json = response.responseJSON;
+        json.geojson.features.each(function(feature) {
+          if (feature.properties.name != null && feature.properties.name.length > 0) {
+            self.parent.location.label = feature.properties.name;
+            throw $break;
+          }
+        });
 
         // send location to ASI
-        var URL = BASE_URL+'/people/'+this.parent.userId+'/@location';
-        var params =  { 
-          'location[latitude]' : self.parent.location.latitude,
-          'location[longitude]' : self.parent.location.longitude
-        };
+        var URL = BASE_URL + '/people/@me/@location';
+        var params =  {};
+        if (! Object.isUndefined(self.parent.location.label)) {
+          params = {
+            'location[latitude]' : self.parent.location.latitude,
+            'location[longitude]' : self.parent.location.longitude,
+            'location[label]' : self.parent.location.label
+          };
+        } else {
+          params = {
+            'location[latitude]' : self.parent.location.latitude,
+            'location[longitude]' : self.parent.location.longitude
+          };
+        }
         new Ajax.Request(URL, {
           method : 'put',
           parameters : params,
@@ -64,6 +82,22 @@ ossi.location = Class.create(ossi.base,{
         });
       }
     });
+  },
+  run: function(interval) {
+    var interval = Object.isUndefined(interval) ? 60 : interval;
+    var self = this;
+    self.running = true;
+//    self.update();
+    new PeriodicalExecuter(function(pe) {
+      if (! self.running) { 
+        pe.stop();
+        return;
+      }
+      self.update();
+    }, interval);
+  },
+  stop: function() {
+    this.running = false;
   },
   destroy: function () {
   }

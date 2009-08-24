@@ -6,12 +6,15 @@ ossi.mainmenu = Class.create(ossi.base, {
     this.parent = parent;
     this.options = Object.extend({
       hostElement: false,
+      selfUpdate: true,
       backCase: function(){
         return false;
       }
     }, options);
     this.pane = false;
+    this.updateInterval = 20000;
     this._draw();
+    this._resetInterval(); // this resets the intervalled update call, if selfUpdate is enabled
   },
   /**
    * _update
@@ -23,7 +26,7 @@ ossi.mainmenu = Class.create(ossi.base, {
       return; // userId in the parent controller not set
     var self = this;
     var URL = BASE_URL + '/people/@me/@self';
-    self.parent.showLoading();
+//    self.parent.showLoading();
     new Ajax.Request(URL, {
       method: 'get',
       requestHeaders: (client.is_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
@@ -71,9 +74,9 @@ ossi.mainmenu = Class.create(ossi.base, {
             if (json.entry.length > 0) 
               Element.insert($('friends_button'), ' <span style="font-size:10px; font-weight:bold;">(' + json.entry.length + ' new)</span>');
             
-            setTimeout(function(){
-              self.parent.hideLoading();
-            }, 600);
+//            setTimeout(function(){
+//              self.parent.hideLoading();
+//            }, 600);
           }
         });
       }
@@ -100,9 +103,9 @@ ossi.mainmenu = Class.create(ossi.base, {
     Math.random() * 9999 +
     '" width="50" height="50" border="0" /></div>\
                     <div class="post_button_text">\
-        						  <div class="button_title"><a id="mainmenu_profile_name" href="javascript:void(null);">n/a</a></div>\
-        						  <div id="mainmenu_status_text" class="button_title" style="font-size:10px;">n/a</div>\
-        						  <div id="mainmenu_status_time" class="button_subtitle_text">n/a</div>\
+        						  <div class="button_title"><a id="mainmenu_profile_name" href="javascript:void(null);">loading...</a></div>\
+        						  <div id="mainmenu_status_text" class="button_title" style="font-size:10px;">loading...</div>\
+        						  <div id="mainmenu_status_time" class="button_subtitle_text">loading...</div>\
                     </div>\
         				  </div>\
           				<div class="nav_button" style="display:none">\
@@ -139,6 +142,7 @@ ossi.mainmenu = Class.create(ossi.base, {
         delete self.parent.userId; //deleted so that attribute could be indicator of valid session.
         delete self.parent.userName;
         delete self.parent.userRole;
+        if (! Object.isUndefined(self.parent.locator)) self.parent.locator.stop();
         
         self.parent.loadingpane.hide();
         self.parent.case1({
@@ -222,6 +226,12 @@ ossi.mainmenu = Class.create(ossi.base, {
      $('feeds_button').stopObserving('click',this._feedsHandler.bindAsEventListener(this));
      $('microblog_button').stopObserving('click',this._microblogHandler.bindAsEventListener(this));
      */
+  },
+  _resetInterval: function(){
+    if (this.options.selfUpdate) {
+      clearInterval(this.interval);
+      this.interval = setInterval(this.update.bind(this), this.updateInterval);
+    }
   },
   destroy: function(){
     this._removeListeners();
