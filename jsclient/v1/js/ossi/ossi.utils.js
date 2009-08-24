@@ -172,10 +172,20 @@ ossi.utils = Class.create(ossi.base,{
      var nextButton = new Element( 'div' , { 'class' : 'nav_button next_button' } );
      var nextButtonText = new Element( 'a' , {'class' : 'nav_button_text' , 'href' : 'javascript:void(null);'} ).update('Next Page');
      nextButton.update( nextButtonText );
+     // IE8 fix
+     nextButton.addClassName('nav_button');
+     nextButton.addClassName('next_button');
+     nextButtonText.addClassName('nav_button_text');
+     // end of IE8 fix
      var previousButton = new Element( 'div' , { 'class' : 'nav_button previous_button' } );
      var previousButtonText = new Element( 'a' , {'class' : 'nav_button_text' , 'href' : 'javascript:void(null);'} ).update('Previous Page');
      previousButton.update( previousButtonText );
-     
+     // IE8 fix
+     previousButton.addClassName('nav_button');
+     previousButton.addClassName('previous_button');
+     previousButtonText.addClassName('nav_button_text');
+     // end of IE8 fix
+
      container.update();
      container.insert( nextButton );
      container.insert( previousButton );
@@ -211,6 +221,4 @@ ossi.utils = Class.create(ossi.base,{
        self.update();
     };
   }
-
-  
 });
