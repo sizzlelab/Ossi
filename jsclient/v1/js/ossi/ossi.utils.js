@@ -169,10 +169,10 @@ ossi.utils = Class.create(ossi.base,{
   },
     
   addPagingFeature: function(container, json, self) {
-     var nextButton = new Element( 'button' , { 'class' : 'nav_button next_button' } );
+     var nextButton = new Element( 'div' , { 'class' : 'nav_button next_button' } );
      var nextButtonText = new Element( 'a' , {'class' : 'nav_button_text' , 'href' : 'javascript:void(null);'} ).update('Next Page');
      nextButton.update( nextButtonText );
-     var previousButton = new Element( 'button' , { 'class' : 'nav_button previous_button' } );
+     var previousButton = new Element( 'div' , { 'class' : 'nav_button previous_button' } );
      var previousButtonText = new Element( 'a' , {'class' : 'nav_button_text' , 'href' : 'javascript:void(null);'} ).update('Previous Page');
      previousButton.update( previousButtonText );
      
@@ -197,7 +197,6 @@ ossi.utils = Class.create(ossi.base,{
      }
      // add actions
      nextButton.onclick = function() {
-       console.log('Next has been clicked!');
        self.updateOptions = {
           page: ++self.updateOptions.page,
           per_page: 8

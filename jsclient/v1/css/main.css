@@ -365,7 +365,13 @@ body.widget {
 }
 
 .previous_button {
-  width: 50%;
+  width: 49.99%;
+  /* IE7 hack */
+}
+
+#paging-container {
+  height: 33px;
+  margin-bottom: 2px;
 }
 
 .button_pic {
