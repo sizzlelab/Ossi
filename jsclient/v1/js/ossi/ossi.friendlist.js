@@ -8,8 +8,10 @@ ossi.friendlist = Class.create(ossi.base, {
       hostElement: false
     }, options);
     this.pane = false;
-    this.count = 7;
-    this.startIndex = 0;
+    this.updateOptions = {
+      per_page: 8,
+      page: 1
+    };
     this._draw();
   },
   
@@ -28,13 +30,17 @@ ossi.friendlist = Class.create(ossi.base, {
       return; // userId in the parent controller not set
     var self = this;
     var URL = BASE_URL + '/people/' + this.parent.userId + '/@friends';
+    var params = {
+      per_page: this.updateOptions.per_page,
+      page: this.updateOptions.page,
+      event_id: 'Ossi::BrowseGroupList',
+      'sortBy': 'status_changed',
+      'sortOrder': 'descending'
+    };
     self.parent.showLoading();
     new Ajax.Request(URL, {
       method: 'get',
-      parameters: {
-        'sortBy': 'status_changed',
-        'sortOrder': 'descending'
-      },
+      parameters: params,
       requestHeaders: (client.is_widget) ? ['Cookie', self.parent.sessionCookie] : '',
       onSuccess: function(response){
         var json = response.responseJSON;
@@ -42,39 +48,15 @@ ossi.friendlist = Class.create(ossi.base, {
         if (typeof(json.entry) != 'undefined') {
           if (json.entry.length > 0) {
             var h = '';
-            var max = options.startIndex + options.count > json.entry.length ? json.entry.length - options.startIndex : options.count;
-            for (var i = 0; i < max; i++) {
-              h += self._getButtonHTML(json.entry[options.startIndex + i]);
-            }
+            json.entry.each( function(person) {
+              h += self._getButtonHTML(person);
+            } );
             $('friends_placeholder').update(h);
             self._addLinkListeners();
             if (json.entry.length > 5) 
               $('friend_list_back_button_2_container').show(); // show second back button at top of screen if more than 5 friends
-            if (options.startIndex + options.count < json.entry.length) {
-              $('friends_next_back_container').show();
-              $('friends_next_button_container').show();
-              Element.setStyle($('friends_previous_button_container'), {
-                'width': '50%'
-              });
-            } else {
-              $('friends_next_button_container').hide();
-              Element.setStyle($('friends_previous_button_container'), {
-                'width': '100%'
-              });
-            }
-            if (options.startIndex > 1) {
-              $('friends_next_back_container').show();
-              $('friends_previous_button_container').show();
-              Element.setStyle($('friends_next_button_container'), {
-                'width': '50%'
-              });
-            } else {
-              $('friends_previous_button_container').hide();
-              Element.setStyle($('friends_next_button_container'), {
-                'width': '100%'
-              });
-            }
-
+            self.parent.utils.addPagingFeature( $('paging-container') , json, self);
+            
             // now loop through results again and fetch user location (this is a temporary measure)
             var button_items = json.entry.slice(0,max);
             button_items.each(function(user) {
@@ -143,14 +125,8 @@ ossi.friendlist = Class.create(ossi.base, {
             </div>\
             <div id="friends_placeholder">\
             </div>\
-	          <div id="friends_next_back_container" class="nav_button" style="top: -1px; position: relative; display: none;">\
-	            <div id="friends_next_button_container" class="nav_button next_button" style="display:none">\
-	              <a id="friends_next_button" class="nav_button_text" href="javascript:void(null);">Next Page</a>\
-              </div>\
-	            <div id="friends_previous_button_container" class="nav_button previous_button" style="display:none">\
-                <a id="friends_previous_button" class="nav_button_text" href="javascript:void(null);">Previous Page</a>\
-            </div>\
-	        </div>\
+	          <div id="paging-container" class="nav_button">\
+	          </div>\
           <div id="new_friend_requests_button_container" class="nav_button" style="display:none;">\
             <a id="new_friend_requests_button" class="nav_button_text" href="javascript:void(null);"></a>\
           </div>\
@@ -202,60 +178,23 @@ ossi.friendlist = Class.create(ossi.base, {
   _backHandler: function(){
     this.options.backCase.apply();
   },
-  _nextHandler: function(){
-    this.update({
-      'startIndex': this.startIndex + this.count,
-      'count': this.count
-    });
-    this.startIndex += this.count;
-  },
-  _previousHandler: function(){
-    this.update({
-      'startIndex': this.startIndex - this.count,
-      'count': this.count
-    });
-    this.startIndex -= this.count;
-  },
   _addFriendHandler: function(){
-    this.parent.case11({
-      backCase: this.parent.case9.bind(this.parent, {
-        out: true,
-        backCase: this.parent.case3.bind(this.parent, {
-          out: true
-        })
-      })
-    });
+    this.parent.case11({ });
   },
   _openProfileHandler: function(event, button_id){
     var uid = button_id.replace("person_uid_", "");
     this.parent.case13({
       userId: uid,
-      backCase: this.parent.case9.bind(this.parent, {
-        out: true,
-        backCase: this.parent.case3.bind(this.parent, {
-          out: true
-        })
-      })
     });
-    
   },
   _friendRequestsHandler: function(){
-    this.parent.case14({
-      backCase: this.parent.case9.bind(this.parent, {
-        out: true,
-        backCase: this.parent.case3.bind(this.parent, {
-          out: true
-        })
-      })
-    });
+    this.parent.case14({ });
   },
   _addListeners: function(){
     $('new_friend_requests_button').onclick = this._friendRequestsHandler.bindAsEventListener(this);
     $('friend_list_back_button').onclick = this._backHandler.bindAsEventListener(this);
     $('friend_list_back_button2').onclick = this._backHandler.bindAsEventListener(this);
     $('add_friend_button').onclick = this._addFriendHandler.bindAsEventListener(this);
-    $('friends_next_button').onclick = this._nextHandler.bindAsEventListener(this);
-    $('friends_previous_button').onclick = this._previousHandler.bindAsEventListener(this);
   },
   _removeListeners: function(){
     $('new_friend_requests_button').onclick = function(){
@@ -270,12 +209,9 @@ ossi.friendlist = Class.create(ossi.base, {
     $('add_friend_button').onclick = function(){
       return
     };
-    $('friends_next_button').onclick = function(){
-      return
-    };
-    $('friends_previous_button').onclick = function(){
-      return
-    };
+    $$('action_button').each( function(button) {
+      button.onclick = function(){ return };
+    });
   },
   _addLinkListeners: function(){ // for dynamic buttons
     $$('.profile_button').each(function(button){
