@@ -373,37 +373,22 @@ ossi.channel = Class.create(ossi.base, {
     }
   },
   _removeListeners: function(){
-    $('channel_next_button').onclick = function(){
-      return
-    };
-    $('channel_previous_button').onclick = function(){
-      return
-    };
+    $('channel_next_button').onclick = function() { return };
+    $('channel_previous_button').onclick = function() { return };
     if (this.parent.userId != false || !this.options.wall) {
-      $('channel_back_button').onclick = function(){
-        return
-      }
-      $('add_post_button').onclick = function(){
-        return
-      }
-      $('channel_back_button2').onclick = function(){
-        return
-      }
+      $('channel_back_button').onclick = function() { return }
+      $('add_post_button').onclick = function(){ return }
+      $('channel_back_button2').onclick = function(){ return }
       if (!Object.isUndefined(this.parent.userRole)) {
         if (this.parent.userRole == 'moderator' && this.priv != true) {
-          $('channel_delete_button').onclick = function(){
-            return
-          }
-          $('channel_allow_delete_button').onclick = function(){
-            return
+          if ($('channel_delete_button')) {
+            $('channel_delete_button').onclick = function() { return }
+            $('channel_allow_delete_button').onclick = function() { return }
           }
         }
       }
-    }
-    else {
-      $('channel_login_button').onclick = function(){
-        return
-      }
+    } else {
+      $('channel_login_button').onclick = function() { return }
     }
   },
   _addLinkListeners: function(){ // for dynamic buttons
