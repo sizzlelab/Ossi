@@ -116,7 +116,7 @@ ossi.main = Class.create(ossi.base,{
     this._getClient(); // determine which client we are serving for
     this._setClientUI(); // on the basis of the client values make CSS changes
     if (client.is_WRT_widget) { // init location engine
-      this.locator = new ossi.location(this);
+//      this.locator = new ossi.location(this);
     }
     BASE_URL = (client.is_widget) ? 'http://cos.alpha.sizl.org' : '/cos'; // where to go asking for COS
     MAX_REQUEST_LENGTH = 20; // in seconds
@@ -1289,6 +1289,21 @@ ossi.main = Class.create(ossi.base,{
 	  }
   },
   /**
+  * _resetUI
+  *
+  * for WRT widget when rotated
+  */
+  _resetUI: function() {
+    this._getClient(); // refresh client dimensions
+    this.mainElement.setStyle({
+      width: client.width+'px',
+      height: client.height+'px'
+    });
+    this.loadingpane.setStyle({
+      width: client.width+'px'
+    });
+  },
+  /**
   * _setClientUI
   *
   * make CSS changes according to client
@@ -1301,16 +1316,14 @@ ossi.main = Class.create(ossi.base,{
       this.loadingpane.addClassName('widget');
 
     } else if (client.is_WRT_widget) {
-      alert('ennen');
+      this._resetUI();
       try {
         this.serviceInfo = device.getServiceObject("Service.SysInfo", "ISysInfo");
       } catch (ex) {
         delete this.serviceInfo;
       }
-
-      alert('jälkeen');
-
       var self = this;
+      this.orientation = -1;
     	new PeriodicalExecuter(function(pe) {
         var criteria = new Object();
         criteria.Entity = "Display";
@@ -1321,9 +1334,12 @@ ossi.main = Class.create(ossi.base,{
           } catch (ex) {
             return;
           }
-          alert(result.ReturnValue.Status);
+          var t = result.ReturnValue.Status;
+          if (self.orientation != t) self.resetUI();
+          alert(client.dimensions.width);
+          self.orientation = t;
         }
-    	}, 15);
+    	}, 10);
       
     } else if (this.options.wall) {
       this.loadingpane.addClassName('wall');

@@ -92,21 +92,21 @@ ossi.myprofile = Class.create(ossi.base,{
       // draw options to select elements (less code this way), may be slow on handset??
       var s = $('profile_day');
       for (var i=1; i<32; i++) {
-        var o = document.createElement('option');
+        var o = new Element('option');
         o.value = i;
         o.update(i);
         s.appendChild(o);
       }
       var s = $('profile_month');
       for (var i=1; i<13; i++) {
-        var o = document.createElement('option');
+        var o = new Element('option');
         o.value = i;
         o.update(i);
         s.appendChild(o);
       }
       var s = $('profile_year');
       for (var i=2008; i>1900; i--) {
-        var o = document.createElement('option');
+        var o = new Element('option');
         o.value = i;
         o.update(i);
         s.appendChild(o);
