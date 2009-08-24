@@ -23,7 +23,9 @@ ossi.post = Class.create(ossi.base, {
     var self = this;
     // get contents
     var URL = BASE_URL + '/channels/' + self.options.channelId + '/@messages/' + self.options.postId;
-    var params = {event_id: 'Ossi::BrowseChannelList'};
+    var params = {
+      event_id: 'Ossi::BrowseChannelList'
+    };
     self.parent.showLoading();
     new Ajax.Request(URL, {
       method: 'get',
@@ -49,8 +51,6 @@ ossi.post = Class.create(ossi.base, {
           $('post_content').update(k);
           // Show delete, if I'm the poster
           if (self.options.posterId == self.parent.userId) {
-            console.log(self.options.posterId);
-            console.log(self.parent.userId);
             $('post_delete_container_' + self.options.postId).show();
           }
         }
@@ -76,10 +76,12 @@ ossi.post = Class.create(ossi.base, {
     var self = this;
     // Get next and previous message ids
     // XXX: Ugly
-    var params = {event_id: 'Ossi::BrowseChannelList'};
+    var params = {
+      event_id: 'Ossi::BrowseChannelList'
+    };
     new Ajax.Request(BASE_URL + '/channels/' + self.options.channelId + '/@messages/', {
       method: 'get',
-      parameters : params,
+      parameters: params,
       requestHeaders: (client.is_widget) ? ['Cookie', self.parent.sessionCookie] : '',
       onSuccess: function(response){
         var json = response.responseJSON;
@@ -105,6 +107,11 @@ ossi.post = Class.create(ossi.base, {
             'width': '100% '
           });
         }
+        if (messageIndex == 0) {
+          $('post_previous_button_container_' + id).setStyle({
+            'width': '100% '
+          });
+        }
         // if there is only one message, hide the next/previous
         if (json.entry.length == 1) {
           $('post_nav_bar').hide();
@@ -126,24 +133,42 @@ ossi.post = Class.create(ossi.base, {
                   </div>\
                   <div id="post_content"></div>\
           				<div class="nav_button">\
-          					<a id="post_reply_button_' + id + '" class="nav_button_text" href="javascript:void(null);">Reply</a>\
+          					<a id="post_reply_button_' +
+    id +
+    '" class="nav_button_text" href="javascript:void(null);">Reply</a>\
           				</div>\
           				<div id="post_profile_button_container" class="nav_button" style="">\
-          					<a id="post_profile_button_' + id + '" class="nav_button_text" href="javascript:void(null);">See profile</a>\
+          					<a id="post_profile_button_' +
+    id +
+    '" class="nav_button_text" href="javascript:void(null);">See profile</a>\
           				</div>\
                   <div id="post_nav_bar" class="nav_button" style="top: -1px; position: relative;">\
-    		  	      <div id="post_next_button_container_' + id + '" class="nav_button next_button" style="display:none">\
-        				    <a id="post_next_button_' + id + '" class="nav_button_text" href="javascript:void(null);">Next post</a>\
+    		  	      <div id="post_next_button_container_' +
+    id +
+    '" class="nav_button next_button" style="display:none">\
+        				    <a id="post_next_button_' +
+    id +
+    '" class="nav_button_text" href="javascript:void(null);">Next post</a>\
           		  	</div>\
-          		  	<div id="post_previous_button_container_' + id + '" class="nav_button previous_button" style="display:none">\
-        				     <a id="post_previous_button_' + id + '" class="nav_button_text" href="javascript:void(null);">Previous post</a>\
+          		  	<div id="post_previous_button_container_' +
+    id +
+    '" class="nav_button previous_button" style="display:none">\
+        				     <a id="post_previous_button_' +
+    id +
+    '" class="nav_button_text" href="javascript:void(null);">Previous post</a>\
           		  	</div>\
 				          </div>\
-                    <div id="post_delete_container_' + id + '"  class="nav_button" style="display: none">\
-          					<a id="post_delete_button_' + id + '" class="nav_button_text" href="javascript:void(null);">Delete Post</a>\
+                    <div id="post_delete_container_' +
+    id +
+    '"  class="nav_button" style="display: none">\
+          					<a id="post_delete_button_' +
+    id +
+    '" class="nav_button_text" href="javascript:void(null);">Delete Post</a>\
           				</div>\
                   <div class="nav_button">\
-          					<a id="post_back_button_' + id + '" class="nav_button_text" href="javascript:void(null);">Back</a>\
+          					<a id="post_back_button_' +
+    id +
+    '" class="nav_button_text" href="javascript:void(null);">Back</a>\
           				</div>\
           			</div>\
           		';
@@ -151,7 +176,7 @@ ossi.post = Class.create(ossi.base, {
   },
   
   _parseBBCode: function(value){
-    var search = new Array(/\n/g, /\[quote\]/g, /\[\/quote\]/g);
+    var search = new Array(/&lt;br \/&gt;/g, /\[quote\]/g, /\[\/quote\]/g);
     var replace = new Array("<br />", '<span class="quoted_block">', '</span>');
     for (i = 0; i < search.length; i++) {
       var value = value.replace(search[i], replace[i]);
@@ -206,7 +231,9 @@ ossi.post = Class.create(ossi.base, {
     var self = this;
     // get contents
     var URL = BASE_URL + '/channels/' + self.options.channelId + '/@messages/' + self.options.postId;
-    var params = {event_id: 'Ossi::BrowseChannelList'};
+    var params = {
+      event_id: 'Ossi::MessageDelete'
+    };
     self.parent.showLoading();
     new Ajax.Request(URL, {
       method: 'delete',
@@ -236,12 +263,24 @@ ossi.post = Class.create(ossi.base, {
   
   _removeListeners: function(){
     var id = this.options.postId;
-    $('post_reply_button_' + id).onclick = function() { return }
-    $('post_back_button_' + id).onclick = function(){ return }
-    $('post_profile_button_' + id).onclick = function(){ return }
-    $('post_next_button_' + id).onclick = function(){ return }
-    $('post_previous_button_' + id).onclick = function(){ return }
-    $('post_delete_button_' + id).onclick = function(){ return }
+    $('post_reply_button_' + id).onclick = function(){
+      return
+    }
+    $('post_back_button_' + id).onclick = function(){
+      return
+    }
+    $('post_profile_button_' + id).onclick = function(){
+      return
+    }
+    $('post_next_button_' + id).onclick = function(){
+      return
+    }
+    $('post_previous_button_' + id).onclick = function(){
+      return
+    }
+    $('post_delete_button_' + id).onclick = function(){
+      return
+    }
   },
   destroy: function(){
     this._removeListeners();

@@ -182,6 +182,7 @@ ossi.channel = Class.create(ossi.base, {
     
     if (!this.options.wall) {
       stripped_message = stripped_message.replace(/<\/?[^>]+(>|$)/g, ""); //clean html-tags away
+      stripped_message = stripped_message.replace(/&lt;br \/&gt;/g, ""); // clean breaks away
       stripped_message = stripped_message.replace(/\[quote\].*\[\/quote\]/g, '').replace(/<br \/>/g, '');
       var message_stub = stripped_message.truncate(40);
       var h = '\
