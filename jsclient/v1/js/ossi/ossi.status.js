@@ -87,13 +87,11 @@ ossi.status = Class.create(ossi.base, {
                 self.options.backCase.apply();
               }
             });
-          }
-          else {
+          } else {
             self.parent.loadingpane.hide();
             self.options.backCase.apply();
           }
-        }
-        else {
+        } else {
           self.parent.loadingpane.hide();
           self.options.backCase.apply();
         }
@@ -152,7 +150,7 @@ ossi.status = Class.create(ossi.base, {
     $('status_input').select();
     $('status_input').setStyle({
       color: '#000'
-    })
+    });
     $('status_input').stopObserving('focus', this._focusHandler); // clears handler to fix issue with N95 calling focus again when blur is supposed to be called
   },
   _cancelHandler: function(){
@@ -170,18 +168,10 @@ ossi.status = Class.create(ossi.base, {
     $('status_input').observe('focus', this._focusHandler); // removed when entered
   },
   _removeListeners: function(){
-    $('done_button').onclick = function(){
-      return
-    }
-    $('cancel_button').onclick = function(){
-      return
-    }
-    $('profile_button').onclick = function(){
-      return
-    }
-    $('status_form').onsubmit = function(){
-      return
-    }
+    $('done_button').onclick = function() { return }
+    $('cancel_button').onclick = function() { return }
+    $('profile_button').onclick = function() { return }
+    $('status_form').onsubmit = function() { return }
   },
   destroy: function(){
     this._removeListeners();
