@@ -25,7 +25,7 @@ ossi.login = Class.create(ossi.base,{
   },
   _getHTML: function() {
     var h =   '\
-          			<div id="loginpane" style="display:none; position:absolute; top:0px; left:0px; width:'+client.dimensions.width+'px">\
+          			<div id="loginpane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
           			  <form id="login_form">\
             				<div id="logo"></div>\
             				<div id="slogan">\
