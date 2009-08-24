@@ -285,7 +285,7 @@ ossi.channel = Class.create(ossi.base, {
   _loginHandler: function(){
     var self = this;
     self.parent.case2({
-      channelId: self.options.channelId,
+      channelId: self.options.channelId
     });
   },
   _backHandler: function(){
@@ -313,7 +313,7 @@ ossi.channel = Class.create(ossi.base, {
     var self = this;
     self.parent.case21({
       channelId: self.options.channelId,
-      priv: (typeof(self.priv) != 'undefined') ? self.priv : false,
+      priv: (typeof(self.priv) != 'undefined') ? self.priv : false
     });
   },
   _deleteHandler: function(){
