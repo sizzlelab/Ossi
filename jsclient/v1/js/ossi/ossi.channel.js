@@ -60,38 +60,11 @@ ossi.channel = Class.create(ossi.base, {
         //        if (json.owner != null) self.owner = json.owner; // if channel has an owner it is a private channel!
         if (typeof(json.entry) != 'undefined') {
           if (json.entry.length > 0) {
-            $('channel_nav_bar').show();
             self._drawContents(json.entry);
             // show second back button at top of screen if more than 5 channels
             if (self.updateOptions.page > 1) 
               $('channel_back_button_2_container').show(); // show second back button at top of screen if more than 5 channels
-            // by default, show everyhing
-            $('channel_next_button_container').show();
-            $('channel_previous_button_container').show();
-            $('channel_previous_button_container').setStyle({
-              'width': '50%'
-            });
-            $('channel_next_button_container').setStyle({
-              'width': '50%'
-            });
-            // no more next, hide nex, set previus big
-            if (self.updateOptions.page * self.updateOptions.per_page >= json.pagination.size) {
-              $('channel_next_button_container').hide();
-              $('channel_previous_button_container').setStyle({
-                'width': '100%'
-              });
-            }
-            // if no previous, set next big
-            if (self.updateOptions.page <= 1) {
-              $('channel_next_button_container').setStyle({
-                'width': '100%'
-              });
-              $('channel_previous_button_container').hide();
-            }
-            // if messages fit in one page, hide whole next/previous
-            if (json.pagination.size <= self.updateOptions.per_page) {
-              $('channel_nav_bar').hide();
-            }
+            self.parent.utils.addPagingFeature($('channel-paging-container'), json, self);
           }
           else {
             $('channel_placeholder').update('<div style="padding:10px; text-align:center">This channel has no posts. Be the first poster by clicking \'Add Post\' below!</div>');
@@ -173,14 +146,7 @@ ossi.channel = Class.create(ossi.base, {
        		    ';
     }
     h += '\
-				<div id="channel_nav_bar" class="nav_button" style="top: -1px; position: relative; display:none;">\
-    		  	      <div id="channel_next_button_container" class="nav_button next_button" style="display:none">\
-          				<a id="channel_next_button" class="nav_button_text" href="javascript:void(null);">Next Page</a>\
-          		  	</div>\
-          		  	<div id="channel_previous_button_container" class="nav_button previous_button" style="display:none">\
-          				<a id="channel_previous_button" class="nav_button_text" href="javascript:void(null);">Previous Page</a>\
-          		  	</div>\
-				</div>\
+				<div id="channel-paging-container"></div>\
           		';
     if (this.parent.userId != false) {
       h += '\
@@ -291,24 +257,6 @@ ossi.channel = Class.create(ossi.base, {
   _backHandler: function(){
     this.options.backCase.apply();
   },
-  _nextHandler: function(){
-    this.updateOptions = {
-      page: ++this.updateOptions.page,
-      per_page: 8
-    };
-    this.update();
-    this._resetInterval(); // reset the interval as we just updated
-    this.startIndex += this.count;
-  },
-  _previousHandler: function(){
-    this.updateOptions = {
-      page: --this.updateOptions.page,
-      per_page: 8
-    };
-    this.update();
-    this._resetInterval(); // reset the interval as we just updated
-    this.startIndex -= this.count;
-  },
   _addPostHandler: function(){
     var self = this;
     self.parent.case21({
@@ -360,8 +308,6 @@ ossi.channel = Class.create(ossi.base, {
   },
   
   _addListeners: function(){
-    $('channel_next_button').onclick = this._nextHandler.bindAsEventListener(this);
-    $('channel_previous_button').onclick = this._previousHandler.bindAsEventListener(this);
     if (this.parent.userId != false || !this.options.wall) {
       $('channel_back_button').onclick = this._backHandler.bindAsEventListener(this);
       $('channel_back_button2').onclick = this._backHandler.bindAsEventListener(this);
@@ -373,22 +319,33 @@ ossi.channel = Class.create(ossi.base, {
     }
   },
   _removeListeners: function(){
-    $('channel_next_button').onclick = function() { return };
-    $('channel_previous_button').onclick = function() { return };
     if (this.parent.userId != false || !this.options.wall) {
-      $('channel_back_button').onclick = function() { return }
-      $('add_post_button').onclick = function(){ return }
-      $('channel_back_button2').onclick = function(){ return }
+      $('channel_back_button').onclick = function(){
+        return
+      }
+      $('add_post_button').onclick = function(){
+        return
+      }
+      $('channel_back_button2').onclick = function(){
+        return
+      }
       if (!Object.isUndefined(this.parent.userRole)) {
         if (this.parent.userRole == 'moderator' && this.priv != true) {
           if ($('channel_delete_button')) {
-            $('channel_delete_button').onclick = function() { return }
-            $('channel_allow_delete_button').onclick = function() { return }
+            $('channel_delete_button').onclick = function(){
+              return
+            }
+            $('channel_allow_delete_button').onclick = function(){
+              return
+            }
           }
         }
       }
-    } else {
-      $('channel_login_button').onclick = function() { return }
+    }
+    else {
+      $('channel_login_button').onclick = function(){
+        return
+      }
     }
   },
   _addLinkListeners: function(){ // for dynamic buttons

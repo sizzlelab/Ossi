@@ -186,6 +186,7 @@ ossi.utils = Class.create(ossi.base,{
      previousButtonText.addClassName('nav_button_text');
      // end of IE8 fix
 
+     container.addClassName('paging-container');
      container.update();
      container.insert( nextButton );
      container.insert( previousButton );

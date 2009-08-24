@@ -55,11 +55,10 @@ ossi.friendlist = Class.create(ossi.base, {
             self._addLinkListeners();
             if (json.entry.length > 5) 
               $('friend_list_back_button_2_container').show(); // show second back button at top of screen if more than 5 friends
-            self.parent.utils.addPagingFeature( $('paging-container') , json, self);
+            self.parent.utils.addPagingFeature( $('friendlist-paging-container') , json, self);
             
             // now loop through results again and fetch user location (this is a temporary measure)
-            var button_items = json.entry.slice(0,max);
-            button_items.each(function(user) {
+            json.entry.each(function(user) {
               var URL = BASE_URL + '/people/' + user.id + '/@location';
               new Ajax.Request(URL, {
                 method: 'get',
@@ -125,7 +124,7 @@ ossi.friendlist = Class.create(ossi.base, {
             </div>\
             <div id="friends_placeholder">\
             </div>\
-	          <div id="paging-container" class="nav_button">\
+	          <div id="friendlist-paging-container">\
 	          </div>\
           <div id="new_friend_requests_button_container" class="nav_button" style="display:none;">\
             <a id="new_friend_requests_button" class="nav_button_text" href="javascript:void(null);"></a>\

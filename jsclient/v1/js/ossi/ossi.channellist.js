@@ -48,7 +48,7 @@ ossi.channellist = Class.create(ossi.base, {
         if (typeof(json.entry) != 'undefined') {
           if (json.entry.length > 0) {
             self._drawContents(json.entry);
-            self.parent.utils.addPagingFeature( $('paging-container') , json, self);
+            self.parent.utils.addPagingFeature( $('channellist-paging-container') , json, self);
           }
           else {
             $('channels_placeholder').replace('<div style="padding:10px; text-align:center">There are currently no channels available to you in the service. Please contact system administrators at: otasizzle-helpdesk@hiit.fi</div>');
@@ -94,7 +94,7 @@ ossi.channellist = Class.create(ossi.base, {
           				</div>\
                   <div id="channels_placeholder">\
                   </div>\
-          				   <div id="paging-container" style="top: 0px; position: relative;" >\
+          				   <div id="channellist-paging-container">\
 						          </div>\
 						      <div style="clear:both"></div>\
           				<div id="create_channel_button_container" class="nav_button action_button">\

@@ -369,7 +369,7 @@ body.widget {
   /* IE7 hack */
 }
 
-#paging-container {
+.paging-container {
   height: 33px;
   margin-bottom: 2px;
 }
