@@ -118,7 +118,7 @@ ossi.main = Class.create(ossi.base,{
     if (client.is_WRT_widget) { // init location engine
 //      this.locator = new ossi.location(this);
     }
-    BASE_URL = (client.is_widget) ? 'http://cos.alpha.sizl.org' : '/cos'; // where to go asking for COS
+    BASE_URL = (client.is_widget) ? 'http://cos.sizl.org' : '/cos'; // where to go asking for COS
     MAX_REQUEST_LENGTH = 20; // in seconds
     this.tmp = []; // for timers etc. May be deleted at any time.
 	  this.case1(); // go to first use case
