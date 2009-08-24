@@ -166,5 +166,52 @@ ossi.utils = Class.create(ossi.base,{
         self.parent.wallHidden = false;
   		}
   	}, 0.01);
+  },
+    
+  addPagingFeature: function(container, json, self) {
+     var nextButton = new Element( 'button' , { 'class' : 'nav_button next_button' } );
+     var nextButtonText = new Element( 'a' , {'class' : 'nav_button_text' , 'href' : 'javascript:void(null);'} ).update('Next Page');
+     nextButton.update( nextButtonText );
+     var previousButton = new Element( 'button' , { 'class' : 'nav_button previous_button' } );
+     var previousButtonText = new Element( 'a' , {'class' : 'nav_button_text' , 'href' : 'javascript:void(null);'} ).update('Previous Page');
+     previousButton.update( previousButtonText );
+     
+     container.update();
+     container.insert( nextButton );
+     container.insert( previousButton );
+     
+     // initially show all
+     if( json.pagination.page == 1 ) {
+       // first page
+       previousButton.hide();
+       nextButton.setStyle( { 'width' : '100%'} );
+     }
+     if( json.pagination.page * json.pagination.per_page >= json.pagination.size ) {
+       // last page
+       nextButton.hide();
+       previousButton.setStyle( { 'width' : '100%'} );
+     }
+     // if we can show things on one page, then hide the container
+     if( json.pagination.size < json.pagination.per_page ) {
+       container.hide();
+     }
+     // add actions
+     nextButton.onclick = function() {
+       console.log('Next has been clicked!');
+       self.updateOptions = {
+          page: ++self.updateOptions.page,
+          per_page: 8
+       };
+       self.update();
+    };
+    previousButton.onclick = function() {
+       self.updateOptions = {
+          page: --self.updateOptions.page,
+          per_page: 8
+       };
+       self.update();
+    };
   }
+
+  
 });

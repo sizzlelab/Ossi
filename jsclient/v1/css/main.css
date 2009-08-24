@@ -365,6 +365,7 @@ body.widget {
 }
 
 .previous_button {
+  width: 50%;
 }
 
 .button_pic {
