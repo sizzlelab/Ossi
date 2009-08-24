@@ -241,7 +241,7 @@ ossi.main = Class.create(ossi.base,{
     this.mainElement.update();
     this.stack.push(this.case2.bind(this,options));
     
-	    if (options.start) { // login without effects (first time)
+    if (options.start) { // login without effects (first time)
 			if (options.channelId) {
 				this.sub1 = new ossi.login(this, {	'hostElement' : this.mainElement,
 	      											              'channelId' : options.channelId,
@@ -250,9 +250,9 @@ ossi.main = Class.create(ossi.base,{
 				this.sub1 = new ossi.login(this, {	'hostElement' : this.mainElement,
                   													'backCase' : options.backCase});
 			}
-		    this.sub1.pane.show();
-	    } else { // login page emerges with fx
-			  this.sub2 = this.sub1;
+	    this.sub1.pane.show();
+    } else { // login page emerges with fx
+		  this.sub2 = this.sub1;
 			if (options.channelId) {
 				this.sub1 = new ossi.login(this, {	'hostElement' : this.mainElement,
 	      											              'channelId' : options.channelId,
@@ -1289,21 +1289,6 @@ ossi.main = Class.create(ossi.base,{
 	  }
   },
   /**
-  * _resetUI
-  *
-  * for WRT widget when rotated
-  */
-  _resetUI: function() {
-    this._getClient(); // refresh client dimensions
-    this.mainElement.setStyle({
-      width: client.width+'px',
-      height: client.height+'px'
-    });
-    this.loadingpane.setStyle({
-      width: client.width+'px'
-    });
-  },
-  /**
   * _setClientUI
   *
   * make CSS changes according to client
@@ -1316,30 +1301,28 @@ ossi.main = Class.create(ossi.base,{
       this.loadingpane.addClassName('widget');
 
     } else if (client.is_WRT_widget) {
-      this._resetUI();
+      var self = this;
       try {
         this.serviceInfo = device.getServiceObject("Service.SysInfo", "ISysInfo");
       } catch (ex) {
         delete this.serviceInfo;
       }
-      var self = this;
       this.orientation = -1;
     	new PeriodicalExecuter(function(pe) {
-        var criteria = new Object();
-        criteria.Entity = "Display";
-        criteria.Key = "DisplayOrientation";
+        var criteria = {
+          Entity : 'Display',
+          Key : 'DisplayOrientation'
+        };
         if (window.widget.isrotationsupported) {
           try {
-            var result = self.serviceInfo.ISysInfo.GetInfo(criteria);
+            var t = self.serviceInfo.ISysInfo.GetInfo(criteria).ReturnValue.Status;
+            if (self.orientation != t) client.dimensions = document.viewport.getDimensions();
+            self.orientation = t;
           } catch (ex) {
             return;
           }
-          var t = result.ReturnValue.Status;
-          if (self.orientation != t) self.resetUI();
-          alert(client.dimensions.width);
-          self.orientation = t;
         }
-    	}, 10);
+    	}, 2);
       
     } else if (this.options.wall) {
       this.loadingpane.addClassName('wall');
