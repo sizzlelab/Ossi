@@ -102,7 +102,7 @@ body.widget {
 }
 
 #logo {
-  background: black url(../images/ossi_logo.png) no-repeat center;
+  background: black url(../images/ossi_logo.gif) no-repeat center;
   margin: 15px 0px 0px 0px;
   padding: 0px 0px 0px 0px;
   height:60px;
@@ -110,7 +110,7 @@ body.widget {
 }
 
 #logo_small {
-  background: black url(../images/logo_small.png) no-repeat center;
+  background: black url(../images/ossi_logo_small.gif) no-repeat center;
   margin: 1px 0px 0px 0px;
   padding: 0px 0px 0px 0px;
   height:33px;
@@ -421,7 +421,7 @@ div.channel_button_left_column {
   position:absolute;
   top:0px;
   left:0px;
-  height:70px;
+  height:100%;
   width:5px;
 }
 
@@ -445,7 +445,6 @@ div.channel_button_left_column.my {
 
 div.channel_button_text {
   margin-left:8px;
-  height:55px;
   padding:5px 5px 5px 5px;
 }
 
