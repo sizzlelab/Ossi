@@ -35,11 +35,11 @@ ossi.login = Class.create(ossi.base,{
             				</div>\
             				<div class="login">\
             					username:<br/>\
-            					<input id="username" class="textinput" maxlength="30" name="uusernaame" type="text"/>\
+            					<input id="uusernaame" class="textinput" maxlength="30" name="uusernaame" type="text"/>\
             				</div>\
             				<div class="login">\
             					password:<br/>\
-            					<input id="password" class="textinput" maxlength="30" name="paasswoord" type="password"/>\
+            					<input id="paasswoord" class="textinput" maxlength="30" name="paasswoord" type="password"/>\
             				</div>\
             				<div class="nav_button" style="margin-top:12px;">\
             					<a id="login_button" class="nav_button_text" href="javascript:void(null);">Login</a>\
@@ -75,6 +75,7 @@ ossi.login = Class.create(ossi.base,{
       requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
       on409 : function() { // found existing session, removing it first!
         new Ajax.Request(BASE_URL+'/session', {
+          method : 'delete',
           requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
           onSuccess : function() {
             self.parent.sessionCookie = false;
@@ -205,7 +206,6 @@ ossi.login = Class.create(ossi.base,{
 		});
 
 		self.parent.hideLoading();
-        
         if(self.options.channelId){ // if channelId exists, go there
         	self.parent.case20({
         		out : true,
@@ -217,7 +217,6 @@ ossi.login = Class.create(ossi.base,{
         			})
         		})
         	});
-
         } else {
 	        self.parent.case3();
         }
