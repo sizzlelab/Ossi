@@ -172,7 +172,13 @@ ossi.channellist = Class.create(ossi.base, {
     
     var ident_class = '';
     if (!Object.isUndefined(channel.channel_type)) {
-      ident_class = (channel.channel_type == 'public') ? 'public' : 'private';
+      if (channel.channel_type == 'public') {
+        ident_class = 'public';
+      } else if (channel.channel_type == 'group') {
+        ident_class = 'group';
+      } else {
+        ident_class = 'private';
+      }
     }
     
     var h = '\

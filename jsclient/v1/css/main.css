@@ -446,6 +446,10 @@ div.channel_button_left_column.private {
   background: #bb3d3d;
 }
 
+div.channel_button_left_column.group {
+  background: #ff9c00;
+}
+
 div.channel_button_left_column.my {
   background: #ff9900;
 }
