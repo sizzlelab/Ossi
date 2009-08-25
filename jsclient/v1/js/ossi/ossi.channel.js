@@ -333,11 +333,9 @@ ossi.channel = Class.create(ossi.base, {
       if (!Object.isUndefined(this.parent.userRole)) {
         if (this.parent.userRole == 'moderator' && this.priv != true) {
           if ($('channel_delete_button')) {
-            $('channel_delete_button').onclick = function(){
-              return
-            }
-            $('channel_allow_delete_button').onclick = function(){
-              return
+            $('channel_delete_button').onclick = function() { return }
+            if ($('channel_allow_delete_button')) {
+              $('channel_allow_delete_button').onclick = function() { return }
             }
           }
         }
