@@ -207,7 +207,7 @@ ossi.profile = Class.create(ossi.base,{
     var URL = BASE_URL+'/people/'+this.parent.userId+'/@friends/' + this.options.userId;
     self.parent.showLoading();
     new Ajax.Request(URL, {
-      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie),
+      method : 'delete',
       requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
       onSuccess : function(response) { // does not handle invalid responses
         var json = response.responseJSON;
@@ -257,7 +257,7 @@ ossi.profile = Class.create(ossi.base,{
     var URL = BASE_URL + '/people/'+this.parent.userId+'/@pending_friend_requests/'+this.options.userId;
     self.parent.showLoading();
     new Ajax.Request(URL, {
-      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie),
+      method : 'delete',
       requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
       onSuccess : function(response) { // does not handle invalid responses
         // should check if the request fails though

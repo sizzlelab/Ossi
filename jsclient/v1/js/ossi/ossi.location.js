@@ -13,7 +13,7 @@ ossi.location = Class.create(ossi.base,{
         this.unavailable = false;
       } catch (ex) {
         this.unavailable = true;
-        alert("Service object cannot be found.");
+//        alert("Service object cannot be found.");
       }
     }
     this.criteria = {
