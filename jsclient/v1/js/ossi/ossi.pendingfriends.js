@@ -21,7 +21,7 @@ ossi.pendingfriends = Class.create(ossi.base,{
     var URL = BASE_URL+'/people/'+self.parent.userId+'/@pending_friend_requests'
     new Ajax.Request(URL,{
       method : 'get',
-      requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
+      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
       onSuccess : function(response) {
         var json = response.responseJSON;
         self._removeLinkListeners();

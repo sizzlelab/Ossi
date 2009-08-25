@@ -6,6 +6,7 @@ ossi.location = Class.create(ossi.base,{
     this.parent = parent;
 		this.options = Object.extend({
 	  },options);
+    this.running = false;
     if (Object.isUndefined(this.parent.serviceObj)) {
       try {
         this.parent.serviceObj = device.getServiceObject("Service.Location", "ILocation");
@@ -78,12 +79,13 @@ ossi.location = Class.create(ossi.base,{
         new Ajax.Request(URL, {
           method : 'put',
           parameters : params,
-          requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : ''
+          requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : ''
         });
       }
     });
   },
   run: function(interval) {
+    if (this.running) return; // do not start more than one "thread"
     var interval = Object.isUndefined(interval) ? 60 : interval;
     var self = this;
     self.running = true;
@@ -93,6 +95,7 @@ ossi.location = Class.create(ossi.base,{
         pe.stop();
         return;
       }
+      alert('updating');
       self.update();
     }, interval);
   },

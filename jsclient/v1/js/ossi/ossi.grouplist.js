@@ -7,10 +7,8 @@ ossi.grouplist = Class.create(ossi.base, {
     this.options = Object.extend({
       hostElement: false
     }, options);
-    this.updateOptions = {
-      per_page: 8,
-      page: 1
-    };
+    this.count = 8;
+    this.startIndex = 0;
     this.pane = false;
     this._draw();
   },
@@ -27,31 +25,52 @@ ossi.grouplist = Class.create(ossi.base, {
     var self = this;
     // get all public groups
     var URL = BASE_URL + '/groups/@public';
-    var params = {
-      per_page: this.updateOptions.per_page,
-      page: this.updateOptions.page,
-      event_id: 'Ossi::BrowseGroupList'
-    };
+    var params = {};
+    // var params = { startIndex : options.startIndex, count : options.count };
     self.parent.showLoading();
     new Ajax.Request(URL, {
       method: 'get',
       parameters: params,
-      requestHeaders: (client.is_widget) ? ['Cookie', self.parent.sessionCookie] : '',
+      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
       onSuccess: function(response){
         var json = response.responseJSON;
         if (typeof(json.entry) != 'undefined') {
           if (json.entry.length > 0) {
             json.entry.sort(self._myOwnSorter);
             var h = '';
-            json.entry.each( function(group) {
-              h += self._getButtonHTML(group);
-            } );
+            max = options.startIndex + options.count > json.entry.length ? json.entry.length - options.startIndex : options.count;
+            for (i = 0; i < max; i++) {
+              h += self._getButtonHTML(json.entry[options.startIndex + i]);
+            }
             $('groups_placeholder').update(h);
             self._addLinkListeners();
             // back buttons
             if (json.entry.length > 5) 
               $('groups_back_button_2_container').show(); // show second back button at top of screen if more than 5 groups
-            self.parent.utils.addPagingFeature( $('grouplist-paging-container') , json, self);
+            if (options.startIndex + options.count < json.entry.length) {
+              $('groups_next_button_container').show();
+              Element.setStyle($('groups_previous_button_container'), {
+                'width': '50%'
+              });
+            }
+            else {
+              $('groups_next_button_container').hide();
+              Element.setStyle($('groups_previous_button_container'), {
+                'width': '100%'
+              });
+            }
+            if (options.startIndex > 1) {
+              $('groups_previous_button_container').show();
+              Element.setStyle($('groups_next_button_container'), {
+                'width': '50%'
+              });
+            }
+            else {
+              $('groups_previous_button_container').hide();
+              Element.setStyle($('groups_next_button_container'), {
+                'width': '100%'
+              });
+            }
           }
           else {
             $('groups_placeholder').replace('<div style="padding:10px; text-align:center">There are currently no public groups available in the service. If this is an error please contact system administrators at: otasizzle-helpdesk@hiit.fi</div>');
@@ -100,8 +119,14 @@ ossi.grouplist = Class.create(ossi.base, {
           				</div>\
                   <div id="groups_placeholder">\
                   </div>\
-				      	       <div id="grouplist-paging-container" class="nav_button">\
-					      	      </div>\
+				      	<div class="nav_button" style="top: -1px; position: relative;" >\
+          				  <div id="groups_next_button_container" class="nav_button next_button" style="display:none" >\
+          					<a id="groups_next_button" class="nav_button_text" href="javascript:void(null);">Next Page</a>\
+          				  </div>\
+          				  <div id="groups_previous_button_container" class="nav_button previous_button" style="display:none" >\
+          					<a id="groups_previous_button" class="nav_button_text" href="javascript:void(null);">Previous Page</a>\
+          				  </div>\
+					      	</div>\
           				<div id="about_groups_button_container" class="nav_button">\
           					<a id="about_groups_button" class="nav_button_text" href="javascript:void(null);">About Groups</a>\
           				</div>\
@@ -167,14 +192,41 @@ ossi.grouplist = Class.create(ossi.base, {
   },
   _createGroupHandler: function(){
     var self = this;
-    self.parent.case26({ });
+    self.parent.case26({
+      backCase: self.parent.case25.bind(self.parent, {
+        out: true,
+        backCase: self.parent.case3.bind(self.parent, {
+          out: true
+        })
+      })
+    });
   },
   _openGroupHandler: function(event, button_id){
     var self = this;
     var group_id = button_id.replace("group_id_", "");
     self.parent.case27({
-      groupId: group_id
+      groupId: group_id,
+      backCase: self.parent.case25.bind(self.parent, {
+        out: true,
+        backCase: self.parent.case3.bind(self.parent, {
+          out: true
+        })
+      })
     });
+  },
+  _nextHandler: function(){
+    this.update({
+      'startIndex': this.startIndex + this.count,
+      'count': this.count
+    });
+    this.startIndex += this.count;
+  },
+  _previousHandler: function(){
+    this.update({
+      'startIndex': this.startIndex - this.count,
+      'count': this.count
+    });
+    this.startIndex -= this.count;
   },
   _aboutGroupsHandler: function(){
     var m = '\
@@ -186,13 +238,21 @@ ossi.grouplist = Class.create(ossi.base, {
     ';
     this.parent.case6({
       message: m,
-      buttonText: "Back"
+      buttonText: "Back",
+      backCase: this.parent.case25.bind(this.parent, {
+        out: true,
+        backCase: this.parent.case3.bind(this.parent, {
+          out: true
+        })
+      })
     });
   },
   _addListeners: function(){
     $('create_group_button').onclick = this._createGroupHandler.bindAsEventListener(this);
     $('about_groups_button').onclick = this._aboutGroupsHandler.bindAsEventListener(this);
     $('groups_back_button').onclick = this._backHandler.bindAsEventListener(this);
+    $('groups_next_button').onclick = this._nextHandler.bindAsEventListener(this);
+    $('groups_previous_button').onclick = this._previousHandler.bindAsEventListener(this);
     $('groups_back_button2').onclick = this._backHandler.bindAsEventListener(this);
   },
   _removeListeners: function(){
@@ -203,6 +263,12 @@ ossi.grouplist = Class.create(ossi.base, {
       return
     };
     $('groups_back_button').onclick = function(){
+      return
+    }
+    $('groups_next_button').onclick = function(){
+      return
+    }
+    $('groups_previous_button').onclick = function(){
       return
     }
     $('groups_back_button2').onclick = function(){

@@ -77,7 +77,7 @@ ossi.changepassword = Class.create(ossi.base,{
     self.parent.loadingpane.show();
     new Ajax.Request(URL, {
       method : 'put',
-      requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
+      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
       parameters : params,
       onSuccess : function() {
         self.parent.loadingpane.hide();

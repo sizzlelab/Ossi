@@ -25,7 +25,7 @@ ossi.profile = Class.create(ossi.base,{
     self.parent.showLoading();
     new Ajax.Request(URL, {
       method : 'get',
-      requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
+      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
       onSuccess : function(response) { // does not handle invalid responses
         var json = response.responseJSON;
 				json = json.entry;
@@ -180,7 +180,7 @@ ossi.profile = Class.create(ossi.base,{
     new Ajax.Request(URL, {
       method : 'post',
       parameters : params,
-      requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
+      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
       onSuccess : function(response) { // does not handle invalid responses
         var json = response.responseJSON;
         // currently returns currently logged in user's data. no need to parse
@@ -207,8 +207,8 @@ ossi.profile = Class.create(ossi.base,{
     var URL = BASE_URL+'/people/'+this.parent.userId+'/@friends/' + this.options.userId;
     self.parent.showLoading();
     new Ajax.Request(URL, {
-      method : 'delete',
-      requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
+      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie),
+      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
       onSuccess : function(response) { // does not handle invalid responses
         var json = response.responseJSON;
         // currently returns currently logged in user's data. no need to parse
@@ -238,7 +238,7 @@ ossi.profile = Class.create(ossi.base,{
     new Ajax.Request(URL, {
       method : 'post',
       parameters : params,
-      requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
+      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
       onSuccess : function(response) { // does not handle invalid responses
         self.parent.case6({
           message : "Friend request accepted!",
@@ -257,8 +257,8 @@ ossi.profile = Class.create(ossi.base,{
     var URL = BASE_URL + '/people/'+this.parent.userId+'/@pending_friend_requests/'+this.options.userId;
     self.parent.showLoading();
     new Ajax.Request(URL, {
-      method : 'delete',
-      requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
+      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie),
+      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
       onSuccess : function(response) { // does not handle invalid responses
         // should check if the request fails though
         self.parent.case6({

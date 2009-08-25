@@ -72,11 +72,11 @@ ossi.login = Class.create(ossi.base,{
     new Ajax.Request(BASE_URL+'/session', { 
       method : 'post',
       parameters : params,
-      requestHeaders : (client.is_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
+      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
       on409 : function() { // found existing session, removing it first!
         new Ajax.Request(BASE_URL+'/session', {
-          method : 'delete',
-          requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
+          requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie),
+          requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
           onSuccess : function() {
             self.parent.sessionCookie = false;
             self._loginHandler();
@@ -99,7 +99,7 @@ ossi.login = Class.create(ossi.base,{
     		// we also need name for that id
     		new Ajax.Request(BASE_URL+'/people/'+self.parent.userId+'/@self', {
     			method : 'get',
-    			requestHeaders : (client.is_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
+    			requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
     			onSuccess : function(response) {
     				var json = response.responseJSON;
     				var name = (json.name != null) ? json.name['unstructured'] : json.username; // if name has not been set
@@ -166,11 +166,11 @@ ossi.login = Class.create(ossi.base,{
     new Ajax.Request(BASE_URL+'/session', { 
       method : 'post',
       parameters : params,
-      requestHeaders : (client.is_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
+      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
       on409 : function() { // found existing session, removing it first!
         new Ajax.Request(BASE_URL+'/session', {
-          method : 'delete',
-          requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
+          requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie),
+          requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
           onSuccess : function() {
             self.parent.sessionCookie = false;
             self._wappuHandler();
@@ -193,7 +193,7 @@ ossi.login = Class.create(ossi.base,{
 		// we also need name for that id
 		new Ajax.Request(BASE_URL+'/people/'+self.parent.userId+'/@self', {
 			method : 'get',
-			requestHeaders : (client.is_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
+			requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
 			onSuccess : function(response) {
 				var json = response.responseJSON;
 				var name = (json.name != null) ? json.name['unstructured'] : json.username; // if name has not been set

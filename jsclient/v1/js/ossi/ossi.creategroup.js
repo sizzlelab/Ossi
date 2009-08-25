@@ -68,7 +68,7 @@ ossi.creategroup = Class.create(ossi.base, {
     self.parent.showLoading();
     new Ajax.Request(URL, {
       method: 'post',
-      requestHeaders: (client.is_widget) ? ['Cookie', self.parent.sessionCookie] : '',
+      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
       parameters: params,
       onSuccess: function(response) { // now post the new group's collection ID and title to group list collection
         self.parent.hideLoading();

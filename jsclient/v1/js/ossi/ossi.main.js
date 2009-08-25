@@ -117,7 +117,7 @@ ossi.main = Class.create(ossi.base,{
     this._setClientUI(); // on the basis of the client values make CSS changes
     if (client.is_WRT_widget) { // init location engine
       this.locator = new ossi.location(this);
-      this.locator.run();
+//      this.locator.run();
     }
     BASE_URL = (client.is_widget) ? 'http://cos.sizl.org' : '/cos'; // where to go asking for COS
     MAX_REQUEST_LENGTH = 20; // in seconds
@@ -172,7 +172,7 @@ ossi.main = Class.create(ossi.base,{
 	  var self = this;
     new Ajax.Request(BASE_URL+'/session', { 
       method : 'get',
-      requestHeaders : (client.is_widget) ? ['Cookie',self.sessionCookie] : '',
+      requestHeaders : (client.is_Dashboard_widget && self.sessionCookie) ? ['Cookie',self.sessionCookie] : '',
       onSuccess : function(response) {
         self._case1c(response);
       },
@@ -194,17 +194,18 @@ ossi.main = Class.create(ossi.base,{
     },response.responseJSON);
 	  if (json.entry.user_id != null) {
   		this.userId = json.entry.user_id;
+  		this.appId = json.entry.app_id;
   		// get username here instead of mainmenu or channel or whatever
   		new Ajax.Request(BASE_URL+'/people/'+this.userId+'/@self', {
   			method : 'get',
-  			requestHeaders : (client.is_widget && self.sessionCookie) ? ['Cookie',self.sessionCookie] : '',
+  			requestHeaders : (client.is_Dashboard_widget && self.sessionCookie) ? ['Cookie',self.sessionCookie] : '',
   			onSuccess : function(response) {
   				var json = response.responseJSON;
   				self.userName = (json.name != null) ? json.name['unstructured'] : json.username;
   				if (typeof(json.role)  != 'undefined' && json.role != null) {
   					self.userRole = json.role;
   				}
-      		if (self.options.channelId) { //go to specified channel
+      		if (self.options.channelId) { //go to specified channel // THESE BACKCASE WILL PROBABLY NOT WORK DUE TO NEW STACK SYSTEM / JT
       			self.case20({start : true, channelId : self.options.channelId,
       				backCase : self.case18.bind(self,{ out : true, backCase : self.case3.bind(self,{out:true})
       				})
@@ -277,10 +278,70 @@ ossi.main = Class.create(ossi.base,{
 	* main screen
 	*/
 	case3: function(options) {
+    var self = this;
+
 		var options = Object.extend({
       out : false,
       backCase : false
 	  },options);
+
+    // THIS IS NOT WELL WRITTEN SO PLEASE FIND TIME TO MODULARISE THIS INTO A SETTINGS CLASS
+    // check for automatic location updates
+    if (client.is_WRT_widget) {
+      if (Object.isUndefined(this.settings_auto_updates)) { // first time, we don't have a value for the parameter yet
+        if (Object.isUndefined(this.userId) || Object.isUndefined(this.appId)) { // force re login
+          new Ajax.Request(BASE_URL + '/session', {
+            method: 'delete',
+            requestHeaders : (client.is_Dashboard_widget && self.sessionCookie) ? ['Cookie', self.sessionCookie] : '',
+            onSuccess: function(){
+              self.sessionCookie = false;
+        
+              delete self.userId; //deleted so that attribute could be indicator of valid session.
+              delete self.userName;
+              delete self.userRole;
+              if (! Object.isUndefined(self.locator)) self.locator.stop();
+        
+              self.case1({
+                out: true
+              });
+              return;
+            }
+          });
+        }
+        var URL = BASE_URL + '/appdata/'+self.userId+'/@self/'+self.appId;
+        new Ajax.Request(URL, {
+          method : 'get',
+          requestHeaders : (client.is_Dashboard_widget && self.sessionCookie) ? ['Cookie',self.sessionCookie] : '',
+          onSuccess : function(response) {
+            var json = response.responseJSON;
+            if (Object.isUndefined(json.entry.settings_auto_updates)) {
+              // create the settings key with default value true
+              var params = {
+                "data['settings_auto_updates']" : true
+              };
+              new Ajax.Request(URL, {
+                method : 'put',
+                parameters : params,
+                requestHeaders : (client.is_Dashboard_widget && self.sessionCookie) ? ['Cookie',self.sessionCookie] : ''
+              });
+              self.settings_auto_updates = true;
+            } else { // object exists
+              self.settings_auto_updates = json.entry.settings_auto_updates;
+            }
+
+            // act accordingly 
+            if (self.settings_auto_updates) {
+              if (client.is_WRT_widget) self.locator.run();
+            }
+          },
+          onFailure : function(response) {
+          }
+          
+        });
+      } else if (this.autoUpdates) {
+        if (client.is_WRT_widget) this.locator.run();
+      } // no else
+    }
 
     // stack stuff
     this.stackReset();

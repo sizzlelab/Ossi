@@ -24,7 +24,7 @@ ossi.mypost = Class.create(ossi.base,{
       self.parent.showLoading();
       new Ajax.Request(URL,{
         method : 'get',
-        requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
+        requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
         onSuccess : function(response) {
           self.parent.hideLoading();
           var json = response.responseJSON;
@@ -116,7 +116,7 @@ ossi.mypost = Class.create(ossi.base,{
     new Ajax.Request(URL,{
       method : 'post',
       parameters : params,
-      requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
+      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
       onSuccess : function(response) { // now post the new channel's collection ID and title to channel list collection
         self.parent.hideLoading();
         self.parent.case6({

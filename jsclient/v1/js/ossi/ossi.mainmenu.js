@@ -135,7 +135,7 @@ ossi.mainmenu = Class.create(ossi.base, {
     this.parent.loadingpane.show();
     new Ajax.Request(BASE_URL + '/session', {
       method: 'delete',
-      requestHeaders: (client.is_widget) ? ['Cookie', self.parent.sessionCookie] : '',
+      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
       onSuccess: function(){
         self.parent.sessionCookie = false;
         

@@ -44,7 +44,7 @@ ossi.channel = Class.create(ossi.base, {
     self.parent.showLoading();
     new Ajax.Request(URL, {
       method: 'get',
-      requestHeaders: (client.is_widget) ? ['Cookie', self.parent.sessionCookie] : '',
+      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
       parameters: params,
       onSuccess: function(response){
         //        if(!self.options.wall) self.parent.hideLoading();
@@ -105,7 +105,7 @@ ossi.channel = Class.create(ossi.base, {
     var URL = BASE_URL + '/channels/' + self.options.channelId;
     new Ajax.Request(URL, {
       method: 'get',
-      requestHeaders: (client.is_widget) ? ['Cookie', self.parent.sessionCookie] : '',
+      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
       onSuccess: function(response){
         response = response.responseJSON;
         var m = '';
@@ -275,7 +275,7 @@ ossi.channel = Class.create(ossi.base, {
     self.parent.showLoading();
     new Ajax.Request(URL, {
       method: 'delete',
-      requestHeaders: (client.is_widget) ? ['Cookie', self.parent.sessionCookie] : '',
+      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
       onSuccess: function(response){
         self.parent.hideLoading();
         var json = response.responseJSON;

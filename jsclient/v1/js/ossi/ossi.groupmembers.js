@@ -26,7 +26,7 @@ ossi.groupmembers = Class.create(ossi.base,{
     self.parent.showLoading();
     new Ajax.Request(URL, {
       method : 'get',
-      requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
+      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
       onSuccess : function(response) {
         var json = response.responseJSON;
         if (typeof(json.entry) != 'undefined') {
@@ -44,7 +44,7 @@ ossi.groupmembers = Class.create(ossi.base,{
               var URL = BASE_URL+'/people/'+user.id+'/@location';
               new Ajax.Request(URL,{
                 method : 'get',
-                requestHeaders : (client.is_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
+                requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
                 onSuccess : function(response) {
                   var json = response.responseJSON;
                   if (Object.isNumber(json.latitude) && Object.isNumber(json.longitude)) {

@@ -22,10 +22,10 @@ ossi.myprofile = Class.create(ossi.base,{
     self.parent.showLoading();
     new Ajax.Request(URL, {
       method : 'get',
-      requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
+      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
       onSuccess : function(response) { // does not handle invalid responses
         var json = response.responseJSON;
-								json = json.entry;
+				json = json.entry;
         if (json.name != null) $('profile_first_name').value = json.name.given_name;
         if (json.name != null) $('profile_last_name').value = json.name.family_name;
         if (json.description != null) $('profile_about_me').value = json.description;
@@ -68,21 +68,30 @@ ossi.myprofile = Class.create(ossi.base,{
           }
         }
 
-        // get location
-        URL = BASE_URL+'/people/'+self.parent.userId+'/@location';
-        new Ajax.Request(URL,{
-          method : 'get',
-          requestHeaders : (client.is_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
-          onSuccess : function(response) {
-            var json = response.responseJSON;
-												// TODO: unddeeded AJAX request?!
-            // print location here
-
-            setTimeout(function() {
-              self.parent.hideLoading();
-            }, 600);
-          }
-        });
+        // get settings
+        if (client.is_WRT_widget) {
+          URL = BASE_URL + '/appdata/'+self.parent.userId+'/@self/'+self.parent.appId;
+          new Ajax.Request(URL,{
+            method : 'get',
+            requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
+            onSuccess : function(response) {
+              var json = response.responseJSON;
+              alert(json.entry.settings_auto_updates);
+              if (json.entry.settings_auto_updates) {
+                self.parent.settings_auto_updates = true;
+                $('location_updates_button_container').show();
+                $('location_updates_button').update('Disable automatic location updates');
+              } else {
+                self.parent.settings_auto_updates = false;
+                $('location_updates_button_container').show();
+                $('location_updates_button').update('Enable automatic location updates');
+              }
+            }
+          });
+        }
+        setTimeout(function() {
+          self.parent.hideLoading();
+        }, 600);
       }
     });
 	},
@@ -167,6 +176,9 @@ ossi.myprofile = Class.create(ossi.base,{
             				<div class="nav_button">\
             					<a id="avatar_button" class="nav_button_text" href="javascript:void(null);">Change avatar</a>\
             				</div>\
+            				<div class="nav_button" id="location_updates_button_container" style="display:none">\
+            					<a id="location_updates_button" class="nav_button_text" href="javascript:void(null);">Disable automatic location updates</a>\
+            				</div>\
 							      <div class="nav_button">\
             					<a id="password_button" class="nav_button_text" href="javascript:void(null);">Change password</a>\
             				</div>\
@@ -202,7 +214,7 @@ ossi.myprofile = Class.create(ossi.base,{
     self.parent.loadingpane.show();
     new Ajax.Request(URL, {
       method : 'put',
-      requestHeaders : (client.is_widget) ? ['Cookie',self.parent.sessionCookie] : '',
+      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
       parameters : params,
       onSuccess : function() {
         self.parent.loadingpane.hide();
@@ -252,18 +264,56 @@ ossi.myprofile = Class.create(ossi.base,{
       })
     });
   },
+  
+  _toggleLocationUpdatesHandler: function() {
+    var self = this;
+    var params = {};
+    if (self.parent.settings_auto_updates) {
+      self.parent.settings_auto_updates = false;
+      params = {
+        "data['settings_auto_updates']" : false
+      };
+    } else {
+      self.parent.settings_auto_updates = true;
+      params = {
+        "data['settings_auto_updates']" : true
+      };
+    }
+    self.parent.loadingpane.show();
+    var URL = BASE_URL + '/appdata/'+self.parent.userId+'/@self/'+self.parent.appId;
+    new Ajax.Request(URL, {
+      method : 'put',
+      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
+      parameters : params,
+      onSuccess : function() {
+        if (self.parent.settings_auto_updates) {
+          self.parent.locator.run();
+          $('location_updates_button').update('Disable automatic location updates');
+        } else {
+          self.parent.locator.stop();
+          $('location_updates_button').update('Enable automatic location updates');
+        }
+        self.parent.loadingpane.hide();
+      },
+      onFailure : function() {
+        
+      }
+    });
+  },
 
   _addListeners: function() {
     $('save_button').onclick = this._saveHandler.bindAsEventListener(this);
     $('avatar_button').onclick = this._avatarHandler.bindAsEventListener(this);
-	   $('password_button').onclick = this._passwordHandler.bindAsEventListener(this);
+    $('password_button').onclick = this._passwordHandler.bindAsEventListener(this);
     $('myprofile_cancel_button').onclick = this._cancelHandler.bindAsEventListener(this);
+    $('location_updates_button').onclick = this._toggleLocationUpdatesHandler.bindAsEventListener(this);
   },
   _removeListeners: function() {
     $('save_button').onclick = function() { return }
     $('avatar_button').onclick = function() { return }
     $('password_button').onclick = function() { return }
-	$('myprofile_cancel_button').onclick = function() { return }
+	  $('myprofile_cancel_button').onclick = function() { return }
+    $('location_updates_button').onclick = function() { return }
   },
   destroy: function () {
     this._removeListeners();
