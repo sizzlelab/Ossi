@@ -122,7 +122,7 @@ ossi.status = Class.create(ossi.base, {
                         <dd style=" margin:0px 0px 5px 15px;"><input type="text" class="myprofile_input" id="status_input" name="status" />\
                       </dd>\
               ';
-    if (Object.isUndefined(self.parent.locator)) {
+    if (Object.isUndefined(this.parent.locator) || this.parent.settings_auto_updates == false) {
       h += '\
                         <dt style="color:#666; margin:0px 0px 5px 0px;">Where are ya?</dt>\
                         <dd style=" margin:0px 0px 5px 15px;"><input type="text" class="myprofile_input" id="location_input" name="location" />\</dd>\

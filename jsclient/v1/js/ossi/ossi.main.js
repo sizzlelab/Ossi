@@ -317,7 +317,7 @@ ossi.main = Class.create(ossi.base,{
             if (Object.isUndefined(json.entry.settings_auto_updates)) {
               // create the settings key with default value true
               var params = {
-                "data['settings_auto_updates']" : true
+                'data[settings_auto_updates]' : true
               };
               new Ajax.Request(URL, {
                 method : 'put',
@@ -326,7 +326,13 @@ ossi.main = Class.create(ossi.base,{
               });
               self.settings_auto_updates = true;
             } else { // object exists
-              self.settings_auto_updates = json.entry.settings_auto_updates;
+
+              // ASI converts these into strings thus:
+              if (json.entry.settings_auto_updates == 'true') {
+                self.settings_auto_updates = true;
+              } else if (json.entry.settings_auto_updates == 'false') {
+                self.settings_auto_updates = false;
+              }
             }
 
             // act accordingly 

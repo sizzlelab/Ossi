@@ -76,8 +76,7 @@ ossi.myprofile = Class.create(ossi.base,{
             requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
             onSuccess : function(response) {
               var json = response.responseJSON;
-              alert(json.entry.settings_auto_updates);
-              if (json.entry.settings_auto_updates) {
+              if (json.entry.settings_auto_updates == 'true') {
                 self.parent.settings_auto_updates = true;
                 $('location_updates_button_container').show();
                 $('location_updates_button').update('Disable automatic location updates');
@@ -271,12 +270,12 @@ ossi.myprofile = Class.create(ossi.base,{
     if (self.parent.settings_auto_updates) {
       self.parent.settings_auto_updates = false;
       params = {
-        "data['settings_auto_updates']" : false
+        'data[settings_auto_updates]' : false
       };
     } else {
       self.parent.settings_auto_updates = true;
       params = {
-        "data['settings_auto_updates']" : true
+        'data[settings_auto_updates]' : true
       };
     }
     self.parent.loadingpane.show();
@@ -286,7 +285,7 @@ ossi.myprofile = Class.create(ossi.base,{
       requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
       parameters : params,
       onSuccess : function() {
-        if (self.parent.settings_auto_updates) {
+        if (self.parent.settings_auto_updates) { // these, for some reason, as set to strings in ASI
           self.parent.locator.run();
           $('location_updates_button').update('Disable automatic location updates');
         } else {

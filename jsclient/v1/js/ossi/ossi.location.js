@@ -94,9 +94,9 @@ ossi.location = Class.create(ossi.base,{
       if (! self.running) { 
         pe.stop();
         return;
+      } else {
+        self.update();
       }
-      alert('updating');
-      self.update();
     }, interval);
   },
   stop: function() {
