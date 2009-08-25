@@ -472,13 +472,11 @@ ossi.main = Class.create(ossi.base,{
       'buttonText' : options.buttonText
     });
 
-    this.utils.into(this.sub2.pane,this.sub1.pane,function() {
-// DO NOT DESTROY sub2
-// IT IS USED AGAIN WHEN GETTING BACK TO USER PROFILE TO KEEP USER BROWSING PATH INTACT
-//      this.sub2.destroy(); 
-
-// note that not destroying sub2 here affects all other use cases within the application where case6 is called!!! / JT
-    }.bind(this));
+    this.utils.into(
+      this.sub2.pane,
+      this.sub1.pane,
+      function() {this.sub2.destroy();}.bind(this)
+    );
 	},
 	/**
 	* status
