@@ -234,6 +234,7 @@ ossi.mainmenu = Class.create(ossi.base, {
     }
   },
   destroy: function(){
+    clearInterval(this.interval);
     this._removeListeners();
     this.pane.remove();
   }
