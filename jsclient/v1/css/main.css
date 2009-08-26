@@ -166,6 +166,10 @@ a:hover {
     outline: none;
 }
 
+div:hover {
+    outline: none;
+}
+
 .nav_button {
 /*  #display: block;*/
   border: solid 1px black;
@@ -504,13 +508,6 @@ a:link {
 a:visited { 
   color:white; 
   text-decoration:none; 
-}
-
-a:hover { 
-  color:white; 
-  text-decoration:none;
-/*  background: #fc7e17 url(../images/button_bg_hover.png) repeat-x top;*/
-  background: transparent;
 }
 
 a:active {
