@@ -100,7 +100,7 @@ ossi.signup = Class.create(ossi.base,{
           buttonText : "Try again"
         });
       },
-      on401 : function() {
+      on403 : function() {
         self.parent.hideLoading();
         self.parent.case6({
           backCase : self.parent.case5.bind(self.parent,{

@@ -132,7 +132,7 @@ ossi.login = Class.create(ossi.base,{
 	        self.parent.case3();
         }
       },
-      on401 : function() {
+      on403 : function() {
         self.parent.hideLoading();
         self.parent.case6({
           backCase : self.parent.case2.bind(self.parent,{out:true}),
@@ -221,7 +221,7 @@ ossi.login = Class.create(ossi.base,{
 	        self.parent.case3();
         }
       },
-      on401 : function() {
+      on403 : function() {
         self.parent.hideLoading();
         self.parent.case6({
           backCase : self.parent.case2.bind(self.parent,{out:true}),
@@ -246,7 +246,7 @@ ossi.login = Class.create(ossi.base,{
     this.parent.case16({ backCase : this.parent.case2.bind(this.parent,{out:true}) });
   },
   _aboutHandler: function() {
-    this.parent.case4({ backCase : this.parent.case2.bind(this.parent,{out:true}) });
+    this.parent.case4();
   },
   _addListeners: function() {
     $('login_form').observe('submit',this._loginHandler.bindAsEventListener(this));
