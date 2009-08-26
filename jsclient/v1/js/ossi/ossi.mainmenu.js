@@ -36,7 +36,7 @@ ossi.mainmenu = Class.create(ossi.base, {
         var name = (json.name != null) ? json.name['unstructured'] : json.username; // if name has not been set
         self.parent.userName = name;
         $('mainmenu_profile_name').update(name);
-        var status_message = false;
+        var status_message = '';
         var status_time = false;
         var location = '';
         if (typeof(json.location) != 'undefined') {
@@ -62,9 +62,9 @@ ossi.mainmenu = Class.create(ossi.base, {
             }
           }
         }
-        if (status_message) {
-          $('mainmenu_status_text').update(status_message + location);
-        }
+        
+        $('mainmenu_status_text').update(status_message + location);
+        
         URL = BASE_URL + '/people/@me/@pending_friend_requests'
         new Ajax.Request(URL, {
           method: 'get',
