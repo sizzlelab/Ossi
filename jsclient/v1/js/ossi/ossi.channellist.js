@@ -246,7 +246,7 @@ ossi.channellist = Class.create(ossi.base, {
                 <div style="font-size:10px; padding:10px">\
         				  <h2>About Channels</h2>\
                   <p>You can create private (red) and public (green) channels on Ossi. Private channels are visible only to the creator\'s Sizl friends and public channels are visible to all Ossi users.</p>\
-                  <p>If you find any bugs or have some other comments about the functionalities of the channels or Ossi in general please post a comment on Ossi\'s "Features & Bugs" channel, or email us at <a href="mailto:helpdesk-otasizzle@hiit.fi">helpdesk-otasizzle@hiit.fi</a>.</p>\
+                  <p>If you find any bugs or have some other comments about the functionalities of the channels or Ossi in general please post a comment on Ossi\'s "Features & Bugs" channel, or email us at <a href="mailto:otasizzle-helpdesk@hiit.fi">otasizzle-helpdesk@hiit.fi</a>.</p>\
                 </div>\
     ';
     this.parent.case6({

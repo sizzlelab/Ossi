@@ -233,7 +233,7 @@ ossi.grouplist = Class.create(ossi.base, {
                 <div style="font-size:10px; padding:10px">\
         				  <h2>About Groups</h2>\
                   <p>Information is not yet available.</p>\
-                  <p>If you find any bugs or have some other comments about the functionalities of the groups or Ossi in general please post a comment on Ossi\'s "Features & Bugs" channel, or email us at <a href="mailto:helpdesk-otasizzle@hiit.fi">helpdesk-otasizzle@hiit.fi</a>.</p>\
+                  <p>If you find any bugs or have some other comments about the functionalities of the groups or Ossi in general please post a comment on Ossi\'s "Features & Bugs" channel, or email us at <a href="mailto:otasizzle-helpdesk@hiit.fi">otasizzle-helpdesk@hiit.fi</a>.</p>\
                 </div>\
     ';
     this.parent.case6({
