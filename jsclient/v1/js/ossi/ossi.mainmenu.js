@@ -72,7 +72,7 @@ ossi.mainmenu = Class.create(ossi.base, {
           onSuccess: function(response){
             var json = response.responseJSON;
             if (json.entry.length > 0) 
-              Element.insert($('friends_button'), ' <span style="font-size:10px; font-weight:bold;">(' + json.entry.length + ' new)</span>');
+              $('pending_friends_container').update('<b>(' + json.entry.length + ' new)</b>');
             
 //            setTimeout(function(){
 //              self.parent.hideLoading();
@@ -95,7 +95,7 @@ ossi.mainmenu = Class.create(ossi.base, {
   _getHTML: function(){
     var h = '\
           			<div id="mainmenupane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
-          				<div id="logo_small"></div>\
+          				<div id="logo_small" style="text-align: right; padding-top:7px; padding-right:10px;"><a style="color:#ff9c00;" href="http://sizl.org">www.sizl.org</a></div>\
           				<div id="microblog_button" class="post_button">\
                     <div class="post_button_left_column"><img style="margin:2px 0px 0px 2px; border:solid #eee 1px;" src="' +
     BASE_URL +
@@ -112,7 +112,7 @@ ossi.mainmenu = Class.create(ossi.base, {
           					<a id="feeds_button" class="nav_button_text" href="javascript:void(null);">Feeds</a>\
           				</div>\
           				<div class="nav_button">\
-          				  <a id="friends_button" class="nav_button_text" href="javascript:void(null);">Friends</a>\
+          				  <a id="friends_button" class="nav_button_text" href="javascript:void(null);">Friends <span id="pending_friends_container"></span></a>\
           				</div>\
           				<div class="nav_button">\
           					<a id="groups_button" class="nav_button_text" href="javascript:void(null);">Groups</a>\
