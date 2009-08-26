@@ -161,6 +161,11 @@ body.widget {
   text-decoration:none;
 }
 
+/* Removes the blue frames of links in S60 */
+a:hover { 
+    outline: none;
+}
+
 .nav_button {
 /*  #display: block;*/
   border: solid 1px black;
