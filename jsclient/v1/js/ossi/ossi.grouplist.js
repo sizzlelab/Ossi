@@ -232,8 +232,9 @@ ossi.grouplist = Class.create(ossi.base, {
     var m = '\
                 <div style="font-size:10px; padding:10px">\
         				  <h2>About Groups</h2>\
-                  <p>You can join any groups that are relevant to you. This allows you to check what its members are doing and communicate with them in group channels. You can also create groups of your own and add channels to enable group communication. Only the creator of a group can add or remove channels.</p>\
-                  <p>If you find any bugs or have some other comments about the groups functionality - or Ossi in general please post a comment on Ossi\'s "Bugs" channel, or email us at <a href="mailto:otasizzle-helpdesk@hiit.fi">otasizzle-helpdesk@hiit.fi</a>.</p>\
+                  <p>You can join groups that are relevant to you and add group channels to them. This allows you to check what other group members are doing and communicate with them. The group channels are visible only to the members of the group.</p>\
+                  <p>You can also create groups of your own. Note that a group and all its channels are deleted if even the last member leaves the group.</p>\
+                  <p>If you find any bugs or have some other comments about the functionalities of the groups or Ossi in general please post a comment on Ossi\'s "Ossi Feedback" channel, or email us at <a href="mailto:otasizzle-helpdesk@hiit.fi">otasizzle-helpdesk@hiit.fi</a>.</p>\
                 </div>\
     ';
     this.parent.case6({

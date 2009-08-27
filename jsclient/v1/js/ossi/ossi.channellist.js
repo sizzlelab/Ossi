@@ -245,9 +245,10 @@ ossi.channellist = Class.create(ossi.base, {
     var m = '\
                 <div style="font-size:10px; padding:10px">\
         				  <h2>About Channels</h2>\
-                  <p>You can create friend (red) and public (green) channels on Ossi. Friend channels are visible only to the creator\'s Sizl friends and public channels are visible to all Ossi users.</p>\
-                  <p>If you are the administrator of a group, you can also create group channels (yellow) through the group\'s page. Group channels are visible only to the members of the group.</p>\
-                  <p>You can reach support by emailing us at <a href="mailto:otasizzle-helpdesk@hiit.fi">otasizzle-helpdesk@hiit.fi</a>.</p>\
+                  <p>Browse the channels in Sizzle to see what\'s being discussed and what\'s happening around you. You can participate in the discussion by posting messages. The most recently updated channels are ranked on the top of the Sizzle view.</p>\
+                  <p>Ossi has three types of channels. Public (green) channels are open to all Sizl users. Friends-only (read) are visible only to the creator\'s Sizl friends. You can create new channels yourself or use ones that already exist.</p>\
+                  <p>You can also create group channels (orange) through the group\'s profile page. Group channels are visible only to the members of the group. You can view group channels either in the group’s profile page or in the Sizzle view.</p>\
+                  <p>If you find any bugs or have some other comments about the functionalities of the groups or Ossi in general please post a comment on Ossi\'s "Ossi Feedback" channel, or email us at <a href="mailto:otasizzle-helpdesk@hiit.fi">otasizzle-helpdesk@hiit.fi</a>.</p>\
                 </div>\
     ';
     this.parent.case6({
