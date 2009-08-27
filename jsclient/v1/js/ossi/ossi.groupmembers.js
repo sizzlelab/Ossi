@@ -38,25 +38,7 @@ ossi.groupmembers = Class.create(ossi.base,{
             $('friends_placeholder').update(h);
             self._addLinkListeners();
             if (json.entry.length > 5) $('friend_list_back_button_2_container').show(); // show second back button at top of screen if more than 5 channels
-
-            // now loop through results again and fetch user location (this is a temporary measure)
-            json.entry.each(function(user) {
-              var URL = BASE_URL+'/people/'+user.id+'/@location';
-              new Ajax.Request(URL,{
-                method : 'get',
-                requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
-                onSuccess : function(response) {
-                  var json = response.responseJSON;
-                  if (Object.isNumber(json.latitude) && Object.isNumber(json.longitude)) {
-                    $('friend_uid_link_'+user.id).insert(' @ ' + self.parent.utils.roundNumber(json.latitude,4) + ' / ' + self.parent.utils.roundNumber(json.longitude,4) + ' ' + self.parent.utils.agoString(json.updated_at));
-                  }
-                  setTimeout(function() {
-                    self.parent.hideLoading();
-                  }, 600);
-                }
-              });
-            },self);
-            
+            self.parent.hideLoading();
           } else {
             $('friends_placeholder').replace('<div style="padding:10px; text-align:center">Your friend list is currently empty. Click on "Find Friends" to search for people in the network and add them onto your list.</div>');
           }
@@ -97,6 +79,7 @@ ossi.groupmembers = Class.create(ossi.base,{
     var name = (user.name != null) ? user.name['unstructured'] : user.username; // if name has not been set
     var status_message = '';
     var status_time = '';
+    var location = '';
     if (typeof(user.status) != 'undefined') {
       if (user.status.message != 'undefined') {
         if (user.status.message != null) {
@@ -109,13 +92,24 @@ ossi.groupmembers = Class.create(ossi.base,{
         }
       }
     }
+    if (user.location ) {
+    if (user.location.label) {
+     location = ' @ ' + user.location.label;
+    }
+    else 
+     if (Object.isNumber(user.location.latitude) && Object.isNumber(user.location.longitude)) {
+      location = ' @ ' + this.parent.utils.roundNumber(user.location.latitude, 4) + ' / ' + this.parent.utils.roundNumber(user.location.longitude, 4);
+     }
+     // Take min of location and status update
+     // update_time = user.location.updated_at;
+   }
 
     var h =   '\
           				<div class="profile_button" id="person_uid_'+user.id+'" href="javascript:void(null);">\
                     <div class="post_button_left_column"><img style="margin:2px 0px 0px 2px; border:solid #eee 1px;" src="'+BASE_URL+'/people/'+user.id+'/@avatar/small_thumbnail?'+Math.random()*9999+'" width="50" height="50" border="0" /></div>\
                     <div class="post_button_text">\
         						  <div class="button_title"><a id="friend_uid_link_'+user.id+'" href="javascript:void(null);">'+name+'</a></div>\
-        						  <div class="button_content_text"><a href="javascript:void(null);">'+status_message+'</a></div>\
+        						  <div class="button_content_text"><a href="javascript:void(null);">'+status_message + location+ '</a></div>\
         						  <div class="button_subtitle_text" style="padding-top:3px">'+status_time+'</div>\
                     </div>\
           				</div>\
