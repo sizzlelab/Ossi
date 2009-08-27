@@ -27,7 +27,7 @@ ossi.about = Class.create(ossi.base,{
           				  <h2>About Ossi</h2>\
                     <p>Ossi is a group-centered mobile social media service. You can use Ossi to connect with friends, keep in touch with groups and to stay tuned to what is sizzling around you. We have developed Ossi especially to be used on the three Aalto university campuses in Helsinki metropolitan area. It is a part of the OtaSizzle research project that develops new social media services and studies their adoption and use.</p>\
                     <p>Ossi has been developed to be used on the go. You can use it from your mobile phone either with a web browser or as an installed application (WRT widget). Furthermore, you can use Ossi from a desktop with a web browser or, if you are a Mac user, as a dashboard widget.</p>\
-                    <p>Currently, the service is in beta phase. We develop Ossi continuously. You are welcome to shape the future of Ossi by sharing your ideas and giving feedback. Moreover, please report all problems to <a href="mailto:otasizzle-helpdesk@hiit.fi">otasizzle-helpdesk@hiit.fi</a>. For more information and downloads, visit <a href="http://sizl.org">sizl.org</a>.</p>
+                    <p>Currently, the service is in beta phase. We develop Ossi continuously. You are welcome to shape the future of Ossi by sharing your ideas and giving feedback. Moreover, please report all problems to <a href="mailto:otasizzle-helpdesk@hiit.fi">otasizzle-helpdesk@hiit.fi</a>. For more information and downloads, visit <a href="http://sizl.org">sizl.org</a>.</p>\
                   </div>\
           				<div class="nav_button">\
           					<a id="back_button" class="nav_button_text" href="javascript:void(null);">Back</a>\
