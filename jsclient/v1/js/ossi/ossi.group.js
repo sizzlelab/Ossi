@@ -102,7 +102,7 @@ ossi.group = Class.create(ossi.base, {
             					<a id="members_button" class="nav_button_text" href="javascript:void(null);">Members</a>\
             				</div>\
             				<div id="group_channels_button_container" class="nav_button">\
-            					<a id="group_channels_button" class="nav_button_text" href="javascript:void(null);">Group\'s Sizzle</a>\
+            					<a id="group_channels_button" class="nav_button_text" href="javascript:void(null);">Group Chat</a>\
             				</div>\
             				<div class="nav_button">\
             					<a id="back_button" class="nav_button_text" href="javascript:void(null);">Back</a>\
