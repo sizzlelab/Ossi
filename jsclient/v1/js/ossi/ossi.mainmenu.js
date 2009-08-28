@@ -27,8 +27,10 @@ ossi.mainmenu = Class.create(ossi.base, {
     var self = this;
     var URL = BASE_URL + '/people/@me/@self';
 //    self.parent.showLoading();
+    var params = { 'event_id' : 'Ossi::MainMenu' };
     new Ajax.Request(URL, {
       method: 'get',
+      parameters: params,
       requestHeaders: (client.is_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
       onSuccess: function(response){
         var json = response.responseJSON;
@@ -66,8 +68,10 @@ ossi.mainmenu = Class.create(ossi.base, {
         $('mainmenu_status_text').update(status_message + location);
         
         URL = BASE_URL + '/people/@me/@pending_friend_requests'
+        var params = { 'event_id' : 'Ossi::MainMenu' };
         new Ajax.Request(URL, {
           method: 'get',
+          parameters: params,
           requestHeaders: (client.is_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
           onSuccess: function(response){
             var json = response.responseJSON;
@@ -134,8 +138,10 @@ ossi.mainmenu = Class.create(ossi.base, {
     var self = this;
     clearInterval(this.interval);
     this.parent.loadingpane.show();
+    var params = { 'event_id' : 'Ossi::MainMenu' }; 
     new Ajax.Request(BASE_URL + '/session', {
       method: 'delete',
+      parameters: params,
       requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
       onSuccess: function(){
         self.parent.sessionCookie = false;
