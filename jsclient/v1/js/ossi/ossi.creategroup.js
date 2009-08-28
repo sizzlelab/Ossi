@@ -32,7 +32,7 @@ ossi.creategroup = Class.create(ossi.base, {
                         <dt style="color:#666; margin:0px 0px 5px 0px;">Group title:</dt>\
                           <dd style=" margin:0px 0px 10px 15px;"><input class="textinput" maxlength="30" name="group_title" id="group_title" type="text"/></dd>\
                         <dt style="color:#666; margin:0px 0px 5px 0px;">Group description:</dt>\
-                          <dd style=" margin:0px 0px 10px 15px;"><input class="textinput" maxlength="30" name="group_description" id="group_description" type="text" /></dd>\
+                          <dd style=" margin:0px 0px 10px 15px;"><input class="textinput" maxlength="60" name="group_description" id="group_description" type="text" /></dd>\
                       </dl>\
             				</div>\
             				<div style="height:14px"></div>\
