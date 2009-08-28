@@ -90,7 +90,7 @@ ossi.channellist = Class.create(ossi.base, {
               }
           }
           else {
-            $('channels_placeholder').replace('<div style="padding:10px; text-align:center">There are currently no channels available to you in the service. Please contact system administrators at: otasizzle-helpdesk@hiit.fi</div>');
+            $('channels_placeholder').replace('<div style="padding:10px; text-align:center">There are currently no channels available. Create one now!</div>');
           }
         }
         else {
