@@ -9,6 +9,8 @@ ossi.status = Class.create(ossi.base, {
     }, options);
     this.pane = false;
     this._draw();
+    if (Object.isUndefined(this.parent.locator) || this.parent.settings_auto_updates == false) $('location_input_container').show();
+    else  $('location_input_container').hide();
   },
   /**
    * _update
@@ -121,15 +123,11 @@ ossi.status = Class.create(ossi.base, {
                         <dt style="color:#666; margin:0px 0px 5px 0px;">What\'s going on?</dt>\
                         <dd style=" margin:0px 0px 5px 15px;"><input type="text" class="myprofile_input" id="status_input" name="status" />\
                       </dd>\
-              ';
-    if (Object.isUndefined(this.parent.locator) || this.parent.settings_auto_updates == false) {
-      h += '\
-                        <dt style="color:#666; margin:0px 0px 5px 0px;">Where are ya?</dt>\
-                        <dd style=" margin:0px 0px 5px 15px;"><input type="text" class="myprofile_input" id="location_input" name="location" />\</dd>\
-              ';
-    }
-    h += '\
-                      </dl>\
+                        <span id="location_input_container">\
+                          <dt style="color:#666; margin:0px 0px 5px 0px;">Where are ya?</dt>\
+                          <dd style=" margin:0px 0px 5px 15px;"><input type="text" class="myprofile_input" id="location_input" name="location" />\</dd>\
+                        </span>\
+                        </dl>\
                       <input type="submit" style="display:none" />\
                     </div>\
             				<div class="nav_button">\
