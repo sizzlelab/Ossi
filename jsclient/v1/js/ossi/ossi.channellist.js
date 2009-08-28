@@ -48,46 +48,7 @@ ossi.channellist = Class.create(ossi.base, {
         if (typeof(json.entry) != 'undefined') {
           if (json.entry.length > 0) {
             self._drawContents(json.entry);
-            $('channels_next_button_container').setStyle({
-              'width': '100%'
-            });
-            if (self.updateOptions.per_page * self.updateOptions.page >= json.pagination.size) { // on the last page or less than one page of results
-              if (json.pagination.size > self.updateOptions.per_page) { // last page
-                $('channels_back_button_2_container').show();
-                $('channels_previous_button_container').setStyle({
-                  'width': '100%'
-                });
-                $('channels_previous_button_container').show();
-                $('channels_next_button_container').hide();
-              }
-              else { // first page and not enough results for pagination
-                $('channels_previous_button_container').hide();
-                $('channels_next_button_container').hide();
-              }
-            }
-            else 
-              if (self.updateOptions.page > 1) { // between first and last page
-                $('channels_back_button_2_container').show();
-                $('channels_previous_button_container').setStyle({
-                  'width': '50%'
-                });
-                $('channels_next_button_container').setStyle({
-                  'width': '50%'
-                });
-                $('channels_next_button_container').show();
-                $('channels_previous_button_container').show();
-              }
-              else { // first page
-                $('channels_back_button_2_container').show();
-                $('channels_previous_button_container').setStyle({
-                  'width': '0%'
-                });
-                $('channels_next_button_container').show();
-                $('channels_next_button_container').setStyle({
-                  'width': '100%'
-                });
-                $('channels_previous_button_container').hide();
-              }
+            self.parent.utils.addPagingFeature( $('channellist-paging-container') , json, self);
           }
           else {
             $('channels_placeholder').replace('<div style="padding:10px; text-align:center">There are currently no channels available. Create one now!</div>');
@@ -133,13 +94,7 @@ ossi.channellist = Class.create(ossi.base, {
           				</div>\
                   <div id="channels_placeholder">\
                   </div>\
-          				<div style="top: 0px; position: relative;" >\
-  							    <div id="channels_next_button_container" class="nav_button next_button" style="display:none">\
-          						<a id="channels_next_button" class="nav_button_text" href="javascript:void(null);">Next Page</a>\
-          					</div>\
-  						      <div id="channels_previous_button_container" class="nav_button previous_button" style="display:none">\
-          						<a id="channels_previous_button" class="nav_button_text" href="javascript:void(null);">Previous Page</a>\
-          					</div>\
+          				<div id="channellist-paging-container" >\
 						      </div>\
 						      <div style="clear:both"></div>\
           				<div id="create_channel_button_container" class="nav_button">\
@@ -223,24 +178,6 @@ ossi.channellist = Class.create(ossi.base, {
       groupId: self.options.groupId
     });
   },
-  _nextHandler: function(){
-    this.updateOptions = {
-      page: ++this.updateOptions.page,
-      per_page: 8
-    };
-    this.update();
-    this._resetInterval(); // reset the interval as we just updated
-    this.startIndex += this.count;
-  },
-  _previousHandler: function(){
-    this.updateOptions = {
-      page: --this.updateOptions.page,
-      per_page: 8
-    };
-    this.update();
-    this._resetInterval(); // reset the interval as we just updated
-    this.startIndex -= this.count;
-  },
   _aboutChannelsHandler: function(){
     var m = '\
                 <div style="font-size:10px; padding:10px">\
@@ -260,8 +197,6 @@ ossi.channellist = Class.create(ossi.base, {
     $('create_channel_button').onclick = this._createChannelHandler.bindAsEventListener(this);
     $('about_channels_button').onclick = this._aboutChannelsHandler.bindAsEventListener(this);
     $('channels_back_button').onclick = this._backHandler.bindAsEventListener(this);
-    $('channels_next_button').onclick = this._nextHandler.bindAsEventListener(this);
-    $('channels_previous_button').onclick = this._previousHandler.bindAsEventListener(this);
     $('channels_back_button2').onclick = this._backHandler.bindAsEventListener(this);
   },
   _removeListeners: function(){
@@ -274,15 +209,10 @@ ossi.channellist = Class.create(ossi.base, {
     $('channels_back_button').onclick = function(){
       return
     }
-    $('channels_next_button').onclick = function(){
-      return
-    }
-    $('channels_previous_button').onclick = function(){
-      return
-    }
     $('channels_back_button2').onclick = function(){
       return
     }
+    $$('.nav_button').each(function(button){ button.onclick = function(){}; });
   },
   _addLinkListeners: function(){ // for dynamic buttons
     $$('.channel_button').each(function(button){
