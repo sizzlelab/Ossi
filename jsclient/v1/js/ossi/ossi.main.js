@@ -287,7 +287,7 @@ ossi.main = Class.create(ossi.base,{
 
     // THIS IS NOT WELL WRITTEN SO PLEASE FIND TIME TO MODULARISE THIS INTO A SETTINGS CLASS
     // check for automatic location updates
-    if (true) {
+    if (client.is_WRT_widget) {
       if (Object.isUndefined(this.settings_auto_updates)) { // first time, we don't have a value for the parameter yet
         if (Object.isUndefined(this.userId) || Object.isUndefined(this.appId)) { // force re login
           new Ajax.Request(BASE_URL + '/session', {
