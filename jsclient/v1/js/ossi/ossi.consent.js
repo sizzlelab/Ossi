@@ -48,38 +48,17 @@ ossi.consent = Class.create(ossi.base,{
           					<a id="info_button" class="nav_button_text" href="javascript:void(null);">Information for Participants</a>\
           				</div>\
           			</div>\
-          		';
+         ';
     return h;
   },
   _agreeHandler: function() {
-    this.parent.case5({ 
-      backCase : this.parent.case16.bind(this.parent,{
-        out:true,
-        backCase : this.parent.case2.bind(this.parent,{
-          out:true
-        })
-      }) 
-    });
+    this.parent.case5({ });
   },
   _infoHandler: function() {
-    this.parent.case17({ 
-      backCase : this.parent.case16.bind(this.parent,{
-        out:true,
-        backCase : this.parent.case2.bind(this.parent,{
-          out:true
-        })
-      }) 
-    });
+    this.parent.case17({ });
   },
   _termsHandler: function() {
-    this.parent.case15({ 
-      backCase : this.parent.case16.bind(this.parent,{
-        out:true,
-        backCase : this.parent.case2.bind(this.parent,{
-          out:true
-        })
-      }) 
-    });
+    this.parent.case15({ });
   },
   _backHandler: function() {
     this.options.backCase.apply();

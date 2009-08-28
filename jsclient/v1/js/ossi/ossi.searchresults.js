@@ -21,7 +21,7 @@ ossi.searchresults = Class.create(ossi.base,{
     if (this.options.search == false) return; // search terms not set
     var self = this;
     var URL = BASE_URL+'/people';
-    var params =  { search : this.options.search };
+    var params =  { search : this.options.search, 'event_id' : 'Ossi::SearchUsers' };
     self.parent.showLoading();
     new Ajax.Request(URL, {
       method : 'get',
@@ -113,15 +113,7 @@ ossi.searchresults = Class.create(ossi.base,{
     var uid = button_id.replace("search_uid_","");
     this.parent.case13({
       userId : uid,
-      search : this.options.search,
-      backCase : this.parent.case12.bind(this.parent,{
-        out : true,
-        search : this.options.search,
-        backCase : this.parent.case11.bind(this.parent,{
-          out : true,
-          backCase : this.parent.case9.bind(this.parent,{
-            out : true,
-            backCase : this.parent.case3.bind(this.parent,{out:true}) }) }) }) 
+      search : this.options.search
     });
   },
   _addListeners: function() {

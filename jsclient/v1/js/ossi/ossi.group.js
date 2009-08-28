@@ -19,6 +19,7 @@ ossi.group = Class.create(ossi.base, {
   update: function(){
     var self = this;
     var URL = BASE_URL + '/groups/@public/' + this.options.groupId;
+    var params = { 'event_id' : 'Ossi::ShowGroupPage'  };
     self.parent.showLoading();
     new Ajax.Request(URL, {
       method: 'get',
@@ -81,7 +82,7 @@ ossi.group = Class.create(ossi.base, {
     }
   },
   _getHTML: function(){
-    var h = '\
+   var h = '\
           			<div id="grouppane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
                   <form>\
                     <div style="margin: 12px auto 12px auto; text-align: left; width: 205px;">\
@@ -118,7 +119,8 @@ ossi.group = Class.create(ossi.base, {
       return; // userId in the parent controller not set
     var URL = BASE_URL + '/people/' + this.parent.userId + '/@groups';
     var params = {
-      group_id: this.options.groupId
+      group_id: this.options.groupId,
+      'event_id' : 'Ossi::GroupPage/JoinGroupAction'
     };
     self.parent.showLoading();
     new Ajax.Request(URL, {
@@ -143,9 +145,11 @@ ossi.group = Class.create(ossi.base, {
     if (typeof(this.parent.userId) == 'undefined') 
       return; // userId in the parent controller not set
     var URL = BASE_URL + '/people/@me/@groups/' + this.options.groupId;
+    var params = { 'event_id' : 'Ossi::GroupPage/JoinGroupAction' };
     self.parent.showLoading();
     new Ajax.Request(URL, {
       method: 'delete',
+      parameters : params,
       requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
       onSuccess: function(response){ // does not handle invalid responses
         var json = response.responseJSON;
@@ -170,21 +174,13 @@ ossi.group = Class.create(ossi.base, {
   _membersHandler: function(){
     var self = this;
     self.parent.case28({
-      groupId: self.options.groupId,
-      backCase: self.parent.case27.bind(self.parent, {
-        out: true,
-        groupId: self.options.groupId
-      })
+      groupId: self.options.groupId
     });
   },
   _channelsHandler: function(){
     var self = this;
     self.parent.case18({
-      groupId: self.options.groupId,
-      backCase: self.parent.case27.bind(self.parent, {
-        out: true,
-        groupId: self.options.groupId
-      })
+      groupId: self.options.groupId
     });
   },
   _addListeners: function(){

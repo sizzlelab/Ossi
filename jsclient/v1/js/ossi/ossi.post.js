@@ -24,7 +24,7 @@ ossi.post = Class.create(ossi.base, {
     // get contents
     var URL = BASE_URL + '/channels/' + self.options.channelId + '/@messages/' + self.options.postId;
     var params = {
-      event_id: 'Ossi::BrowseChannelList'
+      event_id: 'Ossi::BrowseChannelMessages/ShowOneMessage'
     };
     self.parent.showLoading();
     new Ajax.Request(URL, {

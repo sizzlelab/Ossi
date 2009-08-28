@@ -1,17 +1,17 @@
 /**
-* ossi createchannel class
-*/
-ossi.createchannel = Class.create(ossi.base,{
-	initialize: function(parent,options) {
+ * ossi createchannel class
+ */
+ossi.createchannel = Class.create(ossi.base, {
+  initialize: function(parent, options){
     this.parent = parent;
-		this.options = Object.extend({
+    this.options = Object.extend({
       groupId: false,
-      hostElement : false
-	  },options);
-	  this.pane = false;
+      hostElement: false
+    }, options);
+    this.pane = false;
     this._draw();
-	},
-  _draw: function() {
+  },
+  _draw: function(){
     if (this.options.hostElement) {
       this.options.hostElement.insert(this._getHTML());
       this._addListeners();
@@ -21,13 +21,16 @@ ossi.createchannel = Class.create(ossi.base,{
         $('create_friends_channel_container').hide();
         $('create_group_channel_container').show();
       }
-      setTimeout(function() { $('create_channel_form').focusFirstElement() },500); // .delay() did not seem to work on Firefox
-    } else {
+      setTimeout(function(){
+        $('create_channel_form').focusFirstElement()
+      }, 500); // .delay() did not seem to work on Firefox
+    }
+    else {
       alert('ossi.createchannel._draw() failed! this.options.hostElement not defined!');
     }
   },
-  _getHTML: function() {
-    var h =   '\
+  _getHTML: function(){
+    var h = '\
           			<div id="createchannelpane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
                   <form id="create_channel_form" name="create_channel_form">\
                     <div style="margin: 18px auto 12px; text-align: left; width: 170px;">\
@@ -56,77 +59,97 @@ ossi.createchannel = Class.create(ossi.base,{
           		';
     return h;
   },
-  _backHandler: function() {
+  _backHandler: function(){
     this.options.backCase.apply();
   },
-  _createHandler: function(event,options) {
-		var options = Object.extend({
-      priv : false
-	  },options);
+  _createHandler: function(event, options){
+    var options = Object.extend({
+      priv: false
+    }, options);
     var self = this;
-    if (typeof(this.parent.userId) == 'undefined') return; // userId in the parent controller not set
-    if (typeof(this.parent.channelsId) == 'undefined') return; // userId in the parent controller not set
-    var userName = (typeof(self.parent.userName) != 'undefined') ? self.parent.userName : 'N/A'; 
+    if (typeof(this.parent.userId) == 'undefined') 
+      return; // userId in the parent controller not set
+    if (typeof(this.parent.channelsId) == 'undefined') 
+      return; // userId in the parent controller not set
+    var userName = (typeof(self.parent.userName) != 'undefined') ? self.parent.userName : 'N/A';
     var params = {};
     if (self.options.groupId != false) {
-      params = { 
-        'channel[channel_type]' : 'group',
-        'channel[group_id]' : self.options.groupId,
-        'channel[name]' : $F('channel_name'), 
-        'channel[description]' : $F('channel_description')
-      }      
-    } else {
-      params = options.priv ? { 
-        'channel[channel_type]' : 'friend',
-        'channel[name]' : $F('channel_name'), 
-        'channel[description]' : $F('channel_description')
-      } : { 
-        'channel[channel_type]' : 'public', 
-        'channel[name]' : $F('channel_name'), 
-        'channel[description]' : $F('channel_description')
+      params = {
+        'channel[channel_type]': 'group',
+        'channel[group_id]': self.options.groupId,
+        'channel[name]': $F('channel_name'),
+        'channel[description]': $F('channel_description'),
+        'event_id' : 'Ossi::CreateChannel/GroupChannel'
+      }
+    }
+    else {
+      params = options.priv ? {
+        'channel[channel_type]': 'friend',
+        'channel[name]': $F('channel_name'),
+        'channel[description]': $F('channel_description'),
+        'event_id' : 'Ossi::CreateChannel/FriendsOnlyChannel'
+      } : {
+        'channel[channel_type]': 'public',
+        'channel[name]': $F('channel_name'),
+        'channel[description]': $F('channel_description'),
+        'event_id' : 'Ossi::CreateChannel/PublicChannel'
       };
     }
-    var URL = BASE_URL+'/channels';
+    var URL = BASE_URL + '/channels';
     self.parent.showLoading();
-    new Ajax.Request(URL,{
-      method : 'post',
-      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
-      parameters : params,
-      onSuccess : function(response) { // now post the new channel's collection ID and title to channel list collection
+    new Ajax.Request(URL, {
+      method: 'post',
+      requestHeaders: (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
+      parameters: params,
+      onSuccess: function(response){ // now post the new channel's collection ID and title to channel list collection
         self.parent.hideLoading();
         self.parent.case6({
-          message : "Channel created!",
-          buttonText : "Back",
-          skipPrevious : true
-        });            
+          message: "Channel created!",
+          buttonText: "Back",
+          skipPrevious: true
+        });
       },
-      onFailure : function(response) {
+      onFailure: function(response){
         var json = response.responseJSON;
         var message = '';
-        json.messages.each(function(m) {
+        json.messages.each(function(m){
           message += '<p>' + m + '</p>';
         });
         self.parent.hideLoading();
         self.parent.case6({
-          message : message,
-          buttonText : "Try again"
+          message: message,
+          buttonText: "Try again"
         });
       }
     });
   },
-  _addListeners: function() {
-    $('create_channel_create_group_button').onclick = this._createHandler.bindAsEventListener(this,{'priv':false});
-    $('create_channel_create_public_button').onclick = this._createHandler.bindAsEventListener(this,{'priv':false});
-    $('create_channel_create_private_button').onclick = this._createHandler.bindAsEventListener(this,{'priv':true});
+  _addListeners: function(){
+    $('create_channel_create_group_button').onclick = this._createHandler.bindAsEventListener(this, {
+      'priv': false
+    });
+    $('create_channel_create_public_button').onclick = this._createHandler.bindAsEventListener(this, {
+      'priv': false
+    });
+    $('create_channel_create_private_button').onclick = this._createHandler.bindAsEventListener(this, {
+      'priv': true
+    });
     $('create_channel_back_button').onclick = this._backHandler.bindAsEventListener(this);
   },
-  _removeListeners: function() {
-    $('create_channel_create_group_button').onclick = function() { return };
-    $('create_channel_create_public_button').onclick = function() { return };
-    $('create_channel_create_private_button').onclick = function() { return };
-    $('create_channel_back_button').onclick = function() { return };
+  _removeListeners: function(){
+    $('create_channel_create_group_button').onclick = function(){
+      return
+    };
+    $('create_channel_create_public_button').onclick = function(){
+      return
+    };
+    $('create_channel_create_private_button').onclick = function(){
+      return
+    };
+    $('create_channel_back_button').onclick = function(){
+      return
+    };
   },
-  destroy: function () {
+  destroy: function(){
     this._removeListeners();
     this.pane.remove();
   }

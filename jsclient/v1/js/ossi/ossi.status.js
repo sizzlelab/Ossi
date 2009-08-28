@@ -22,9 +22,11 @@ ossi.status = Class.create(ossi.base, {
       return; // userId in the parent controller not set
     var self = this;
     var URL = BASE_URL + '/people/@me/@self';
+    var params = { 'event_id' : 'Ossi::UpdateStatus/GetData'};
     self.parent.showLoading();
     new Ajax.Request(URL, {
       method: 'get',
+      parameters : params,
       requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
       onSuccess: function(response){
         var json = response.responseJSON;
@@ -56,7 +58,8 @@ ossi.status = Class.create(ossi.base, {
     var s = $F('status_input');
     var URL = BASE_URL + '/people/@me/@self';
     var params = {
-      'person[status_message]': s
+      'person[status_message]': s,
+      'event_id' : 'Ossi::UpdateStatus/UpdateStatus'
     };
     self.parent.loadingpane.show();
     new Ajax.Request(URL, {
@@ -71,7 +74,8 @@ ossi.status = Class.create(ossi.base, {
               label: $F('location_input'),
               latitude: '',
               longitude: '',
-              datetime: new Date().toUTCString()
+              datetime: new Date().toUTCString(),
+              'event_id' : 'Ossi::UpdateStatus/UpdateLocation'
             };
             // send location to server
             var URL = BASE_URL + '/people/@me/@location';

@@ -146,7 +146,7 @@ ossi.myprofile = Class.create(ossi.base,{
                           <dd style=" margin:0px 0px 10px 15px;">\
                   					<select id="profile_gender" class="myprofile_input" name="profile_gender">\
                               <option value="">Select gender</option>\
-                              <option value="">-------------</option>\
+                              <option value="clear">-------------</option>\
                               <option value="FEMALE">female</option>\
                               <option value="MALE">male</option>\
                   					</select>\
@@ -155,15 +155,15 @@ ossi.myprofile = Class.create(ossi.base,{
                           <dd style=" margin:0px 0px 10px 15px;">\
                   					<select id="profile_day" class="textinput" name="profile_day" style="width:50px">\
                   					  <option value="">day</option>\
-                              <option value="">------</option>\
+                              <option value="clear">------</option>\
                   					</select>\
                   					<select id="profile_month" class="textinput" name="profile_month" style="width:60px">\
                   					  <option value="">month</option>\
-                              <option value="">------</option>\
+                              <option value="clear">------</option>\
                   					</select>\
                   					<select id="profile_year" class="textinput" name="profile_year" style="width:65px">\
                   					  <option value="">year</option>\
-                              <option value="">------</option>\
+                              <option value="clear">------</option>\
                   					</select>\
                           </dd>\
 	                        </dl>\
@@ -202,12 +202,20 @@ ossi.myprofile = Class.create(ossi.base,{
       var m = ($F('profile_month').length != 2) ? '0'+$F('profile_month') : $F('profile_month');
       dob = $F('profile_year') + '-' + m + '-' + d;
     }
+    // clear opportunity
+    if( $F('profile_day') == 'clear' && $F('profile_month') == 'clear' && $F('profile_year') == 'clear' ) {
+      dob = ' ';
+    }
+    /* verify with ASI
+    if( $F('profile_gender') == 'clear' ) {
+      g = ' ';
+    }*/
     var params =  { 'person[name][given_name]' : fn,
                     'person[name][family_name]' : ln,
                     'person[website]' : website,
                     'person[description]' : am
                   };
-    if (g != false) params['person[gender]'] = g;
+    if (g.length > 0) params['person[gender]'] = g;
     if (dob) params['person[birthdate]'] = dob;
     var URL = BASE_URL+'/people/@me/@self';
     self.parent.loadingpane.show();

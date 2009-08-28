@@ -48,12 +48,7 @@ ossi.findusers = Class.create(ossi.base,{
   _searchHandler: function(e) {
     Event.stop(e);
     this.parent.case12({
-      search : $F('search_string'),
-      backCase : this.parent.case11.bind(this.parent,{
-        out : true,
-        backCase : this.parent.case9.bind(this.parent,{
-          out : true,
-          backCase : this.parent.case3.bind(this.parent,{out:true}) }) }) 
+      search : $F('search_string')
     });
     return false;
   },

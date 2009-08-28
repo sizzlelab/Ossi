@@ -19,8 +19,10 @@ ossi.pendingfriends = Class.create(ossi.base,{
     if (typeof(this.parent.userId) == 'undefined') return; // userId in the parent controller not set
     var self = this;
     var URL = BASE_URL+'/people/'+self.parent.userId+'/@pending_friend_requests'
+    var params = { 'event_id' : 'Ossi::ShowPendingFriends'};
     new Ajax.Request(URL,{
       method : 'get',
+      parameters : params,
       requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
       onSuccess : function(response) {
         var json = response.responseJSON;
@@ -104,23 +106,16 @@ ossi.pendingfriends = Class.create(ossi.base,{
     this.options.backCase.apply();
   },
   _removeFriendHandler: function() {
-    this.parent.case10({ backCase : this.parent.case9.bind(this.parent,{out : true, backCase : this.parent.case3.bind(this.parent,{out:true}) }) });
+    this.parent.case10({});
   },
   _addFriendHandler: function() {
-    this.parent.case11({ backCase : this.parent.case9.bind(this.parent,{out : true, backCase : this.parent.case3.bind(this.parent,{out:true}) }) });
+    this.parent.case11({});
   },
   _openProfileHandler: function(event,button_id) {
     var uid = button_id.replace("pending_person_uid_","");
     this.parent.case13({
 //      pendingNav : true, // no longer needed, status of user's relationship is now handled in ossi.profile.js
-      userId : uid,
-      backCase : this.parent.case14.bind(this.parent,{
-        out : true,
-        backCase : this.parent.case9.bind(this.parent,{
-          out : true,
-          backCase : this.parent.case3.bind(this.parent,{out:true}) 
-        })
-      })
+      userId : uid
     });
   },
   _addListeners: function() {

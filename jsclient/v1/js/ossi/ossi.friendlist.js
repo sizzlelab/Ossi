@@ -33,7 +33,7 @@ ossi.friendlist = Class.create(ossi.base, {
     var params = {
       per_page: this.updateOptions.per_page,
       page: this.updateOptions.page,
-      event_id: 'Ossi::BrowseGroupList',
+      event_id: 'Ossi::BrowseFriendList',
       'sortBy': 'status_changed',
       'sortOrder': 'descending'
     };
@@ -69,7 +69,7 @@ ossi.friendlist = Class.create(ossi.base, {
         }
         
         // now check if any pending friend requests
-        URL = BASE_URL + '/people/' + self.parent.userId + '/@pending_friend_requests'
+        URL = BASE_URL + '/people/' + self.parent.userId + '/@pending_friend_requests';
         new Ajax.Request(URL, {
           method: 'get',
           requestHeaders: (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
@@ -178,7 +178,7 @@ ossi.friendlist = Class.create(ossi.base, {
   _openProfileHandler: function(event, button_id){
     var uid = button_id.replace("person_uid_", "");
     this.parent.case13({
-      userId: uid,
+      userId: uid
     });
   },
   _friendRequestsHandler: function(){

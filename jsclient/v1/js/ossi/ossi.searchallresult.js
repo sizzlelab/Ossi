@@ -25,7 +25,8 @@ ossi.searchallresult = Class.create(ossi.base, {
         var self = this;
         var URL = BASE_URL + '/search';
         var params = {
-            search: this.options.search
+            search: this.options.search,
+            'event_id' : 'Ossi::SearchAll'
         };
         self.parent.showLoading();
         new Ajax.Request(URL, {
@@ -174,42 +175,21 @@ ossi.searchallresult = Class.create(ossi.base, {
         var uid = button_id.replace("search_uid_", "");
         this.parent.case13({
             userId: uid,
-            search: this.options.search,
-            backCase: this.parent.case32.bind(this.parent, {
-                out: true,
-                search: this.options.search,
-                backCase: this.parent.case3.bind(this.parent, {
-                    out: true
-                })
-            })
+            search: this.options.search
         });
     },
     _openGroupHandler: function(event, button_id){
         var gid = button_id.replace("search_gid_", "");
         this.parent.case27({
             groupId: gid,
-            search: this.options.search,
-            backCase: this.parent.case32.bind(this.parent, {
-                out: true,
-                search: this.options.search,
-                backCase: this.parent.case3.bind(this.parent, {
-                    out: true
-                })
-            })
+            search: this.options.search
         });
     },
     _openChannelHandler: function(event, button_id){
         var cid = button_id.replace("search_cid_", "");
         this.parent.case20({
             channelId: cid,
-            search: this.options.search,
-            backCase: this.parent.case32.bind(this.parent, {
-                out: true,
-                search: this.options.search,
-                backCase: this.parent.case3.bind(this.parent, {
-                    out: true
-                })
-            })
+            search: this.options.search
         });
     },
     _addListeners: function(){

@@ -111,13 +111,14 @@ ossi.channel = Class.create(ossi.base, {
         var m = '';
         //moderator privileges
         if (self.parent.userId == response.entry.owner_id) {
-          m = '<div id="moderator_placeholder"><div class="nav_button">\
+         m = '<div id="moderator_placeholder"><div class="nav_button">\
                 <a id="channel_delete_button" class="nav_button_text" href="javascript:void(null);">Delete this channel</a>\
         </div>\
         ';
         }
         $('moderator_placeholder').replace(m);
-        self._addModeListeners();
+        if( $('channel_delete_button') )
+        $('channel_delete_button').onclick = this._deleteHandler.bindAsEventListener(this);
       }
     });
   },
@@ -273,8 +274,10 @@ ossi.channel = Class.create(ossi.base, {
     // get contents
     var URL = BASE_URL + '/channels/' + self.options.channelId; // this page. ossi app Id hard-coded
     self.parent.showLoading();
+    var params = {'event_id' : 'Ossi::ChannelView//DeleteChannel'};
     new Ajax.Request(URL, {
       method: 'delete',
+      parameters: params,
       requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
       onSuccess: function(response){
         self.parent.hideLoading();
@@ -293,19 +296,12 @@ ossi.channel = Class.create(ossi.base, {
   _allowDeleteHandler: function(){
     if (!this.allowDelete) {
       this.allowDelete = true;
-      $('channel_allow_delete_button').update('Cancel delete');
       $('channel_delete_channel').setStyle('visibility: visible');
     }
     else {
       this.allowDelete = false;
-      $('channel_allow_delete_button').update('Delete this post');
       $('channel_delete_channel').setStyle('visibility: hidden');
     }
-  },
-  
-  _addModeListeners: function(){
-    $('channel_delete_button').onclick = this._deleteHandler.bindAsEventListener(this);
-    $('channel_allow_delete_button').onclick = this._allowDeleteHandler.bindAsEventListener(this);
   },
   
   _addListeners: function(){

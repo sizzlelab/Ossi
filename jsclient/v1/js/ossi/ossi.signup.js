@@ -69,7 +69,8 @@ ossi.signup = Class.create(ossi.base,{
     var params =  { 'person[username]' : u,
                     'person[password]' : p,
                     'person[email]' : e,
-		                'person[consent]' : 'EN1.0'
+		                'person[consent]' : 'EN1.0',
+                  'event_id' : 'Ossi::CreateUser'
                   };
     self.parent.showLoading();
     new Ajax.Request(BASE_URL+'/people', {
@@ -92,10 +93,6 @@ ossi.signup = Class.create(ossi.base,{
         }, self );
         self.parent.hideLoading();
         self.parent.case6({
-          backCase : self.parent.case5.bind(self.parent,{
-            out:true,
-            backCase:self.parent.case2.bind(self.parent,{out:true}) // tells back button to go back to login screen
-          }),
           message : "Could not create user. Reasons: "+reason_string,
           buttonText : "Try again"
         });
@@ -103,10 +100,6 @@ ossi.signup = Class.create(ossi.base,{
       on403 : function() {
         self.parent.hideLoading();
         self.parent.case6({
-          backCase : self.parent.case5.bind(self.parent,{
-            out:true,
-            backCase:self.parent.case2.bind(self.parent,{out:true}) // tells back button to go back to login screen
-          }),
           message : "Could not create user. Reason: "+reason_string,
           buttonText : "Try again"
         });
@@ -117,12 +110,7 @@ ossi.signup = Class.create(ossi.base,{
     this.options.backCase.apply();
   },
   _termsHandler: function() {
-    this.parent.case15({
-      backCase : this.parent.case5.bind(this.parent,{
-        out:true,
-        backCase:this.parent.case2.bind(this.parent,{out:true}) // tells back button to go back to login screen
-      })
-    });
+    this.parent.case15({});
   },
   _addListeners: function() {
     $('done_button').onclick = this._doneHandler.bindAsEventListener(this);

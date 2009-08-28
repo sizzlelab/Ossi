@@ -23,6 +23,7 @@ ossi.groupmembers = Class.create(ossi.base,{
     if (typeof(this.parent.userId) == 'undefined') return; // userId in the parent controller not set
     var self = this;
     var URL = BASE_URL+'/groups/'+this.options.groupId+'/@members';
+    var params = {'event_id' : 'Ossi::ShowGroupMembers'};
     self.parent.showLoading();
     new Ajax.Request(URL, {
       method : 'get',
@@ -127,7 +128,7 @@ ossi.groupmembers = Class.create(ossi.base,{
     var uid = button_id.replace("person_uid_","");
     this.parent.case13({
       userId : uid,
-  	  groupId : this.options.groupId,
+  	   groupId : this.options.groupId,
       backCase : this.backCase
     });
 
