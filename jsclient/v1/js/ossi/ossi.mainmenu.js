@@ -132,6 +132,7 @@ ossi.mainmenu = Class.create(ossi.base, {
   },
   _logoutHandler: function(){
     var self = this;
+    clearInterval(this.interval);
     this.parent.loadingpane.show();
     new Ajax.Request(BASE_URL + '/session', {
       method: 'delete',

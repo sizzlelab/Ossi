@@ -95,6 +95,7 @@ ossi.login = Class.create(ossi.base,{
         var json = response.responseJSON;
         self.parent.sessionCookie = self.parent.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
         self.parent.userId = json.entry.user_id;
+        self.parent.appId = json.entry.app_id;
 
     		// we also need name for that id
     		new Ajax.Request(BASE_URL+'/people/'+self.parent.userId+'/@self', {
