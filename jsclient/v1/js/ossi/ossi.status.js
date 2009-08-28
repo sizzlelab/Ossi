@@ -10,7 +10,7 @@ ossi.status = Class.create(ossi.base, {
     this.pane = false;
     this._draw();
     if (Object.isUndefined(this.parent.locator) || this.parent.settings_auto_updates == false) $('location_input_container').show();
-    else  $('location_input_container').hide();
+    else $('location_input_container').hide();
   },
   /**
    * _update

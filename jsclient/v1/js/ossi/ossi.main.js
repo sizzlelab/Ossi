@@ -238,9 +238,6 @@ ossi.main = Class.create(ossi.base,{
 	      channelId : false,
 	      start : false
 		  },options);
-
-    // make sure loading image is no longer shown
-    $('loading_div').remove();
     
     // Add this item to stack
     this.mainElement.update();
@@ -288,9 +285,6 @@ ossi.main = Class.create(ossi.base,{
       backCase : false
 	  },options);
 
-    // make sure loading image is no longer shown
-    $('loading_div').remove();
-    
     // THIS IS NOT WELL WRITTEN SO PLEASE FIND TIME TO MODULARISE THIS INTO A SETTINGS CLASS
     // check for automatic location updates
     if (client.is_WRT_widget) {
@@ -900,9 +894,6 @@ ossi.main = Class.create(ossi.base,{
   	  backCase : false,
 		  startIndex : 1
 		},options);
-
-    // make sure loading image is no longer shown
-    $('loading_div').remove();
 
     // manage stack
     if (options.out) this.stack.pop();
