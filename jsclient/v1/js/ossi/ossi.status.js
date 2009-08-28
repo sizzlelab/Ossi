@@ -69,20 +69,19 @@ ossi.status = Class.create(ossi.base, {
       onSuccess: function(response){
         if (Object.isUndefined(self.parent.locator)) {
           // also update the location
-          if ($F('location_input').length > 2) {
             self.parent.location = {
               label: $F('location_input'),
               latitude: '',
               longitude: '',
-              datetime: new Date().toUTCString(),
-              'event_id' : 'Ossi::UpdateStatus/UpdateLocation'
+              datetime: new Date().toUTCString()
             };
             // send location to server
             var URL = BASE_URL + '/people/@me/@location';
             var params = {
               'location[label]': self.parent.location.label,
               'location[latitude]': self.parent.location.latitude,
-              'location[longitude]': self.parent.location.longitude
+              'location[longitude]': self.parent.location.longitude,
+              'event_id' : 'Ossi::UpdateStatus/UpdateLocation'
             };
             new Ajax.Request(URL, {
               method: 'put',
@@ -93,10 +92,6 @@ ossi.status = Class.create(ossi.base, {
                 self.options.backCase.apply();
               }
             });
-          } else {
-            self.parent.loadingpane.hide();
-            self.options.backCase.apply();
-          }
         } else {
           self.parent.loadingpane.hide();
           self.options.backCase.apply();

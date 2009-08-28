@@ -44,7 +44,9 @@ ossi.mainmenu = Class.create(ossi.base, {
         if (typeof(json.location) != 'undefined') {
           if (typeof(json.location.label) != 'undefined') {
             if (json.location.label != null) {
+             if (json.location.label > 0) {
               location = ' @ ' + json.location.label;
+             }
             }
           }
         }
@@ -68,7 +70,7 @@ ossi.mainmenu = Class.create(ossi.base, {
         $('mainmenu_status_text').update(status_message + location);
         
         URL = BASE_URL + '/people/@me/@pending_friend_requests'
-        var params = { 'event_id' : 'Ossi::MainMenu' };
+        var params = { 'event_id' : 'Ossi::MainMenu/Friends' };
         new Ajax.Request(URL, {
           method: 'get',
           parameters: params,
@@ -138,7 +140,7 @@ ossi.mainmenu = Class.create(ossi.base, {
     var self = this;
     clearInterval(this.interval);
     this.parent.loadingpane.show();
-    var params = { 'event_id' : 'Ossi::MainMenu' }; 
+    var params = { 'event_id' : 'Ossi::MainMenu/LogOut' }; 
     new Ajax.Request(BASE_URL + '/session', {
       method: 'delete',
       parameters: params,
