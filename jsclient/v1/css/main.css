@@ -161,9 +161,10 @@ body.widget {
   text-decoration:none;
 }
 
-/* Removes the blue frames of links in S60 */
 a:hover { 
-    outline: none;
+  outline: none;
+  text-decoration:none;
+  background: #fc7e17 url(../images/button_bg_hover.png) repeat-x top;
 }
 
 div:hover {

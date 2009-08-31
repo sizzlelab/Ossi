@@ -44,7 +44,7 @@ ossi.mainmenu = Class.create(ossi.base, {
         if (typeof(json.location) != 'undefined') {
           if (typeof(json.location.label) != 'undefined') {
             if (json.location.label != null) {
-             if (json.location.label > 0) {
+             if (json.location.label.length > 0) {
               location = ' @ ' + json.location.label;
              }
             }
