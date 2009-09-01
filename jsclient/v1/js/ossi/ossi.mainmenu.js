@@ -101,13 +101,9 @@ ossi.mainmenu = Class.create(ossi.base, {
   _getHTML: function(){
     var h = '\
           			<div id="mainmenupane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
-          				<div id="logo_small" style="text-align: right; padding-top:7px; padding-right:10px;"><a style="color:#ff9c00;" href="http://sizl.org">www.sizl.org</a></div>\
+          				<div id="logo_small" style="text-align: right; padding-top:7px; padding-right:10px;"><a style="color:#ff9c00;" href="http://sizl.org" target="_blank">www.sizl.org</a></div>\
           				<div id="microblog_button" class="post_button">\
-                    <div class="post_button_left_column"><img style="margin:2px 0px 0px 2px; border:solid #eee 1px;" src="' +
-    BASE_URL +
-    '/people/@me/@avatar/small_thumbnail?' +
-    Math.random() * 9999 +
-    '" width="50" height="50" border="0" /></div>\
+                    <div class="post_button_left_column"><img style="margin:2px 0px 0px 2px; border:solid #eee 1px;" src="' + BASE_URL + '/people/'+this.parent.userId+'/@avatar/small_thumbnail" width="50" height="50" border="0" /></div>\
                     <div class="post_button_text">\
         						  <div class="button_title"><a id="mainmenu_profile_name" href="javascript:void(null);">loading...</a></div>\
         						  <div id="mainmenu_status_text" class="button_title" style="font-size:10px;">loading...</div>\

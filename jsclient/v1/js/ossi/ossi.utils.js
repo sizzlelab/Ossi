@@ -114,11 +114,11 @@ ossi.utils = Class.create(ossi.base,{
     
     // argument date to epoch
     var d = UTC_string;
-    var a = Date.UTC(d.substring(0,4),d.substring(5,7),d.substring(8,10),d.substring(11,13),d.substring(14,16),d.substring(17,19));
+    var a = Date.UTC(this.stripLeadingZeros(d.substring(0,4)),(this.stripLeadingZeros(d.substring(5,7))-1),this.stripLeadingZeros(d.substring(8,10)),this.stripLeadingZeros(d.substring(11,13)),this.stripLeadingZeros(d.substring(14,16)),this.stripLeadingZeros(d.substring(17,19)));
 	
     // now to epoch
     var e = new Date();
-    var b = Date.UTC(e.getUTCFullYear(),(e.getUTCMonth()+1),e.getUTCDate(),e.getUTCHours(),e.getUTCMinutes(),e.getUTCSeconds());
+    var b = Date.UTC(e.getUTCFullYear(),e.getUTCMonth(),e.getUTCDate(),e.getUTCHours(),e.getUTCMinutes(),e.getUTCSeconds());
 
     // set string data
     var s = (b-a) / 1000;
@@ -139,6 +139,12 @@ ossi.utils = Class.create(ossi.base,{
       h = s+' months ago';
     }
     return h;
+  },
+  stripLeadingZeros: function(string) {
+    while (string.startsWith('0') && string.length > 1) {
+      string = string.substring(1);
+    }
+    return string;
   },
   hideWall: function() {
     var self = this;

@@ -119,7 +119,7 @@ ossi.main = Class.create(ossi.base,{
       this.locator = new ossi.location(this);
 //      this.locator.run();
     }
-    BASE_URL = (client.is_widget) ? 'http://cos.sizl.org' : '/cos'; // where to go asking for COS
+    BASE_URL = (client.is_widget) ? 'https://cos.sizl.org' : '/cos'; // where to go asking for COS
     MAX_REQUEST_LENGTH = 20; // in seconds
     this.tmp = []; // for timers etc. May be deleted at any time.
 	  this.case1(); // go to first use case
