@@ -43,6 +43,7 @@ ossi.group = Class.create(ossi.base, {
         if (json.is_member) {
           $('leave_button_container').show();
           $('join_button_container').hide();
+          $('group_channels_button_container').show();
         } else {
           if (json.group_type != 'closed') $('join_button_container').show();
           $('leave_button_container').hide();
@@ -93,16 +94,16 @@ ossi.group = Class.create(ossi.base, {
                       </div>\
             				</div>\
             				<div style="height:14px"></div>\
-            				<div id="join_button_container" class="nav_button" style="display:none"v>\
+            				<div id="join_button_container" class="nav_button" style="display:none">\
             					<a id="join_button" class="nav_button_text" href="javascript:void(null);">Join Group</a>\
             				</div>\
-							      <div  id="leave_button_container"  class="nav_button" style="display:none" >\
+							      <div id="leave_button_container"  class="nav_button" style="display:none" >\
             					<a id="leave_button" class="nav_button_text" href="javascript:void(null);">Leave Group</a>\
             				</div>\
             				<div class="nav_button">\
             					<a id="members_button" class="nav_button_text" href="javascript:void(null);">Members</a>\
             				</div>\
-            				<div id="group_channels_button_container" class="nav_button">\
+            				<div id="group_channels_button_container" class="nav_button" style="display:none">\
             					<a id="group_channels_button" class="nav_button_text" href="javascript:void(null);">Group Channels</a>\
             				</div>\
             				<div class="nav_button">\

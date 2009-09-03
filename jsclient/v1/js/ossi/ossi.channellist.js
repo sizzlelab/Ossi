@@ -49,12 +49,10 @@ ossi.channellist = Class.create(ossi.base, {
           if (json.entry.length > 0) {
             self._drawContents(json.entry);
             self.parent.utils.addPagingFeature( $('channellist-paging-container') , json, self);
-          }
-          else {
+          } else {
             $('channels_placeholder').replace('<div style="padding:10px; text-align:center">There are currently no channels available. Create one now!</div>');
           }
-        }
-        else {
+        } else {
           $('channels_placeholder').replace('<div style="padding:10px; text-align:center">Error occurred. Try again later.</div>');
           $('create_channel_button_container').hide();
         }
