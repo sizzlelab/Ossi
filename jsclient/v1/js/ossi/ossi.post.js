@@ -148,14 +148,14 @@ ossi.post = Class.create(ossi.base, {
     '" class="nav_button next_button" style="display:none">\
         				    <a id="post_next_button_' +
     id +
-    '" class="nav_button_text" href="javascript:void(null);">Next post</a>\
+    '" class="nav_button_text" href="javascript:void(null);">Newer post</a>\
           		  	</div>\
           		  	<div id="post_previous_button_container_' +
     id +
     '" class="nav_button previous_button" style="display:none">\
         				     <a id="post_previous_button_' +
     id +
-    '" class="nav_button_text" href="javascript:void(null);">Previous post</a>\
+    '" class="nav_button_text" href="javascript:void(null);">Older post</a>\
           		  	</div>\
 				          </div>\
                     <div id="post_delete_container_' +

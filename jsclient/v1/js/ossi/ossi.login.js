@@ -145,7 +145,7 @@ ossi.login = Class.create(ossi.base,{
         self.parent.hideLoading();
         self.parent.case6({
           backCase : function() { window.location.reload(); }.bind(self),
-          message : "We could not reach Common Services. Please try again later!",
+          message : "We could not reach Aalto Social Interface. Please try again later!",
           buttonText : "Restart Application"
         });
       }

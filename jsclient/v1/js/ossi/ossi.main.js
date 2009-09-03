@@ -1413,7 +1413,7 @@ ossi.main = Class.create(ossi.base,{
     if (this.sessionCookie) this.sessionCookie = false;
     this.hideLoading();
     this.case6({
-      message : "There has been an error within Common Services, or Ossi has been unable to reach Common Services. You may have lost network connectivity. Please try again later!",
+      message : "There has been an error within Aalto Social Interface, or Ossi has been unable to reach Aalto Social Interface. You may have lost network connectivity. Please try again later!",
       buttonText : "Restart application",
       backCase: function() { window.location.reload(); }.bind(self)
     });
