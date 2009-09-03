@@ -44,7 +44,7 @@ ossi.channel = Class.create(ossi.base, {
     self.parent.showLoading();
     new Ajax.Request(URL, {
       method: 'get',
-      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
+      requestHeaders: (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
       parameters: params,
       onSuccess: function(response){
         //        if(!self.options.wall) self.parent.hideLoading();
@@ -105,7 +105,7 @@ ossi.channel = Class.create(ossi.base, {
     var URL = BASE_URL + '/channels/' + self.options.channelId;
     new Ajax.Request(URL, {
       method: 'get',
-      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
+      requestHeaders: (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
       onSuccess: function(response){
         response = response.responseJSON;
         //moderator privileges
@@ -265,22 +265,23 @@ ossi.channel = Class.create(ossi.base, {
   },
   _deleteHandler: function(){
     var self = this;
-    kissa = self;
     // get contents
     var URL = BASE_URL + '/channels/' + self.options.channelId; // this page. ossi app Id hard-coded
     self.parent.showLoading();
-    var params = {'event_id' : 'Ossi::ChannelView//DeleteChannel'};
+    var params = {
+      'event_id': 'Ossi::ChannelView//DeleteChannel'
+    };
     new Ajax.Request(URL, {
       method: 'delete',
       parameters: params,
-      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
+      requestHeaders: (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
       onSuccess: function(response){
         self.parent.hideLoading();
         self.parent.stack.pop();
         self.parent.case6({
-           message : "Channel has been deleted",
-           buttonText : "Back to channel list"
-         });
+          message: "Channel has been deleted",
+          buttonText: "Back to channel list"
+        });
       }
       // on403 and on404
     });
@@ -322,9 +323,13 @@ ossi.channel = Class.create(ossi.base, {
       if (!Object.isUndefined(this.parent.userRole)) {
         if (this.parent.userRole == 'moderator' && this.priv != true) {
           if ($('channel_delete_button')) {
-            $('channel_delete_button').onclick = function() { return }
+            $('channel_delete_button').onclick = function(){
+              return
+            }
             if ($('channel_allow_delete_button')) {
-              $('channel_allow_delete_button').onclick = function() { return }
+              $('channel_allow_delete_button').onclick = function(){
+                return
+              }
             }
           }
         }
