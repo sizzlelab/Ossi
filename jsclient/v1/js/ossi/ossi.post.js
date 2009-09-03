@@ -30,7 +30,7 @@ ossi.post = Class.create(ossi.base, {
     new Ajax.Request(URL, {
       method: 'get',
       parameters: params,
-      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
+      requestHeaders: (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
       onSuccess: function(response){
         self.parent.hideLoading();
         var json = response.responseJSON;
@@ -82,7 +82,7 @@ ossi.post = Class.create(ossi.base, {
     new Ajax.Request(BASE_URL + '/channels/' + self.options.channelId + '/@messages/', {
       method: 'get',
       parameters: params,
-      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
+      requestHeaders: (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
       onSuccess: function(response){
         var json = response.responseJSON;
         // iterete until the message is found
@@ -229,26 +229,27 @@ ossi.post = Class.create(ossi.base, {
     if (typeof(this.parent.userId) == 'undefined') 
       return; // userId in the parent controller not set
     var self = this;
-    // get contents
-    var URL = BASE_URL + '/channels/' + self.options.channelId + '/@messages/' + self.options.postId;
-    var params = {
-      event_id: 'Ossi::MessageDelete'
-    };
-    self.parent.showLoading();
-    new Ajax.Request(URL, {
-      method: 'delete',
-      parameters: params,
-      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
-      onSuccess: function(response){
-        self.parent.hideLoading();
-        var json = response.responseJSON;
-        self.options.backCase.apply();
-        setTimeout(function(){
+    var conf = confirm('Really want to delete this message?');
+    if (conf) {
+      var URL = BASE_URL + '/channels/' + self.options.channelId + '/@messages/' + self.options.postId;
+      var params = {
+        event_id: 'Ossi::MessageDelete'
+      };
+      self.parent.showLoading();
+      new Ajax.Request(URL, {
+        method: 'delete',
+        parameters: params,
+        requestHeaders: (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
+        onSuccess: function(response){
           self.parent.hideLoading();
-        }, 600);
-      }
-    });
-    
+          var json = response.responseJSON;
+          self.options.backCase.apply();
+          setTimeout(function(){
+            self.parent.hideLoading();
+          }, 600);
+        }
+      });
+    }
   },
   
   _addListeners: function(){

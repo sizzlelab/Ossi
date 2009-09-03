@@ -265,27 +265,29 @@ ossi.channel = Class.create(ossi.base, {
   },
   _deleteHandler: function(){
     var self = this;
-    // get contents
-    var URL = BASE_URL + '/channels/' + self.options.channelId; // this page. ossi app Id hard-coded
-    self.parent.showLoading();
-    var params = {
-      'event_id': 'Ossi::ChannelView//DeleteChannel'
-    };
-    new Ajax.Request(URL, {
-      method: 'delete',
-      parameters: params,
-      requestHeaders: (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
-      onSuccess: function(response){
-        self.parent.hideLoading();
-        self.parent.stack.pop();
-        self.parent.case6({
-          message: "Channel has been deleted",
-          buttonText: "Back to channel list"
-        });
-      }
-      // on403 and on404
-    });
-    
+    var conf = confirm('Really want to delete this channel?');
+    if (conf) {
+      // get contents
+      var URL = BASE_URL + '/channels/' + self.options.channelId; // this page. ossi app Id hard-coded
+      self.parent.showLoading();
+      var params = {
+        'event_id': 'Ossi::ChannelView//DeleteChannel'
+      };
+      new Ajax.Request(URL, {
+        method: 'delete',
+        parameters: params,
+        requestHeaders: (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
+        onSuccess: function(response){
+          self.parent.hideLoading();
+          self.parent.stack.pop();
+          self.parent.case6({
+            message: "Channel has been deleted",
+            buttonText: "Back to channel list"
+          });
+        }
+        // on403 and on404
+      });
+    }
   },
   _allowDeleteHandler: function(){
     if (!this.allowDelete) {
