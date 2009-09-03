@@ -108,17 +108,11 @@ ossi.channel = Class.create(ossi.base, {
       requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
       onSuccess: function(response){
         response = response.responseJSON;
-        var m = '';
         //moderator privileges
         if (self.parent.userId == response.entry.owner_id) {
-         m = '<div id="moderator_placeholder"><div class="nav_button">\
-                <a id="channel_delete_button" class="nav_button_text" href="javascript:void(null);">Delete this channel</a>\
-        </div>\
-        ';
+          $('channel_delete_button_container').show();
+          $('channel_delete_button').onclick = self._deleteHandler.bindAsEventListener(self);
         }
-        $('moderator_placeholder').replace(m);
-        if( $('channel_delete_button') )
-        $('channel_delete_button').onclick = this._deleteHandler.bindAsEventListener(this);
       }
     });
   },
@@ -149,9 +143,12 @@ ossi.channel = Class.create(ossi.base, {
     h += '\
 				<div id="channel-paging-container"></div>\
           		';
+    h += '<div id="channel_delete_button_container" class="nav_button" style="display:none;">\
+                <a id="channel_delete_button" class="nav_button_text" href="javascript:void(null);">Delete this channel</a>\
+        </div>\
+        ';
     if (this.parent.userId != false) {
       h += '\
-  	  		        <div id="moderator_placeholder"></div>\
   				        <div class="nav_button">\
           					<a id="channel_back_button" class="nav_button_text" href="javascript:void(null);">Back</a>\
           				</div>\
@@ -267,10 +264,8 @@ ossi.channel = Class.create(ossi.base, {
     });
   },
   _deleteHandler: function(){
-    if (typeof(this.parent.userId) == 'undefined') 
-      return; // userId in the pa$
     var self = this;
-    
+    kissa = self;
     // get contents
     var URL = BASE_URL + '/channels/' + self.options.channelId; // this page. ossi app Id hard-coded
     self.parent.showLoading();
@@ -281,13 +276,11 @@ ossi.channel = Class.create(ossi.base, {
       requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
       onSuccess: function(response){
         self.parent.hideLoading();
-        var json = response.responseJSON;
-        
-        self.options.backCase.apply();
-        
-        setTimeout(function(){
-          self.parent.hideLoading();
-        }, 600);
+        self.parent.stack.pop();
+        self.parent.case6({
+           message : "Channel has been deleted",
+           buttonText : "Back to channel list"
+         });
       }
       // on403 and on404
     });
