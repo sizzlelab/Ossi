@@ -61,7 +61,7 @@ ossi.creategroup = Class.create(ossi.base, {
       'group[title]': $F('group_title'),
       'group[type]': type,
       'group[description]': $F('group_description'),
-      'create_channel': 'true',
+//      'create_channel': 'true',
       'event_id' : 'Ossi::CreateGroup'
     };
     
