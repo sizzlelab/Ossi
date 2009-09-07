@@ -140,14 +140,12 @@ ossi.friendlist = Class.create(ossi.base, {
     }
    if (user.location ) {
     if (user.location.label) {
-      if (user.location.label.lenght > 0) {
+      if (user.location.label.length > 0) {
        location = ' @ ' + user.location.label;
       }
-    }
-    else 
-     if (Object.isNumber(user.location.latitude) && Object.isNumber(user.location.longitude)) {
+    } else if (Object.isNumber(user.location.latitude) && Object.isNumber(user.location.longitude)) {
       location = ' @ ' + this.parent.utils.roundNumber(user.location.latitude, 4) + ' / ' + this.parent.utils.roundNumber(user.location.longitude, 4);
-     }
+    }
      // Take min of location and status update
      // update_time = user.location.updated_at;
    }
