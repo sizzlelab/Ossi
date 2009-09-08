@@ -70,7 +70,7 @@ ossi.signup = Class.create(ossi.base,{
                     'person[password]' : p,
                     'person[email]' : e,
 		                'person[consent]' : 'EN1.0',
-                  'event_id' : 'Ossi::CreateUser'
+                    'event_id' : 'Ossi::CreateUser'
                   };
     self.parent.showLoading();
     new Ajax.Request(BASE_URL+'/people', {
@@ -80,7 +80,7 @@ ossi.signup = Class.create(ossi.base,{
       onSuccess : function(response) { // will probably have to save cookie here as well... check!
         var json = response.responseJSON;
         self.parent.hideLoading();
-        self.parent.userId = json.id;
+        self.parent.userId = json.entry.id;
         self.parent.case3();
       },
       onFailure : function(response) {
