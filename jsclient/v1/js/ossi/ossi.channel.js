@@ -175,7 +175,7 @@ ossi.channel = Class.create(ossi.base, {
     }
     
     var author_string = (typeof(post.poster_name) != 'undefined') ? 'by ' + post.poster_name + ' ' : '';
-    var stripped_message = post.title + ' - ' + post.body;
+    var stripped_message = (post.title.length > 0) ? post.title + ' - ' + post.body : post.body;
     var avatar_src = (post.poster_id == null) ? anonymous_icon : BASE_URL + '/people/' + post.poster_id + '/@avatar/small_thumbnail';
     
     if (!this.options.wall) {
