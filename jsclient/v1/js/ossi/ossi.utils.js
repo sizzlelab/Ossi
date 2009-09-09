@@ -104,7 +104,9 @@ ossi.utils = Class.create(ossi.base,{
 //    console.log(d.substring(0,4)+', '+month+', '+day+', '+d.substring(11,13)+', '+d.substring(14,16)+', '+d.substring(17,19));
   	var a = Date.UTC(d.substring(0,4),(month-1),day,d.substring(11,13),d.substring(14,16),d.substring(17,19));
   	a = new Date(a);
-  	return a.getDate() + '.' + (a.getMonth()+1) + '.' + a.getFullYear() + ' ' + a.getHours() + ':' + a.getMinutes();
+  	var minutes = ''+a.getMinutes();
+  	minutes = minutes.length == 1 ? "0"+minutes : minutes;
+  	return a.getDate() + '.' + (a.getMonth()+1) + '.' + a.getFullYear() + ' ' + a.getHours() + ':' + minutes;
   },
   
   agoString: function(UTC_string) {
