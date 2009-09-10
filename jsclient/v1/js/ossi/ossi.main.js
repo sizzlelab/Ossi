@@ -1289,7 +1289,7 @@ ossi.main = Class.create(ossi.base,{
     }.bind(this));
 	},
 	
-		/**
+	/**
 	* search all results
 	*/
 	case32: function(options) {
@@ -1326,7 +1326,43 @@ ossi.main = Class.create(ossi.base,{
       }.bind(this));
     }
 	},
+	/**
+	* other user's friend list
+	*/
+	case33: function(options) {
+		var options = Object.extend({
+      userId : false,
+      out : false,
+      backCase : false
+	  },options);
 
+    // manage stack
+    if (options.out) this.stack.pop();
+    else {
+      var opt = Object.clone(options);
+      opt.out = true;
+      this.stack.push(this.case9.bind(this,opt));
+    }
+
+    this.sub2 = this.sub1;
+    this.sub1 = new ossi.friendlist(this, {   
+      'userId' : options.userId,
+      'hostElement' : this.mainElement,
+      'backCase' : this.stack[this.stack.length-2]
+    });
+
+    if (options.out) {
+      this.utils.out(this.sub2.pane,this.sub1.pane,function() {
+        this.sub2.destroy();
+        this.sub1.update();
+      }.bind(this));
+    } else {
+      this.utils.into(this.sub2.pane,this.sub1.pane,function() {
+        this.sub2.destroy();
+        this.sub1.update();
+      }.bind(this));
+    }
+	},
 	/**
 	* _getClient
 	*

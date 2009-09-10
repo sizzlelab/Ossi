@@ -2,7 +2,7 @@
  * ossi profile class
  */
 ossi.profile = Class.create(ossi.base, {
-  initialize: function(parent, options){
+  initialize: function(parent, options) {
     this.parent = parent;
     this.options = Object.extend({
       userId: false,
@@ -12,13 +12,14 @@ ossi.profile = Class.create(ossi.base, {
     }, options);
     this.pane = false;
     this._draw();
+    if (this.parent.stack.length > 4) $('profile_back_to_main_menu_button_container').show();
   },
   /**
    * update
    *
    * does not handle XHR failure yet!
    */
-  update: function(){
+  update: function() {
     if (typeof(this.options.userId) == 'undefined') 
       return; // userId in the parent controller not set
     var self = this;
@@ -59,7 +60,7 @@ ossi.profile = Class.create(ossi.base, {
       }
     });
   },
-  _draw: function(){
+  _draw: function() {
     if (this.options.hostElement) {
       this.options.hostElement.insert(this._getHTML());
       this._removeListeners();
@@ -70,15 +71,18 @@ ossi.profile = Class.create(ossi.base, {
       alert('ossi.profile._draw() failed! this.options.hostElement not defined!');
     }
   },
-  _getHTML: function(){
+  _getHTML: function() {
     var h = '\
           			<div id="profilepane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
                   <div id="profile_placeholder"></div>\
+					        <div id="profile_view_friends_button_container" class="nav_button">\
+          					<a id="profile_view_friends_button" class="nav_button_text" href="javascript:void(null);">User\'s Friends</a>\
+          				</div>\
           				<div id="profile_add_as_friend_button_container" class="nav_button">\
           					<a id="profile_add_as_friend_button" class="nav_button_text" href="javascript:void(null);">Add as Friend</a>\
           				</div>\
-						        <div id="profile_remove_friend_button_container" style="display:none" class="nav_button">\
-          					<a id="profile_remove_friend_button" class="nav_button_text" href="javascript:void(null);">Remove this Friend</a>\
+					        <div id="profile_remove_friend_button_container" style="display:none" class="nav_button">\
+          					<a id="profile_remove_friend_button" class="nav_button_text" href="javascript:void(null);">Remove This Friend</a>\
           				</div>\
                   <div id="pending_nav" style="display:none">\
             				<div class="nav_button">\
@@ -89,13 +93,16 @@ ossi.profile = Class.create(ossi.base, {
             				</div>\
                   </div>\
           				<div class="nav_button">\
-          					<a id="profile_back_button" class="nav_button_text" href="javascript:void(null);">Back</a>\
+          					<a id="profile_back_button" class="nav_button_text" href="javascript:void(null);">Back to Previous</a>\
+          				</div>\
+					        <div id="profile_back_to_main_menu_button_container" style="display:none" class="nav_button">\
+          					<a id="profile_back_to_main_menu_button" class="nav_button_text" href="javascript:void(null);">Back to Main Menu</a>\
           				</div>\
                 </div>\
           		';
     return h;
   },
-  _getProfileHTML: function(json){
+  _getProfileHTML: function(json) {
     var name = (json.name != null) ? json.name.unstructured : json.username;
     var gender = false;
     if (typeof(json.gender) != 'undefined') {
@@ -172,10 +179,10 @@ ossi.profile = Class.create(ossi.base, {
               ';
     return h;
   },
-  _backHandler: function(){
+  _backHandler: function() {
     this.options.backCase.apply();
   },
-  _addFriendHandler: function(){
+  _addFriendHandler: function() {
     if (typeof(this.options.userId) == 'undefined') 
       return; // userId in the parent controller not set
     var self = this;
@@ -207,7 +214,7 @@ ossi.profile = Class.create(ossi.base, {
     });
   },
   
-  _removeFriendHandler: function(){
+  _removeFriendHandler: function() {
     if (typeof(this.options.userId) == 'undefined') 
       return; // userId in the parent controller not set
     var self = this;
@@ -237,7 +244,7 @@ ossi.profile = Class.create(ossi.base, {
     });
   },
   
-  _acceptRequestHandler: function(){
+  _acceptRequestHandler: function() {
     if (typeof(this.options.userId) == 'undefined') 
       return; // userId in the parent controller not set
     var self = this;
@@ -262,7 +269,7 @@ ossi.profile = Class.create(ossi.base, {
       }
     });
   },
-  _rejectRequestHandler: function(){
+  _rejectRequestHandler: function() {
     if (typeof(this.options.userId) == 'undefined') 
       return; // userId in the parent controller not set
     var self = this;
@@ -286,31 +293,33 @@ ossi.profile = Class.create(ossi.base, {
       }
     });
   },
-  _addListeners: function(){
+  _viewFriendsHandler: function() {
+    this.parent.case33({
+      userId: this.options.userId
+    });
+  },
+  _backToMainMenuHandler: function() {
+    this.parent.case3({out:true});
+  },
+  _addListeners: function() {
     $('profile_back_button').onclick = this._backHandler.bindAsEventListener(this);
     $('profile_accept_friendship_request_button').onclick = this._acceptRequestHandler.bindAsEventListener(this);
     $('profile_reject_friendship_request_button').onclick = this._rejectRequestHandler.bindAsEventListener(this);
     $('profile_add_as_friend_button').onclick = this._addFriendHandler.bindAsEventListener(this);
+    $('profile_add_as_friend_button').onclick = this._addFriendHandler.bindAsEventListener(this);
     $('profile_remove_friend_button').onclick = this._removeFriendHandler.bindAsEventListener(this);
+    $('profile_view_friends_button').onclick = this._viewFriendsHandler.bindAsEventListener(this);
+    $('profile_back_to_main_menu_button').onclick = this._backToMainMenuHandler.bindAsEventListener(this);
   },
-  _removeListeners: function(){
-    $('profile_back_button').onclick = function(){
-      return
-    };
-    $('profile_accept_friendship_request_button').onclick = function(){
-      return
-    };
-    $('profile_reject_friendship_request_button').onclick = function(){
-      return
-    };
-    $('profile_add_as_friend_button').onclick = function(){
-      return
-    };
-    $('profile_remove_friend_button').onclick = function(){
-      return
-    };
+  _removeListeners: function() {
+    $('profile_back_button').onclick = function() { return };
+    $('profile_accept_friendship_request_button').onclick = function() { return };
+    $('profile_reject_friendship_request_button').onclick = function() { return };
+    $('profile_add_as_friend_button').onclick = function() { return };
+    $('profile_remove_friend_button').onclick = function() { return };
+    $('profile_back_to_main_menu_button').onclick = function() { return };
   },
-  destroy: function(){
+  destroy: function() {
     this._removeListeners();
     this.pane.remove();
   }

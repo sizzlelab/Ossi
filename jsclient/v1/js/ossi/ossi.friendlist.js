@@ -5,7 +5,8 @@ ossi.friendlist = Class.create(ossi.base, {
   initialize: function(parent, options){
     this.parent = parent;
     this.options = Object.extend({
-      hostElement: false
+      userId : false,
+      hostElement : false
     }, options);
     this.pane = false;
     this.updateOptions = {
@@ -13,6 +14,7 @@ ossi.friendlist = Class.create(ossi.base, {
       page: 1
     };
     this._draw();
+    if (this.parent.stack.length > 4) $('friend_list_back_to_main_menu_button_container').show();
   },
   
   /**
@@ -29,7 +31,7 @@ ossi.friendlist = Class.create(ossi.base, {
     if (typeof(this.parent.userId) == 'undefined') 
       return; // userId in the parent controller not set
     var self = this;
-    var URL = BASE_URL + '/people/' + this.parent.userId + '/@friends';
+    var URL = (self.options.userId) ? BASE_URL + '/people/' + self.options.userId + '/@friends' : BASE_URL + '/people/' + this.parent.userId + '/@friends';
     var params = {
       per_page: this.updateOptions.per_page,
       page: this.updateOptions.page,
@@ -50,40 +52,43 @@ ossi.friendlist = Class.create(ossi.base, {
             var h = '';
             json.entry.each( function(person) {
               h += self._getButtonHTML(person);
-            } );
+            });
             $('friends_placeholder').update(h);
             self._addLinkListeners();
             if (json.entry.length > 5) 
               $('friend_list_back_button_2_container').show(); // show second back button at top of screen if more than 5 friends
             self.parent.utils.addPagingFeature( $('friendlist-paging-container') , json, self);
-            
-           self.parent.hideLoading();
-          }
-          else {
+            self.parent.hideLoading();
+          } else {
             $('friends_placeholder').replace('<div style="padding:10px; text-align:center">Your friend list is currently empty. Click on "Find Friends" to search for people in the network and add them onto your list.</div>');
           }
-        }
-        else {
+        } else {
           $('friends_placeholder').replace('<div style="padding:10px; text-align:center">Error occurred. Try again later.</div>');
           $('add_friend_button_container').hide();
         }
         
         // now check if any pending friend requests
-        URL = BASE_URL + '/people/' + self.parent.userId + '/@pending_friend_requests';
-        new Ajax.Request(URL, {
-          method: 'get',
-          requestHeaders: (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
-          onSuccess: function(response){
-            var json = response.responseJSON;
-            if (json.entry.length > 0) {
-              $('new_friend_requests_button_container').show();
-              $('new_friend_requests_button').update(json.entry.length + ' New Friend Requests!')
+        if (self.options.userId == false) {
+          URL = BASE_URL + '/people/' + self.parent.userId + '/@pending_friend_requests';
+          new Ajax.Request(URL, {
+            method: 'get',
+            requestHeaders: (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
+            onSuccess: function(response){
+              var json = response.responseJSON;
+              if (json.entry.length > 0) {
+                $('new_friend_requests_button_container').show();
+                $('new_friend_requests_button').update(json.entry.length + ' New Friend Requests!')
+              }
+              setTimeout(function(){
+                self.parent.hideLoading();
+              }, 600);
             }
-            setTimeout(function(){
-              self.parent.hideLoading();
-            }, 600);
-          }
-        });
+          });
+        } else {
+          setTimeout(function(){
+            self.parent.hideLoading();
+          }, 600);
+        }
       }
     });
   },
@@ -115,8 +120,11 @@ ossi.friendlist = Class.create(ossi.base, {
             <a id="add_friend_button" class="nav_button_text" href="javascript:void(null);">Find Friends</a>\
        	  </div>\
           <div class="nav_button">\
-            <a id="friend_list_back_button" class="nav_button_text" href="javascript:void(null);">Back</a>\
+            <a id="friend_list_back_button" class="nav_button_text" href="javascript:void(null);">Back to Previous</a>\
           </div>\
+	        <div id="friend_list_back_to_main_menu_button_container" style="display:none" class="nav_button">\
+  					<a id="friend_list_back_to_main_menu_button" class="nav_button_text" href="javascript:void(null);">Back to Main Menu</a>\
+  				</div>\
         </div>\
 		';
     return h;
@@ -184,28 +192,25 @@ ossi.friendlist = Class.create(ossi.base, {
   _friendRequestsHandler: function(){
     this.parent.case14({ });
   },
+  _backToMainMenuHandler: function() {
+    this.parent.case3({out:true});
+  },
   _addListeners: function(){
     $('new_friend_requests_button').onclick = this._friendRequestsHandler.bindAsEventListener(this);
     $('friend_list_back_button').onclick = this._backHandler.bindAsEventListener(this);
     $('friend_list_back_button2').onclick = this._backHandler.bindAsEventListener(this);
     $('add_friend_button').onclick = this._addFriendHandler.bindAsEventListener(this);
+    $('friend_list_back_to_main_menu_button_container').onclick = this._backToMainMenuHandler.bindAsEventListener(this);
   },
   _removeListeners: function(){
-    $('new_friend_requests_button').onclick = function(){
-      return
-    };
-    $('friend_list_back_button').onclick = function(){
-      return
-    };
-    $('friend_list_back_button2').onclick = function(){
-      return
-    };
-    $('add_friend_button').onclick = function(){
-      return
-    };
+    $('new_friend_requests_button').onclick = function() { return };
+    $('friend_list_back_button').onclick = function() { return };
+    $('friend_list_back_button2').onclick = function() { return };
+    $('add_friend_button').onclick = function() { return };
     $$('action_button').each( function(button) {
-      button.onclick = function(){ return };
+      button.onclick = function() { return };
     });
+    $('friend_list_back_to_main_menu_button_container').onclick = function() { return }
   },
   _addLinkListeners: function(){ // for dynamic buttons
     $$('.profile_button').each(function(button){

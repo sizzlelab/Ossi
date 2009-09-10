@@ -67,11 +67,9 @@ ossi.createchannel = Class.create(ossi.base, {
       priv: false
     }, options);
     var self = this;
-    if (typeof(this.parent.userId) == 'undefined') 
-      return; // userId in the parent controller not set
-    if (typeof(this.parent.channelsId) == 'undefined') 
-      return; // userId in the parent controller not set
-    var userName = (typeof(self.parent.userName) != 'undefined') ? self.parent.userName : 'N/A';
+    if (typeof(this.parent.userId) == 'undefined') return; // userId in the parent controller not set
+    if (typeof(this.parent.channelsId) == 'undefined') return; // userId in the parent controller not set
+//    var userName = (typeof(self.parent.userName) != 'undefined') ? self.parent.userName : 'N/A';
     var params = {};
     if (self.options.groupId != false) {
       params = {
@@ -81,8 +79,7 @@ ossi.createchannel = Class.create(ossi.base, {
         'channel[description]': $F('channel_description'),
         'event_id' : 'Ossi::CreateChannel/GroupChannel'
       }
-    }
-    else {
+    } else {
       params = options.priv ? {
         'channel[channel_type]': 'friend',
         'channel[name]': $F('channel_name'),
