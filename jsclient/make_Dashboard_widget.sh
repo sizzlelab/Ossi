@@ -13,3 +13,4 @@ rm -rf `find . -type d -name .svn`
 mv Info.plist_Dashboard Info.plist
 popd
 mv _tmp/ Ossi.wdgt
+zip -r Ossi.wdgt.zip Ossi.wdgt
