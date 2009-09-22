@@ -344,8 +344,9 @@ ossi.main = Class.create(ossi.base,{
           }
           
         });
-      } else if (this.autoUpdates) {
-        if (client.is_WRT_widget) this.locator.run();
+      } else if (self.settings_auto_updates) {
+        alert('trying to start locator.run');
+        if (client.is_WRT_widget && this.locator.unavailable == false) this.locator.run();
       } // no else
     }
 

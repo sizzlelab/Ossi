@@ -39,7 +39,7 @@ ossi.mainmenu = Class.create(ossi.base, {
         self.parent.userName = name;
         $('mainmenu_profile_name').update(name);
         var status_message = '';
-        var status_time = '';
+        var status_time = false;
         var location = '';
         if (typeof(json.location) != 'undefined') {
           if (typeof(json.location.label) != 'undefined') {
@@ -62,13 +62,12 @@ ossi.mainmenu = Class.create(ossi.base, {
           }
           if (json.status.changed != 'undefined') {
             if (json.status.changed != null) {
-              status_time = self.parent.utils.agoString(json.status.changed);
+              $('mainmenu_status_time').update(self.parent.utils.agoString(json.status.changed));
             }
           }
         }
         
         $('mainmenu_status_text').update(status_message + location);
-        $('mainmenu_status_time').update(status_time);
         
         URL = BASE_URL + '/people/@me/@pending_friend_requests'
         var params = { 'event_id' : 'Ossi::MainMenu/Friends' };

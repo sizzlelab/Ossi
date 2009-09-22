@@ -107,7 +107,7 @@ ossi.friendlist = Class.create(ossi.base, {
     var h = '\
           <div id="friendlistpane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
             <div id="friend_list_back_button_2_container" class="nav_button" style="display:none">\
-              <a id="friend_list_back_button2" class="nav_button_text" href="javascript:void(null);">Back</a>\
+              <a id="friend_list_back_button2" class="nav_button_text" href="javascript:void(null);">Back to Previous</a>\
             </div>\
             <div id="friends_placeholder">\
             </div>\

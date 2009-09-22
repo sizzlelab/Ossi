@@ -22,7 +22,7 @@ ossi.groupmembers = Class.create(ossi.base,{
 	update: function() {
     if (typeof(this.parent.userId) == 'undefined') return; // userId in the parent controller not set
     var self = this;
-    var URL = BASE_URL+'/groups/'+this.options.groupId+'/@members';
+    var URL = BASE_URL+'/groups/@public/'+this.options.groupId+'/@members';
     var params = {'event_id' : 'Ossi::ShowGroupMembers'};
     self.parent.showLoading();
     new Ajax.Request(URL, {
@@ -36,15 +36,15 @@ ossi.groupmembers = Class.create(ossi.base,{
             json.entry.each(function(entry) {
               h += this._getButtonHTML(entry);
             },self);
-            $('friends_placeholder').update(h);
+            $('group_members_placeholder').update(h);
             self._addLinkListeners();
-            if (json.entry.length > 5) $('friend_list_back_button_2_container').show(); // show second back button at top of screen if more than 5 channels
+            if (json.entry.length > 5) $('group_member_list_back_button_2_container').show(); // show second back button at top of screen if more than 5 channels
             self.parent.hideLoading();
           } else {
-            $('friends_placeholder').replace('<div style="padding:10px; text-align:center">Your friend list is currently empty. Click on "Find Friends" to search for people in the network and add them onto your list.</div>');
+            $('group_members_placeholder').replace('<div style="padding:10px; text-align:center">This group has currently no members.</div>');
           }
         } else {
-          $('friends_placeholder').replace('<div style="padding:10px; text-align:center">Error occurred. Try again later.</div>');
+          $('group_members_placeholder').replace('<div style="padding:10px; text-align:center">Error occurred. Try again later.</div>');
         }
       }
     });
@@ -61,16 +61,13 @@ ossi.groupmembers = Class.create(ossi.base,{
   _getHTML: function() {
     var h =   '\
           			<div id="groupmemberspane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
-          				<div id="friend_list_back_button_2_container" class="nav_button" style="display:none">\
-          					<a id="friend_list_back_button2" class="nav_button_text" href="javascript:void(null);">Back</a>\
+          				<div id="group_member_list_back_button_2_container" class="nav_button" style="display:none">\
+          					<a id="group_member_list_back_button2" class="nav_button_text" href="javascript:void(null);">Back</a>\
           				</div>\
-                  <div id="friends_placeholder">\
+                  <div id="group_members_placeholder">\
                   </div>\
-          				<div id="new_friend_requests_button_container" class="nav_button" style="display:none;">\
-          					<a id="new_friend_requests_button" class="nav_button_text" href="javascript:void(null);"></a>\
-          				</div>\
           				<div class="nav_button">\
-          					<a id="friend_list_back_button" class="nav_button_text" href="javascript:void(null);">Back</a>\
+          					<a id="group_member_list_back_button" class="nav_button_text" href="javascript:void(null);">Back</a>\
           				</div>\
           			</div>\
           		';
@@ -144,14 +141,12 @@ ossi.groupmembers = Class.create(ossi.base,{
     });
   },
   _addListeners: function() {
-    $('new_friend_requests_button').onclick = this._friendRequestsHandler.bindAsEventListener(this);
-    $('friend_list_back_button').onclick = this._backHandler.bindAsEventListener(this);
-    $('friend_list_back_button2').onclick = this._backHandler.bindAsEventListener(this);
+    $('group_member_list_back_button').onclick = this._backHandler.bindAsEventListener(this);
+    $('group_member_list_back_button2').onclick = this._backHandler.bindAsEventListener(this);
   },
   _removeListeners: function() {
-    $('new_friend_requests_button').onclick = function() { return };
-    $('friend_list_back_button').onclick = function() { return };
-    $('friend_list_back_button2').onclick = function() { return };
+    $('group_member_list_back_button').onclick = function() { return };
+    $('group_member_list_back_button2').onclick = function() { return };
   },
   _addLinkListeners: function() { // for dynamic buttons
     $$('.profile_button').each(function(button) {
