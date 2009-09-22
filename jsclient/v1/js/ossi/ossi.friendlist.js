@@ -60,7 +60,11 @@ ossi.friendlist = Class.create(ossi.base, {
             self.parent.utils.addPagingFeature( $('friendlist-paging-container') , json, self);
             self.parent.hideLoading();
           } else {
-            $('friends_placeholder').replace('<div style="padding:10px; text-align:center">Your friend list is currently empty. Click on "Find Friends" to search for people in the network and add them onto your list.</div>');
+            if (self.options.userId) {
+              $('friends_placeholder').replace('<div style="padding:10px; text-align:center">This user\'s friend list is currently empty. Why don\'t you invite them to be your friend?</div>');
+            } else {
+              $('friends_placeholder').replace('<div style="padding:10px; text-align:center">Your friend list is currently empty. Click on "Find Friends" to search for people in the network and add them onto your list.</div>');
+            }
           }
         } else {
           $('friends_placeholder').replace('<div style="padding:10px; text-align:center">Error occurred. Try again later.</div>');
