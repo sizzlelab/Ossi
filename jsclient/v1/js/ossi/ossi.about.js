@@ -30,7 +30,7 @@ ossi.about = Class.create(ossi.base,{
                     <p>Currently, the service is in beta phase. We develop Ossi continuously. You are welcome to shape the future of Ossi by sharing your ideas and giving feedback. Moreover, please report all problems to <a href="mailto:otasizzle-helpdesk@hiit.fi">otasizzle-helpdesk@hiit.fi</a>. For more information and downloads, visit <a href="http://sizl.org">sizl.org</a>.</p>\
                   </div>\
           				<div class="nav_button">\
-          					<a id="back_button" class="nav_button_text" href="javascript:void(null);">Back</a>\
+          					<a id="about_back_button" class="nav_button_text" href="javascript:void(null);">Back</a>\
           				</div>\
           			</div>\
           		';
@@ -43,7 +43,7 @@ ossi.about = Class.create(ossi.base,{
 //    Element.observe does not work in Nokia Minimap browser when tabbed navigation is enabled,
 //    thus old skool
 
-    $('back_button').onclick = this._backHandler.bindAsEventListener(this);
+    $('about_back_button').onclick = this._backHandler.bindAsEventListener(this);
 
 //    $('back_button').observe('click',this._backHandler.bindAsEventListener(this));
   },
@@ -51,7 +51,7 @@ ossi.about = Class.create(ossi.base,{
 //    Element.observe does not work in Nokia Minimap browser when tabbed navigation is enabled,
 //    thus old skool
 
-    $('back_button').onclick = function() { return }
+    $('about_back_button').onclick = function() { return }
   
 //    $('back_button').stopObserving('click',this._backHandler.bindAsEventListener(this));
   },

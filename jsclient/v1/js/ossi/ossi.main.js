@@ -240,8 +240,14 @@ ossi.main = Class.create(ossi.base,{
 		  },options);
     
     // Add this item to stack
-    this.mainElement.update();
-    this.stack.push(this.case2.bind(this,options));
+    if (options.start) this.mainElement.update();
+    if (options.out) this.stack.pop();
+    else {
+      var opt = Object.clone(options);
+      opt.out = true;
+      opt.start = false;
+      this.stack.push(this.case2.bind(this,opt));
+    }
     
     if (options.start) { // login without effects (first time)
 			if (options.channelId) {
@@ -1518,7 +1524,9 @@ ossi.main = Class.create(ossi.base,{
 	*/
 	showLoading: function() {
     this.loadingpane.show();
-	  this.utils.spinLoader();
+    if (Object.isUndefined(this.utils.spinning)) {
+	    this.utils.spinLoader();
+    }
 	},
 	/**
 	* hideLoading
@@ -1527,6 +1535,6 @@ ossi.main = Class.create(ossi.base,{
 	*/
 	hideLoading: function() {
     this.loadingpane.hide();
-	  this.utils.stopLoader();
+//	  this.utils.stopLoader();
 	}
 });

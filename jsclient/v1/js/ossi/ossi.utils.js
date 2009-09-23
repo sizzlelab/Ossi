@@ -60,6 +60,7 @@ ossi.utils = Class.create(ossi.base,{
   	}, 0.01);
   },
   spinLoader: function() {
+    this.spinning = true;
     this.loadertimer = setInterval(function() {
       if (this.loadercounter < (this.loadertexts.length-1)) {
         this.loadercounter++;
