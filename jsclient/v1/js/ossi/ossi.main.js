@@ -97,8 +97,6 @@ ossi.main = Class.create(ossi.base,{
       document.body.appendChild(this.mainElement);
     }
 
-    this.channelsId = 'd8-W0MMEir3yhJaaWPEYjL'; // hardcoded id on alpha.sizl.org!
-//    this.channelsId = 'bzFvEETj8r3yz7aaWPfx7J'; // hardcoded id on beta.sizl.org!
     this.sub1 = false; // pointers for case classes
     this.sub2 = false; // pointers for case classes
     this.sessionCookie = false; // for widget's cookie
@@ -120,6 +118,7 @@ ossi.main = Class.create(ossi.base,{
 //      this.locator.run();
     }
     BASE_URL = (client.is_widget) ? 'https://cos.sizl.org' : '/cos'; // where to go asking for COS
+//    BASE_URL = 'https://cos.sizl.org'; // where to go asking for COS
     MAX_REQUEST_LENGTH = 20; // in seconds
     this.tmp = []; // for timers etc. May be deleted at any time.
 	  this.case1(); // go to first use case
@@ -172,7 +171,6 @@ ossi.main = Class.create(ossi.base,{
 	  var self = this;
     new Ajax.Request(BASE_URL+'/session', { 
       method : 'get',
-      requestHeaders : (client.is_Dashboard_widget && self.sessionCookie) ? ['Cookie',self.sessionCookie] : '',
       onSuccess : function(response) {
         self._case1c(response);
       },
@@ -188,7 +186,8 @@ ossi.main = Class.create(ossi.base,{
   _case1c: function(response) {
     var self = this;
     this.hideLoading();
-    var json = Object.extend({
+    var json = {};
+    json.entry = Object.extend({
       user_id : null,
       app_id : null
     },response.responseJSON);
@@ -198,7 +197,6 @@ ossi.main = Class.create(ossi.base,{
   		// get username here instead of mainmenu or channel or whatever
   		new Ajax.Request(BASE_URL+'/people/'+this.userId+'/@self', {
   			method : 'get',
-  			requestHeaders : (client.is_Dashboard_widget && self.sessionCookie) ? ['Cookie',self.sessionCookie] : '',
   			onSuccess : function(response) {
   				var json = response.responseJSON;
   				self.userName = (json.name != null) ? json.name['unstructured'] : json.username;
@@ -298,7 +296,6 @@ ossi.main = Class.create(ossi.base,{
         if (Object.isUndefined(this.userId) || Object.isUndefined(this.appId)) { // force re login
           new Ajax.Request(BASE_URL + '/session', {
             method: 'delete',
-            requestHeaders : (client.is_Dashboard_widget && self.sessionCookie) ? ['Cookie', self.sessionCookie] : '',
             onSuccess: function(){
               self.sessionCookie = false;
         
@@ -317,7 +314,6 @@ ossi.main = Class.create(ossi.base,{
         var URL = BASE_URL + '/appdata/'+self.userId+'/@self/'+self.appId;
         new Ajax.Request(URL, {
           method : 'get',
-          requestHeaders : (client.is_Dashboard_widget && self.sessionCookie) ? ['Cookie',self.sessionCookie] : '',
           onSuccess : function(response) {
             var json = response.responseJSON;
             if (Object.isUndefined(json.entry.settings_auto_updates)) {
@@ -327,8 +323,7 @@ ossi.main = Class.create(ossi.base,{
               };
               new Ajax.Request(URL, {
                 method : 'put',
-                parameters : params,
-                requestHeaders : (client.is_Dashboard_widget && self.sessionCookie) ? ['Cookie',self.sessionCookie] : ''
+                parameters : params
               });
               self.settings_auto_updates = true;
             } else { // object exists
@@ -1468,6 +1463,7 @@ ossi.main = Class.create(ossi.base,{
   * handler for managing XHRequests. Called onCreate.
   */
   _onXHRCreate: function(request) {
+    if (client.is_Dashboard_widget && this.sessionCookie) request.options.requestHeaders = ['Cookie',this.sessionCookie]; // if client is Dashboard, then manually slap cookie onto every single request (due to Dashboard bug)
     this.XHRequests.push(request);
     this.tmp.push(setTimeout(function(request) {
       for (var i=0; i<this.XHRequests.length; i++) {

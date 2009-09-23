@@ -30,7 +30,6 @@ ossi.post = Class.create(ossi.base, {
     new Ajax.Request(URL, {
       method: 'get',
       parameters: params,
-      requestHeaders: (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
       onSuccess: function(response){
         self.parent.hideLoading();
         var json = response.responseJSON;
@@ -82,7 +81,6 @@ ossi.post = Class.create(ossi.base, {
     new Ajax.Request(BASE_URL + '/channels/' + self.options.channelId + '/@messages/', {
       method: 'get',
       parameters: params,
-      requestHeaders: (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
       onSuccess: function(response){
         var json = response.responseJSON;
         // iterete until the message is found
@@ -239,7 +237,6 @@ ossi.post = Class.create(ossi.base, {
       new Ajax.Request(URL, {
         method: 'delete',
         parameters: params,
-        requestHeaders: (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
         onSuccess: function(response){
           self.parent.hideLoading();
           var json = response.responseJSON;

@@ -68,7 +68,6 @@ ossi.createchannel = Class.create(ossi.base, {
     }, options);
     var self = this;
     if (typeof(this.parent.userId) == 'undefined') return; // userId in the parent controller not set
-    if (typeof(this.parent.channelsId) == 'undefined') return; // userId in the parent controller not set
 //    var userName = (typeof(self.parent.userName) != 'undefined') ? self.parent.userName : 'N/A';
     var params = {};
     if (self.options.groupId != false) {
@@ -96,7 +95,6 @@ ossi.createchannel = Class.create(ossi.base, {
     self.parent.showLoading();
     new Ajax.Request(URL, {
       method: 'post',
-      requestHeaders: (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
       parameters: params,
       onSuccess: function(response){ // now post the new channel's collection ID and title to channel list collection
         self.parent.hideLoading();

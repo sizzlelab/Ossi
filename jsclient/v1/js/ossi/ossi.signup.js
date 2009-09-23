@@ -76,7 +76,6 @@ ossi.signup = Class.create(ossi.base,{
     new Ajax.Request(BASE_URL+'/people', {
       method : 'post',
       parameters : params,
-      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
       onSuccess : function(response) { // will probably have to save cookie here as well... check!
         var json = response.responseJSON;
         self.parent.hideLoading();

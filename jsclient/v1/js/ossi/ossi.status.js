@@ -27,7 +27,6 @@ ossi.status = Class.create(ossi.base, {
     new Ajax.Request(URL, {
       method: 'get',
       parameters : params,
-      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
       onSuccess: function(response){
         var json = response.responseJSON;
         if (typeof(json.entry.status) != 'undefined') {
@@ -65,7 +64,6 @@ ossi.status = Class.create(ossi.base, {
     new Ajax.Request(URL, {
       method: 'put',
       parameters: params,
-      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
       onSuccess: function(response){
         if (Object.isUndefined(self.parent.locator)) {
           // also update the location
@@ -86,7 +84,6 @@ ossi.status = Class.create(ossi.base, {
             new Ajax.Request(URL, {
               method: 'put',
               parameters: params,
-              requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
               onSuccess: function(response){
                 self.parent.loadingpane.hide();
                 self.options.backCase.apply();

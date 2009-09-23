@@ -23,7 +23,6 @@ ossi.group = Class.create(ossi.base, {
     self.parent.showLoading();
     new Ajax.Request(URL, {
       method: 'get',
-      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
       onSuccess: function(response){ // does not handle invalid responses
         var json = response.responseJSON;
         json = json.entry;
@@ -54,7 +53,6 @@ ossi.group = Class.create(ossi.base, {
         URL = BASE_URL + '/channels?group_id=' + self.options.groupId;
         new Ajax.Request(URL, {
           method: 'get',
-          requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
           onSuccess: function(response){ // does not handle invalid responses
             var json = response.responseJSON;
             if (json.entry.length > 0) {
@@ -127,7 +125,6 @@ ossi.group = Class.create(ossi.base, {
     new Ajax.Request(URL, {
       method: 'post',
       parameters: params,
-      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
       onSuccess: function(response){ // does not handle invalid responses
         var json = response.responseJSON;
         self.parent.case6({
@@ -151,7 +148,6 @@ ossi.group = Class.create(ossi.base, {
     new Ajax.Request(URL, {
       method: 'delete',
       parameters : params,
-      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
       onSuccess: function(response){ // does not handle invalid responses
         var json = response.responseJSON;
         // remove one item from the back-stack

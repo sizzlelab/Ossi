@@ -27,7 +27,6 @@ ossi.groupmembers = Class.create(ossi.base,{
     self.parent.showLoading();
     new Ajax.Request(URL, {
       method : 'get',
-      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
       onSuccess : function(response) {
         var json = response.responseJSON;
         if (typeof(json.entry) != 'undefined') {

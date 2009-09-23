@@ -80,6 +80,7 @@ ossi.utils = Class.create(ossi.base,{
     return t;    
   },
   makeCookie: function(headerText) {
+    if (! client.is_Dashboard_widget) return false;
     if (headerText == null) return headerText;
     var h = headerText;
     var o = []

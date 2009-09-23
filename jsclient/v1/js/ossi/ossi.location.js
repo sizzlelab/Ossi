@@ -78,8 +78,7 @@ ossi.location = Class.create(ossi.base,{
         }
         new Ajax.Request(URL, {
           method : 'put',
-          parameters : params,
-          requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : ''
+          parameters : params
         });
       }
     });

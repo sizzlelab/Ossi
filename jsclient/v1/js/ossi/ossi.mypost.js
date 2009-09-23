@@ -25,7 +25,6 @@ ossi.mypost = Class.create(ossi.base, {
       self.parent.showLoading();
       new Ajax.Request(URL, {
         method: 'get',
-        requestHeaders: (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
         onSuccess: function(response){
           self.parent.hideLoading();
           var json = response.responseJSON;
@@ -50,8 +49,7 @@ ossi.mypost = Class.create(ossi.base, {
       setTimeout(function(){
         $('mypost_form').focusFirstElement()
       }, 500); // .delay() did not seem to work on Firefox
-    }
-    else {
+    } else {
       alert('ossi.mypost._draw() failed! this.options.hostElement not defined!');
     }
   },
@@ -102,12 +100,8 @@ ossi.mypost = Class.create(ossi.base, {
      return;
      */
     var self = this;
-    if (typeof(this.parent.userId) == 'undefined') 
-      return; // userId in the parent controller not set
-    if (typeof(this.parent.channelsId) == 'undefined') 
-      return; // channelsId not set in main controller
-    if (typeof(this.options.channelId) == 'undefined') 
-      return; // channelId not set
+    if (typeof(this.parent.userId) == 'undefined') return; // userId in the parent controller not set
+    if (typeof(this.options.channelId) == 'undefined') return; // channelId not set
     var title = $('post_title').value;
     var message = $('post_message').value.replace(/\n/g, '<br />');
     if (typeof(self.replyToUserName) != 'undefined') {
@@ -118,15 +112,13 @@ ossi.mypost = Class.create(ossi.base, {
       'message[title]': title,
       'event_id': 'Ossi::SendNewMessageToChannel'
     };
-    if (this.options.replyToId) 
-      params.reference_to = this.options.replyToId;
+    if (this.options.replyToId) params.reference_to = this.options.replyToId;
     self.parent.showLoading();
     var URL = BASE_URL + '/channels/' + self.options.channelId + '/@messages'; // ossi app id hard coded
     new Ajax.Request(URL, {
       method: 'post',
       parameters: params,
-      requestHeaders: (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie', self.parent.sessionCookie] : '',
-      onSuccess: function(response){ // now post the new channel's collection ID and title to channel list collection
+      onSuccess: function(response) { // now post the new channel's collection ID and title to channel list collection
         self.parent.hideLoading();
         self.parent.case6({
           message: "Post added.",

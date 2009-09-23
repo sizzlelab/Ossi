@@ -22,7 +22,6 @@ ossi.myprofile = Class.create(ossi.base,{
     self.parent.showLoading();
     new Ajax.Request(URL, {
       method : 'get',
-      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
       onSuccess : function(response) { // does not handle invalid responses
         var json = response.responseJSON;
 				json = json.entry;
@@ -73,7 +72,6 @@ ossi.myprofile = Class.create(ossi.base,{
           URL = BASE_URL + '/appdata/'+self.parent.userId+'/@self/'+self.parent.appId;
           new Ajax.Request(URL,{
             method : 'get',
-            requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
             onSuccess : function(response) {
               var json = response.responseJSON;
               if (json.entry.settings_auto_updates == 'true') {
@@ -221,7 +219,6 @@ ossi.myprofile = Class.create(ossi.base,{
     self.parent.loadingpane.show();
     new Ajax.Request(URL, {
       method : 'put',
-      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
       parameters : params,
       onSuccess : function() {
         self.parent.loadingpane.hide();
@@ -290,7 +287,6 @@ ossi.myprofile = Class.create(ossi.base,{
     var URL = BASE_URL + '/appdata/'+self.parent.userId+'/@self/'+self.parent.appId;
     new Ajax.Request(URL, {
       method : 'put',
-      requestHeaders : (client.is_Dashboard_widget && self.parent.sessionCookie) ? ['Cookie',self.parent.sessionCookie] : '',
       parameters : params,
       onSuccess : function() {
         if (self.parent.settings_auto_updates) { // these, for some reason, as set to strings in ASI
