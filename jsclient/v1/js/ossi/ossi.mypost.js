@@ -57,12 +57,12 @@ ossi.mypost = Class.create(ossi.base, {
     var h = '\
           			<div id="mypostpane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
                   <form name="mypost_form" action="' + BASE_URL + '/channels/' + this.options.channelId + '/@messages" id="mypost_form" method="post" target="testframe" enctype="multipart/form-data">\
-                    <div style="margin: 18px auto 12px; text-align: left; width: 170px;">\
+                    <div style="margin: 18px auto 12px; text-align: left; width: 80%;">\
                       <dl>\
                         <dt style="color:#666; margin:0px 0px 5px 0px;">Message title:</dt>\
                           <dd style=" margin:0px 0px 10px 15px;"><input class="textinput" maxlength="30" name="message[title]" id="post_title" type="text"/></dd>\
                         <dt style="color:#666; margin:0px 0px 5px 0px;">Message body:</dt>\
-                          <dd style=" margin:0px 0px 10px 15px;"><textarea class="textinput" style="height:90px;" name="message[body]" id="post_message"/></textarea></dd>\
+                          <dd style=" margin:0px 0px 10px 15px;"><textarea class="textinput" style="height:120px; width:90%;" name="message[body]" id="post_message"/></textarea></dd>\
                         <!--dt style="color:#666; margin:0px 0px 5px 0px;">Attachment:</dt>\
                           <dd style=" margin:0px 0px 10px 15px;"><input type="file" name="message[attachment]" /></dd-->\
                       </dl>\
@@ -82,8 +82,9 @@ ossi.mypost = Class.create(ossi.base, {
     return h;
   },
   _parseBBCode: function(value){
-    var search = new Array(/\<br \/\>/g);
-    var replace = new Array("\n");
+//    var search = new Array(/\<br \/\>/g);
+    var search = new Array(/&gt;/g, /&lt;/g, /\<br \/\>/g);
+    var replace = new Array(">","<","\n");
     for (i = 0; i < search.length; i++) {
       var value = value.replace(search[i], replace[i]);
     }

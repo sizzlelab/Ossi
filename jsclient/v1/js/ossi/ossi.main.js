@@ -159,6 +159,7 @@ ossi.main = Class.create(ossi.base,{
         self._case1b();
       },
       onFailure : function(response) {
+        self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
         this.case2({start : true}); // call login
       }
 		});
@@ -175,6 +176,9 @@ ossi.main = Class.create(ossi.base,{
         self._case1c(response);
       },
       on409 : function(response) {
+        self._case1c(response);
+      },
+      onFailure : function(response) {
         self._case1c(response);
       }
     });

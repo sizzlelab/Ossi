@@ -106,7 +106,8 @@ ossi.login = Class.create(ossi.base,{
     					self.parent.userRole = json.role;
     				}
     			},
-    			onFailure : function() {
+    			onFailure : function(response) {
+    			  alert(response.status); // iphone & phonegap gives 401 :(
     				self.parent.hideLoading();
     				self.parent.case3();
     			}
