@@ -107,9 +107,8 @@ ossi.login = Class.create(ossi.base,{
     				}
     			},
     			onFailure : function(response) {
-    			  alert(response.status); // iphone & phonegap gives 401 :(
+    			  alert('failure, response code: '+response.status); // iphone & phonegap gives 401 :(
     				self.parent.hideLoading();
-    				self.parent.case3();
     			}
     		});
 

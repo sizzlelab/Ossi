@@ -117,9 +117,9 @@ ossi.main = Class.create(ossi.base,{
       this.locator = new ossi.location(this);
 //      this.locator.run();
     }
-    BASE_URL = (client.is_widget) ? 'https://cos.sizl.org' : '/cos'; // where to go asking for COS
+    BASE_URL = (client.is_widget || client.is_phonegap) ? 'https://cos.sizl.org' : '/cos'; // where to go asking for COS
 //    BASE_URL = 'https://cos.sizl.org'; // where to go asking for COS
-    MAX_REQUEST_LENGTH = 20; // in seconds
+    MAX_REQUEST_LENGTH = 30; // in seconds
     this.tmp = []; // for timers etc. May be deleted at any time.
 	  this.case1(); // go to first use case
 	},
@@ -1377,8 +1377,7 @@ ossi.main = Class.create(ossi.base,{
     var agent = navigator.userAgent;
 	  client = {};
 	  client.is_widget = (typeof(window.widget) != 'undefined') ? true : false;
-    client.is_WRT_widget = false;
-    client.is_Dashboard_widget = false;
+    client.is_iphone, client.is_WRT_widget, client.is_Dashboard_widget, client.is_phonegap, client.is_safari = false;
 	  if (client.is_widget) {
       if (agent.include('Series60')) { // if we're running inside Nokia WRT
         client.is_WRT_widget = true;
@@ -1391,6 +1390,16 @@ ossi.main = Class.create(ossi.base,{
 	    client.dimensions = { height : this.options.height, width : this.options.width }
 	  } else if (this.options.wall) {
       client.dimensions = WIDGET_VIEWPORT;
+	  } else if (agent.include('iPhone')) {
+	    client.is_iphone = true;
+	    if (agent.include('Safari')) {
+	      client.is_phonegap = false;
+	      client.is_safari = true;
+	    } else { // this fails if some other browser is used on iPhone (not available in 9/2009)
+	      client.is_phonegap = true;
+	      client.is_safari = false;
+	    }
+	    client.dimensions = document.viewport.getDimensions();
 	  } else {
 	    client.dimensions = document.viewport.getDimensions();
 	  }
@@ -1466,7 +1475,8 @@ ossi.main = Class.create(ossi.base,{
   * handler for managing XHRequests. Called onCreate.
   */
   _onXHRCreate: function(request) {
-    if (client.is_Dashboard_widget && this.sessionCookie) request.options.requestHeaders = ['Cookie',this.sessionCookie]; // if client is Dashboard, then manually slap cookie onto every single request (due to Dashboard bug)
+//    if (client.is_Dashboard_widget && this.sessionCookie) request.options.requestHeaders = ['Cookie',this.sessionCookie]; // if client is Dashboard, then manually slap cookie onto every single request (due to Dashboard bug)
+    if ((client.is_Dashboard_widget || client.is_phonegap) && this.sessionCookie) request.options.requestHeaders = ['Cookie',this.sessionCookie]; // if client is Dashboard, then manually slap cookie onto every single request (due to Dashboard bug)
     this.XHRequests.push(request);
     this.tmp.push(setTimeout(function(request) {
       for (var i=0; i<this.XHRequests.length; i++) {

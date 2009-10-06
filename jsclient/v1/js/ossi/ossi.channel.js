@@ -130,30 +130,31 @@ ossi.channel = Class.create(ossi.base, {
           					<a id="add_post_button" class="nav_button_text" href="javascript:void(null);">Add Post</a>\
           		  	</div>\
        		    ';
-    }
-    else {
+    } else {
       h += '\
   			  	      <div id="add_post_button_container" class="nav_button">\
           					<a id="add_post_button" class="nav_button_text" href="javascript:void(null);">Add Anonymous Post</a>\
           		  	</div>\
        		    ';
     }
-    h += '\
-				<div id="channel-paging-container"></div>\
-          		';
-    h += '<div id="channel_delete_button_container" class="nav_button" style="display:none;">\
-                <a id="channel_delete_button" class="nav_button_text" href="javascript:void(null);">Delete this channel</a>\
-        </div>\
-        ';
+
+    h +=  '\
+				          <div id="channel-paging-container"></div>\
+      		';
+
+    h +=  '\
+                  <div id="channel_delete_button_container" class="nav_button" style="display:none;">\
+                    <a id="channel_delete_button" class="nav_button_text" href="javascript:void(null);">Delete this channel</a>\
+                  </div>\
+          ';
     if (this.parent.userId != false) {
-      h += '\
+      h +=  '\
   				        <div class="nav_button">\
           					<a id="channel_back_button" class="nav_button_text" href="javascript:void(null);">Back</a>\
           				</div>\
           			</div>\
-        		  ';
-    }
-    else {
+      		  ';
+    } else {
       h += '\
   	  		        <div class="nav_button">\
           					<a id="channel_login_button" class="nav_button_text" href="javascript:void(null);">Log in</a>\
@@ -171,7 +172,7 @@ ossi.channel = Class.create(ossi.base, {
         updated_text = this.parent.utils.dateToString(post.updated_at);
       }
     }
-    
+
     var author_string = (typeof(post.poster_name) != 'undefined') ? 'by ' + post.poster_name + ' ' : '';
     var stripped_message = (post.title.length > 0) ? post.title + ' - ' + post.body : post.body;
     var avatar_src = (post.poster_id == null) ? anonymous_icon : BASE_URL + '/people/' + post.poster_id + '/@avatar/small_thumbnail';
@@ -181,55 +182,37 @@ ossi.channel = Class.create(ossi.base, {
       stripped_message = stripped_message.replace(/&lt;br \/&gt;/g, ""); // clean breaks away
       stripped_message = stripped_message.replace(/\[quote\].*\[\/quote\]/g, '').replace(/<br \/>/g, '');
       var message_stub = stripped_message.truncate(40);
-      var h = '\
+      var h =   '\
             				<div class="post_button" id="post_id_' + post.id + '">\
                       <div class="post_button_left_column">\
-                      	<img style="margin:2px 0px 0px 2px; border:solid #eee 1px;"\
-                      	src="' +
-      avatar_src +
-      '"\
-                      	width="50" height="50" border="0" />\
-                      	</div>\
+                      	<img style="margin:2px 0px 0px 2px; border:solid #eee 1px;" src="' +  avatar_src + '" width="50" height="50" border="0" />\
+                    	</div>\
                       <div class="post_button_text">\
-          						  <div class="button_title"><a href="javascript:void(null);">' +
-      message_stub +
-      '</a></div>\
-          						  <div class="button_subtitle_text" style="padding-top:3px">' +
-      author_string +
-      ' ' +
-      updated_text +
-      '</div>\
+          						  <div class="button_title"><a href="javascript:void(null);">' + message_stub + '</a></div>\
+          						  <div class="button_subtitle_text" style="padding-top:3px">' + author_string + ' ' + updated_text + '</div>\
                       </div>\
             				</div>\
-            			';
-    }
-    else {
+          			';
+    } else {
       stripped_message = stripped_message.replace(/<\/?[^>]+(>|$)/g, ""); //clean html-tags away
       stripped_message = stripped_message.replace(/\[quote\].*\[\/quote\]/g, '').replace(/<br \/>/g, '');
       var message_stub = stripped_message.replace(/(ftp|http|https|file):\/\/[\S]+(\b|$)/gim, '<a href="$&" style="text-decoration: underline;" target="_blank">$&</a>').replace(/([^\/])(www[\S]+(\b|$))/gim, '$1<a href="http://$2" style="text-decoration: underline;" target="_blank">$2</a>');
       
-      var h = '\
-            		<div class="post_wall" id="post_id_' + post.id + '">\
-                  <div class="wall_post_button_left_column">\
-                  	<img style="margin:2px 0px 0px 2px; border:solid #eee 1px;"\
-                  	src="' +
-      avatar_src +
-      '"\
-                  	width="50" height="50" border="0" />\
-                  </div>\
-                  <div  style="height:55px; float:left;">&nbsp;</div>\
-                  <div class="wall_post_button_text">\
-      						  <div class="wall_button_title"><a href="javascript:void(null);">' +
-      message_stub +
-      '</a></div>\
-      						  <div class="wall_button_subtitle_text" style="padding-top:3px">' +
-      author_string +
-      ' , ' +
-      updated_text +
-      '</div>\
-                  </div><div style="clear:both;"></div>\
-            		</div>\
+      var h =   '\
+              		<div class="post_wall" id="post_id_' + post.id + '">\
+                    <div class="wall_post_button_left_column">\
+                    	<img style="margin:2px 0px 0px 2px; border:solid #eee 1px;" src="' + avatar_src + '" width="50" height="50" border="0" />\
+                    </div>\
+                    <div style="height:55px; float:left;">&nbsp;</div>\
+                    <div class="wall_post_button_text">\
+        						  <div class="wall_button_title"><a href="javascript:void(null);">' + message_stub + '</a></div>\
+        						  <div class="wall_button_subtitle_text" style="padding-top:3px">' + author_string + ' , ' + updated_text + '</div>\
+                    </div><div style="clear:both;"></div>\
+              		</div>\
           			';
+                
+                
+      
       
     }
     return h;
