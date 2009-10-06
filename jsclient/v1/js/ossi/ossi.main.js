@@ -1476,7 +1476,8 @@ ossi.main = Class.create(ossi.base,{
   */
   _onXHRCreate: function(request) {
 //    if (client.is_Dashboard_widget && this.sessionCookie) request.options.requestHeaders = ['Cookie',this.sessionCookie]; // if client is Dashboard, then manually slap cookie onto every single request (due to Dashboard bug)
-    if ((client.is_Dashboard_widget || client.is_phonegap) && this.sessionCookie) request.options.requestHeaders = ['Cookie',this.sessionCookie]; // if client is Dashboard, then manually slap cookie onto every single request (due to Dashboard bug)
+//    if ((client.is_Dashboard_widget || client.is_phonegap) && this.sessionCookie) request.options.requestHeaders = ['Cookie',this.sessionCookie]; // if client is Dashboard, then manually slap cookie onto every single request (due to Dashboard bug)
+    request.options.requestHeaders = ['Cookie',this.sessionCookie]; // if client is Dashboard, then manually slap cookie onto every single request (due to Dashboard bug)
     this.XHRequests.push(request);
     this.tmp.push(setTimeout(function(request) {
       for (var i=0; i<this.XHRequests.length; i++) {
