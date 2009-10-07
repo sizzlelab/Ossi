@@ -7,7 +7,7 @@
 #############################################################
 
 rm -Rf Ossi.wdgt
-cp -R v1 _tmp
+cp -R v2 _tmp
 pushd _tmp
 rm -rf `find . -type d -name .svn`
 mv Info.plist_Dashboard Info.plist
