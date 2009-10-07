@@ -1,0 +1,35 @@
+.post_wall { 
+	position:relative;
+	border: solid 1px black;
+	border-bottom: solid 1px #150900;
+	margin: 0px 0px 0px 0px;
+	color: #CBD58B;
+	/*background-color: #FFFFFF;*/
+	text-align: left;
+	cursor: pointer;
+}
+.post_wall:hover {
+	background-color: #222222;
+	color:#122E2E;
+}
+div.wall_post_button_left_column {
+  position:absolute;
+  top:0px;
+  left:0px;
+}
+div.wall_post_button_text {
+  margin-left:56px;
+  height:56px;
+  padding:5px 5px 5px 5px;
+}
+.wall_button_title {
+  font-size:11px;
+  color:white;
+  text-decoration:none;
+}
+.wall_button_subtitle_text {
+  font-size:9px;
+  color:#C0C0C0;
+  text-decoration:none;
+}
+

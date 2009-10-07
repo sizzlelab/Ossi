@@ -22,8 +22,15 @@ indexes:
   - name: cell
   - name: date_created
 
-# Used 25 times in query history.
+# Unused in query history -- copied from input.
 - kind: Point
   properties:
+  - name: date_created
+    direction: desc
+
+# Used once in query history.
+- kind: Point
+  properties:
+  - name: date_created=
   - name: date_created
     direction: desc

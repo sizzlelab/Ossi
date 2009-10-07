@@ -261,7 +261,8 @@ class NewPoint(webapp.RequestHandler):
 class Dump(webapp.RequestHandler):
   def get(self):
     start = int(self.request.get('start',0))
-    points = Point.all().order('-date_created').fetch(200,start)
+    points = Point.gql("WHERE date_created>DATE(2008,12,04) ORDER BY date_created DESC LIMIT "+str(start)+",200")
+#    points = Point.all().filter('date_created=',DATE('2008-12-04%').order('-date_created').fetch(200,start)
 
     if points:
       for point in points:
@@ -277,7 +278,7 @@ class Dump(webapp.RequestHandler):
 application = webapp.WSGIApplication([  
 #                                        ('/cells.*', Cells),
 #                                        ('/cell.*', ViewCell),
-#                                        ('/dump.*', Dump),
+                                        ('/dump.*', Dump),
                                         ('/new.*', NewPoint)],
                                      debug=True)
 
