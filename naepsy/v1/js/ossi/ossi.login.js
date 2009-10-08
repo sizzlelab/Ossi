@@ -27,12 +27,7 @@ ossi.login = Class.create(ossi.base,{
     var h =   '\
           			<div id="loginpane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
           			  <form id="login_form">\
-            				<div id="logo"></div>\
-            				<div id="slogan">\
-            					<span id="slogan_text">\
-            						Share moments, share with Ossi.\
-            					</span>\
-            				</div>\
+            				<div><img src="images/naepsy_logo.png" /></div>\
             				<div class="login">\
             					username:<br/>\
             					<input id="uusernaame" class="textinput" maxlength="30" name="uusernaame" type="text"/>\

@@ -30,7 +30,7 @@ ossi.utils = Class.create(ossi.base,{
   	b.setStyle({left:-client.dimensions.width+'px', width:client.dimensions.width+'px'});
   	b.show();
   	new PeriodicalExecuter(function(pe) {
-  		var speed = self.getSpeed(0,client.dimensions.width,parseInt(a.getStyle('left')),80,1);
+  		var speed = self.getSpeed(0,client.dimensions.width,parseInt(a.getStyle('left')),150,1);
   		a.setStyle({left:(parseInt(a.getStyle('left'))+speed)+'px'});
   		b.setStyle({left:(parseInt(b.getStyle('left'))+speed)+'px'});
   		if (parseInt(b.getStyle('left')) == 0) {
@@ -48,7 +48,7 @@ ossi.utils = Class.create(ossi.base,{
   	b.setStyle({left:client.dimensions.width+'px', width:client.dimensions.width+'px'});
   	b.show();
   	new PeriodicalExecuter(function(pe) {
-  		var speed = self.getSpeed(client.dimensions.width,0,parseInt(b.getStyle('left')),80,1);
+  		var speed = self.getSpeed(client.dimensions.width,0,parseInt(b.getStyle('left')),150,1);
   		a.setStyle({left:(parseInt(a.getStyle('left'))+speed)+'px'});
   		b.setStyle({left:(parseInt(b.getStyle('left'))+speed)+'px'});
   		if (parseInt(b.getStyle('left')) == 0) {
