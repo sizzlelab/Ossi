@@ -15,112 +15,36 @@ ossi.main = Class.create(ossi.base,{
     WIDGET_VIEWPORT = { height : 428, width : 313 }; // set these to same values as for #content_area.widget in main.css
     this.stack = []; // array stack for use cases queue
 
-    // if this is a wall then create chrome for the window
-    if (this.options.wall) {
-      var self = this;
-      this.window = new Element('div', { id : 'ossi_window' });
-      this.windowHandle = new Element('div', { id : 'ossi_window_handle' });
-      this.windowContent = new Element('div', { id : 'ossi_window_content' });
-      document.body.appendChild(this.window);
-      this.window.appendChild(this.windowContent);
-      this.window.appendChild(this.windowHandle);
-      this.window.setStyle({
-        position : 'absolute',
-        top : '100px',
-        left : '100px',
-        background : '#000',
-        border : 'solid #444 2px',
-        width : WIDGET_VIEWPORT.width+'px',
-        height : WIDGET_VIEWPORT.height+'px'
-      });
-      this.windowHandle.setStyle({
-        position : 'absolute',
-        right : '-29px',
-        top : '10px',
-        width : '25px',
-        height : '90px',
-        background : '#555',
-        cursor : 'pointer',
-        color : '#ff8a21',
-        fontFamily : 'helvetica',
-        fontWeight : 'bold',
-        fontSize : '14px',
-        textAlign : 'center',
-        paddingTop : '10px',
-//        layoutFlow: 'vertical-ideographic',
-        border : 'solid #444 2px'
-      });
-      var h = '\
-        O<br />S<br />S<br />I\
-        <div id="ossi_toggle_window_button" style="position:absolute; left:8px; bottom:10px; width:10px; height:10px; background:red;"><img id="ossi_toggle_button_image" src="../images/ossi_minimize_button.png" border="0" /></div>\
-        <img src="../images/ossi_maximize_button.png" style="display:none" />\
-      ';
-      this.windowHandle.update(h);
-      this.windowToggleButton = $('ossi_toggle_window_button');
-      this.windowToggleButton.onclick = function() {
-        if (!Object.isUndefined(self.wallHidden)) {
-          if (self.wallHidden) { 
-            self.utils.showWall();
-            $('ossi_toggle_button_image').src = '../images/ossi_minimize_button.png';
-          } else {
-            self.utils.hideWall();
-            $('ossi_toggle_button_image').src = '../images/ossi_maximize_button.png';
-          }
-        } else{
-          self.utils.hideWall(this.window);
-          $('ossi_toggle_button_image').src = '../images/ossi_maximize_button.png';
-        }
-      }
-      this.windowContent.setStyle({
-        position : 'absolute',
-        left : '0px',
-        top : '0px',
-        width : WIDGET_VIEWPORT.width+'px',
-        height : WIDGET_VIEWPORT.height+'px',
-        overflowY : 'auto',
-        overflowX : 'hidden'
-      });
-    }
-
-    // create main content element
-    if (this.options.wall) {
-      this.mainElement = this.windowContent;
-//      this.windowContent.appendChild(this.mainElement);
-      new Draggable(this.window, { 
-        handle : this.windowHandle,
-        onStart : function() {
-          this.wallHidden = false;
-        }.bind(this)
-      });
-    } else {
-      this.mainElement = new Element('div', { id : 'content_area' });
-      document.body.appendChild(this.mainElement);
-    }
+    // add main element
+    this.mainElement = new Element('div', { id : 'content_area' });
+    document.body.appendChild(this.mainElement);
 
     this.sub1 = false; // pointers for case classes
     this.sub2 = false; // pointers for case classes
     this.sessionCookie = false; // for widget's cookie
+
+    // XHR management
     this.XHRequests = [];
     Ajax.Responders.register({ onCreate:this._onXHRCreate.bind(this), onComplete:this._onXHRComplete.bind(this) }); // set handlers for managing requests
+
+    // loading panel
     this.utils = new ossi.utils(this);
     this.loadingpane = new Element('div', { id : 'loading' });
-    if (this.options.wall) {
-      this.window.appendChild(this.loadingpane);
-    } else {
-      document.body.appendChild(this.loadingpane);
-    }
+    document.body.appendChild(this.loadingpane);
     this.loadingpane.hide();
     this.loadingpane.addClassName('loading');
+
+    // do client UI stuff (which client is in question etc...)
     this._getClient(); // determine which client we are serving for
     this._setClientUI(); // on the basis of the client values make CSS changes
-    if (client.is_WRT_widget) { // init location engine
-      this.locator = new ossi.location(this);
-//      this.locator.run();
-    }
+
+    // base URL for COS / ASI
     BASE_URL = (client.is_widget || client.is_phonegap) ? 'https://ossi.sizl.org/cos' : '/cos'; // where to go asking for COS
 //    BASE_URL = 'https://cos.sizl.org'; // where to go asking for COS
     MAX_REQUEST_LENGTH = 30; // in seconds
     this.tmp = []; // for timers etc. May be deleted at any time.
+
+    // start application
 	  this.case1(); // go to first use case
 	},
 	/**
@@ -252,14 +176,8 @@ ossi.main = Class.create(ossi.base,{
     }
     
     if (options.start) { // login without effects (first time)
-			if (options.channelId) {
-				this.sub1 = new ossi.login(this, {	'hostElement' : this.mainElement,
-	      											              'channelId' : options.channelId,
-      	                                  	'backCase' : options.backCase});
-			} else {
-				this.sub1 = new ossi.login(this, {	'hostElement' : this.mainElement,
-                  													'backCase' : options.backCase});
-			}
+			this.sub1 = new ossi.login(this, {	'hostElement' : this.mainElement,
+                													'backCase' : options.backCase});
 	    this.sub1.pane.show();
     } else { // login page emerges with fx
 		  this.sub2 = this.sub1;
@@ -367,7 +285,6 @@ ossi.main = Class.create(ossi.base,{
         'backCase' : options.backCase
       });
       this.sub1.pane.show();
-      this.sub1.update();
     } else {
       this.sub2 = this.sub1;
       this.sub1 = new ossi.mainmenu(this, {

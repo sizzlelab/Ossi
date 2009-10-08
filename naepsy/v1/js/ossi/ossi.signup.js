@@ -70,7 +70,7 @@ ossi.signup = Class.create(ossi.base,{
                     'person[password]' : p,
                     'person[email]' : e,
 		                'person[consent]' : 'EN1.0',
-                    'event_id' : 'Ossi::CreateUser'
+                    'event_id' : 'Naepsy::CreateUser'
                   };
     self.parent.showLoading();
     new Ajax.Request(BASE_URL+'/people', {

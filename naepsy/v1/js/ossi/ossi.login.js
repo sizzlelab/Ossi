@@ -15,7 +15,6 @@ ossi.login = Class.create(ossi.base,{
   _draw: function() {
     if (this.options.hostElement) {
       this.options.hostElement.insert(this._getHTML());
-      new ossi.sloganizer(this,{targetElement:$('slogan_text')});
       this._addListeners();
       this.pane = $('loginpane');
       setTimeout(function() { $('login_form').focusFirstElement() },500); // .delay() did not seem to work on Firefox
@@ -25,16 +24,14 @@ ossi.login = Class.create(ossi.base,{
   },
   _getHTML: function() {
     var h =   '\
-          			<div id="loginpane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
+          			<div id="loginpane" style="position:absolute; top:0px; left:0px; width:100%; text-align:center;">\
           			  <form id="login_form">\
             				<div><img src="images/naepsy_logo.png" /></div>\
-            				<div class="login">\
-            					username:<br/>\
-            					<input id="uusernaame" class="textinput" maxlength="30" name="uusernaame" type="text"/>\
+            				<div style="margin-top:10px">\
+            					<input id="uusernaame" value="OtaSizzle username" class="textinput" maxlength="30" name="uusernaame" type="text"/>\
             				</div>\
-            				<div class="login">\
-            					password:<br/>\
-            					<input id="paasswoord" class="textinput" maxlength="30" name="paasswoord" type="password"/>\
+            				<div style="margin-top:10px">\
+            					<input id="paasswoord" value="OtaSizzle password" class="textinput" maxlength="30" name="paasswoord" type="text"/>\
             				</div>\
             				<div class="nav_button" style="margin-top:12px;">\
             					<a id="login_button" class="nav_button_text" href="javascript:void(null);">Login</a>\
@@ -42,11 +39,8 @@ ossi.login = Class.create(ossi.base,{
             				<div class="nav_button">\
             					<a id="signup_button" class="nav_button_text" href="javascript:void(null);">Sign up</a>\
             				</div>\
-            				<div class="nav_button" style="display:none">\
-            					<a id="wappu_button" class="nav_button_text" href="javascript:void(null);"><b><i>Wappu Login</i></b></a>\
-            				</div>\
             				<div class="nav_button">\
-            					<a id="about_button" class="nav_button_text" href="javascript:void(null);">About Ossi</a>\
+            					<a id="about_button" class="nav_button_text" href="javascript:void(null);">About Naepsy</a>\
             				</div>\
                     <input type="submit" style="display:none" />\
                   </form>\
@@ -237,18 +231,31 @@ ossi.login = Class.create(ossi.base,{
   _aboutHandler: function() {
     this.parent.case4();
   },
+  _passwordFieldOnFocus: function() {
+    if ($('paasswoord').value == 'OtaSizzle password') {
+      $('paasswoord').value = '';
+      $('paasswoord').type = 'password';
+      $('paasswoord').onblur = function() {
+        if ($('paasswoord').value == '') {
+          $('paasswoord').value = 'OtaSizzle password';
+          $('paasswoord').type = 'text';
+        }
+      }.bindAsEventListener(this);
+    }
+  },
   _addListeners: function() {
     $('login_form').observe('submit',this._loginHandler.bindAsEventListener(this));
+    $('paasswoord').onfocus = this._passwordFieldOnFocus.bindAsEventListener(this);
     $('login_button').onclick = this._loginHandler.bindAsEventListener(this);
     $('signup_button').onclick = this._signupHandler.bindAsEventListener(this);
     $('about_button').onclick = this._aboutHandler.bindAsEventListener(this);
-    $('wappu_button').onclick = this._wappuHandler.bindAsEventListener(this);
   },
   _removeListeners: function() {
+    $('paasswoord').onfocus = function() { return }
+    $('paasswoord').onblur = function() { return }
     $('login_button').onclick = function() { return }
     $('signup_button').onclick = function() { return }
     $('about_button').onclick = function() { return }
-    $('wappu_button').onclick = function() { return }
     $('login_form').onsubmit = function() { return }
   },
   destroy: function () {
