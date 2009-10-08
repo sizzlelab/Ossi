@@ -1,7 +1,7 @@
 /**
- * ossi mainmenu class
+ * naepsy mainmenu class
  */
-ossi.mainmenu = Class.create(ossi.base, {
+naepsy.mainmenu = Class.create(naepsy.base, {
   initialize: function(parent, options){
     this.parent = parent;
     this.options = Object.extend({
@@ -14,29 +14,6 @@ ossi.mainmenu = Class.create(ossi.base, {
     this.pane = false;
     this._draw();
   },
-  /**
-   * _update
-   *
-   * does not handle XHR failure yet!
-   */
-  update: function() {
-    if (typeof(this.parent.userId) == 'undefined') 
-      return; // userId in the parent controller not set
-    var self = this;
-    var URL = BASE_URL + '/people/@me/@self';
-//    self.parent.showLoading();
-    var params = { 'event_id' : 'Naepsy::MainMenu' };
-    new Ajax.Request(URL, {
-      method: 'get',
-      parameters: params,
-      onSuccess: function(response){
-        var json = response.responseJSON;
-        json = json.entry;
-        var name = (json.name != null) ? json.name['unstructured'] : json.username; // if name has not been set
-        $('text_container').update('logged in as <i>'+name+'</i>');
-      }
-    });
-  },
   _draw: function(){
     if (this.options.hostElement) {
       this.options.hostElement.insert(this._getHTML());
@@ -44,16 +21,18 @@ ossi.mainmenu = Class.create(ossi.base, {
       this.pane = $('mainmenupane');
     }
     else {
-      alert('ossi.mainmenu._draw() failed! this.options.hostElement not defined!');
+      alert('naepsy.mainmenu._draw() failed! this.options.hostElement not defined!');
     }
   },
-  _getHTML: function(){
+  _getHTML: function() {
     var h = '\
           			<div id="mainmenupane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
-          				<div id="text_container" style="text-align:center">\
+                  <div style="position:absolute; right:5px; top:5px;"><span id="logged_in_as_container">logged in as <i>'+this.parent.userName+'</i></span></div>\
+          				<div style="text-align:center; margin:20px 10px 20px 10px;">\
+                    <img src="images/naepsy_logo.png" width="50" height="50" />\
         				  </div>\
           				<div class="nav_button">\
-          					<a id="shoot_button" class="nav_button_text" href="javascript:void(null);">Launch camera</a>\
+          					<a id="shoot_button" class="nav_button_text" href="javascript:void(null);">Take a picture!</a>\
           				</div>\
           				<div class="nav_button">\
           					<a id="logout_button" class="nav_button_text" href="javascript:void(null);">Logout</a>\
@@ -92,7 +71,19 @@ ossi.mainmenu = Class.create(ossi.base, {
       }
     });
   },
+  handleImages: function(transactionId, errorCode, outPut) {
+    for(var i=0;i<outPut.length;i++)
+      alert(outPut[i]); //Array containing paths of all pictures taken
+  },
   _startCamera: function(){
+    try {
+       var camera = com.nokia.device.load("", "com.nokia.device.camera", "");
+       var id = camera.startCamera(this.handleImages.bind(this));
+       alert('Transaction Id = ' + id);
+    } catch(e) {
+       var error = e.toString();
+       alert(error);
+    }
   },
   _addListeners: function(){
     $('logout_button').onclick = this._logoutHandler.bindAsEventListener(this);

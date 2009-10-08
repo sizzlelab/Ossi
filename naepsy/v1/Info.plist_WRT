@@ -3,9 +3,9 @@
 <plist version="1.0">
   <dict>
     <key>DisplayName</key>
-    <string>Ossi</string>  <!-- Name to be shown next to the icon -->
+    <string>Naepsy</string>  <!-- Name to be shown next to the icon -->
     <key>Identifier</key>
-    <string>org.sizl.widget.ossi</string>  <!-- Unique string to identify this widget (in reverse domain format) -->
+    <string>org.sizl.widget.naepsy</string>  <!-- Unique string to identify this widget (in reverse domain format) -->
     <key>MainHTML</key>
     <string>index.html</string>  <!-- File name of the main HTML document -->
     <key>AllowNetworkAccess</key>   

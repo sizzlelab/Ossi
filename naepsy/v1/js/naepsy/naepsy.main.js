@@ -1,7 +1,7 @@
 /**
-* ossi main class
+* naepsy main class
 */
-ossi.main = Class.create(ossi.base,{
+naepsy.main = Class.create(naepsy.base,{
 	initialize: function(options) {
 	  this.options = Object.extend({
       channelId : false,
@@ -28,7 +28,7 @@ ossi.main = Class.create(ossi.base,{
     Ajax.Responders.register({ onCreate:this._onXHRCreate.bind(this), onComplete:this._onXHRComplete.bind(this) }); // set handlers for managing requests
 
     // loading panel
-    this.utils = new ossi.utils(this);
+    this.utils = new naepsy.utils(this);
     this.loadingpane = new Element('div', { id : 'loading' });
     document.body.appendChild(this.loadingpane);
     this.loadingpane.hide();
@@ -176,17 +176,17 @@ ossi.main = Class.create(ossi.base,{
     }
     
     if (options.start) { // login without effects (first time)
-			this.sub1 = new ossi.login(this, {	'hostElement' : this.mainElement,
+			this.sub1 = new naepsy.login(this, {	'hostElement' : this.mainElement,
                 													'backCase' : options.backCase});
 	    this.sub1.pane.show();
     } else { // login page emerges with fx
 		  this.sub2 = this.sub1;
 			if (options.channelId) {
-				this.sub1 = new ossi.login(this, {	'hostElement' : this.mainElement,
+				this.sub1 = new naepsy.login(this, {	'hostElement' : this.mainElement,
 	      											              'channelId' : options.channelId,
       	                                  	'backCase' : options.backCase});
 			} else {
-				this.sub1 = new ossi.login(this, {	'hostElement' : this.mainElement,
+				this.sub1 = new naepsy.login(this, {	'hostElement' : this.mainElement,
       	                                  	'backCase' : options.backCase});
 			}
       if (options.out) {
@@ -280,26 +280,26 @@ ossi.main = Class.create(ossi.base,{
     this.stack.push(this.case3.bind(this,opt));
 		
     if (options.start) {
-      this.sub1 = new ossi.mainmenu(this, {
+      this.sub1 = new naepsy.mainmenu(this, {
         'hostElement' : this.mainElement,
         'backCase' : options.backCase
       });
       this.sub1.pane.show();
     } else {
       this.sub2 = this.sub1;
-      this.sub1 = new ossi.mainmenu(this, {
+      this.sub1 = new naepsy.mainmenu(this, {
         'hostElement' : this.mainElement,
         'backCase' : options.backCase
       });
       if (options.out) {
         this.utils.out(this.sub2.pane,this.sub1.pane,function() {
           this.sub2.destroy();
-          this.sub1.update();
+//          this.sub1.update();
         }.bind(this));
       } else {
         this.utils.into(this.sub2.pane,this.sub1.pane,function() {
           this.sub2.destroy();
-          this.sub1.update();
+//          this.sub1.update();
         }.bind(this));
       }
     }
@@ -321,7 +321,7 @@ ossi.main = Class.create(ossi.base,{
     }
 
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.about(this, {
+    this.sub1 = new naepsy.about(this, {
       'hostElement' : this.mainElement,
       'backCase' : this.stack[this.stack.length-2]
     });
@@ -352,7 +352,7 @@ ossi.main = Class.create(ossi.base,{
     }
 
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.signup(this, { 
+    this.sub1 = new naepsy.signup(this, { 
       'hostElement' : this.mainElement,
       'backCase' : this.stack[this.stack.length-2]
     });
@@ -387,7 +387,7 @@ ossi.main = Class.create(ossi.base,{
     }
 
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.dialog(this,  {  
+    this.sub1 = new naepsy.dialog(this,  {  
       'hostElement' : this.mainElement,
       'backCase' : this.stack[this.stack.length-2],
       'message' : options.message,
@@ -418,7 +418,7 @@ ossi.main = Class.create(ossi.base,{
     }
 
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.status(this, {
+    this.sub1 = new naepsy.status(this, {
       'hostElement' : this.mainElement,
       'backCase' : this.stack[this.stack.length-2]
     });
@@ -453,7 +453,7 @@ ossi.main = Class.create(ossi.base,{
     }
 
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.myprofile(this, {  
+    this.sub1 = new naepsy.myprofile(this, {  
       'hostElement' : this.mainElement,
       'backCase' : this.stack[this.stack.length-2]
     });
@@ -488,7 +488,7 @@ ossi.main = Class.create(ossi.base,{
     }
 
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.friendlist(this, {   
+    this.sub1 = new naepsy.friendlist(this, {   
       'hostElement' : this.mainElement,
       'backCase' : this.stack[this.stack.length-2]
     });
@@ -523,7 +523,7 @@ ossi.main = Class.create(ossi.base,{
     }
 
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.findusers(this, {  
+    this.sub1 = new naepsy.findusers(this, {  
       'hostElement' : this.mainElement,
       'backCase' : this.stack[this.stack.length-2]
     });
@@ -557,7 +557,7 @@ ossi.main = Class.create(ossi.base,{
     }
 
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.searchresults(this, {
+    this.sub1 = new naepsy.searchresults(this, {
       'hostElement' : this.mainElement,
       'search' : options.search,
       'backCase' : this.stack[this.stack.length-2]
@@ -596,7 +596,7 @@ ossi.main = Class.create(ossi.base,{
     }
 
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.profile(this, {
+    this.sub1 = new naepsy.profile(this, {
       'hostElement' : this.mainElement,
       'pendingNav' : options.pendingNav,
       'search' : options.search,
@@ -634,7 +634,7 @@ ossi.main = Class.create(ossi.base,{
     }
 
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.pendingfriends(this, { 
+    this.sub1 = new naepsy.pendingfriends(this, { 
       'hostElement' : this.mainElement,
       'backCase' : this.stack[this.stack.length-2]
     });
@@ -668,7 +668,7 @@ ossi.main = Class.create(ossi.base,{
     }
 
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.terms(this, {
+    this.sub1 = new naepsy.terms(this, {
       'hostElement' : this.mainElement,
       'backCase' : this.stack[this.stack.length-2]
     });
@@ -694,7 +694,7 @@ ossi.main = Class.create(ossi.base,{
     }
 
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.consent(this, {
+    this.sub1 = new naepsy.consent(this, {
       'hostElement' : this.mainElement,
       'backCase' : this.stack[this.stack.length-2]
     });
@@ -726,7 +726,7 @@ ossi.main = Class.create(ossi.base,{
     }
 
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.information(this, {
+    this.sub1 = new naepsy.information(this, {
       'hostElement' : this.mainElement,
       'backCase' : this.stack[this.stack.length-2]
     });
@@ -753,7 +753,7 @@ ossi.main = Class.create(ossi.base,{
     }
 		
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.channellist(this, {  'hostElement' : this.mainElement,
+    this.sub1 = new naepsy.channellist(this, {  'hostElement' : this.mainElement,
                                               'groupId' : options.groupId,
                                               'selfUpdate' : true,
                                               'backCase' : this.stack[this.stack.length-2]});
@@ -788,7 +788,7 @@ ossi.main = Class.create(ossi.base,{
     }
 
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.createchannel(this, {
+    this.sub1 = new naepsy.createchannel(this, {
       'groupId' : options.groupId,
       'hostElement' : this.mainElement,
       'backCase' : this.stack[this.stack.length-2]
@@ -826,7 +826,7 @@ ossi.main = Class.create(ossi.base,{
     }
 
 		this.sub2 = this.sub1;
-  	this.sub1 = new ossi.channel(this, {  
+  	this.sub1 = new naepsy.channel(this, {  
   	  'hostElement' : this.mainElement,
       'selfUpdate' : true,
    	  'groupId' : options.groupId,
@@ -875,7 +875,7 @@ ossi.main = Class.create(ossi.base,{
     }
 
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.mypost(this, {   
+    this.sub1 = new naepsy.mypost(this, {   
       'hostElement' : this.mainElement,
       'priv' : options.priv,
       'channelId' : options.channelId,
@@ -916,7 +916,7 @@ ossi.main = Class.create(ossi.base,{
     }
 
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.post(this, {
+    this.sub1 = new naepsy.post(this, {
       'hostElement' : this.mainElement,
       'channelId' : options.channelId,
       'postId' : options.postId,
@@ -953,7 +953,7 @@ ossi.main = Class.create(ossi.base,{
     }
 
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.avatar(this, {
+    this.sub1 = new naepsy.avatar(this, {
       'hostElement' : this.mainElement,
       'backCase' : this.stack[this.stack.length-2]
     });
@@ -979,7 +979,7 @@ ossi.main = Class.create(ossi.base,{
 			channelId : false,
 			backCase : false
 		},options);
-    this.sub1 = new ossi.channel(this, {	'hostElement' : this.mainElement,
+    this.sub1 = new naepsy.channel(this, {	'hostElement' : this.mainElement,
 											'wall' : true,
 											'selfUpdate' : true,
 											'count' : 7,
@@ -1007,7 +1007,7 @@ ossi.main = Class.create(ossi.base,{
     }
 		
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.grouplist(this, {
+    this.sub1 = new naepsy.grouplist(this, {
       'hostElement' : this.mainElement,
       'backCase' : this.stack[this.stack.length-2]
     });
@@ -1042,7 +1042,7 @@ ossi.main = Class.create(ossi.base,{
     }
 		
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.creategroup(this, {  'hostElement' : this.mainElement,
+    this.sub1 = new naepsy.creategroup(this, {  'hostElement' : this.mainElement,
                                               'backCase' : this.stack[this.stack.length-2]});
     if (options.out) {
       this.utils.out(this.sub2.pane,this.sub1.pane,function() {
@@ -1073,7 +1073,7 @@ ossi.main = Class.create(ossi.base,{
     }
 		
 		this.sub2 = this.sub1;
-  	this.sub1 = new ossi.group(this, {  
+  	this.sub1 = new naepsy.group(this, {  
   	  'hostElement' : this.mainElement,
       'groupId' : options.groupId,
       'backCase' : this.stack[this.stack.length-2]
@@ -1110,7 +1110,7 @@ ossi.main = Class.create(ossi.base,{
     }
 
 		this.sub2 = this.sub1;
-  	this.sub1 = new ossi.groupmembers(this, { 
+  	this.sub1 = new naepsy.groupmembers(this, { 
   	  'hostElement' : this.mainElement,
       'selfUpdate' : true,
       'groupId' : options.groupId,
@@ -1147,7 +1147,7 @@ ossi.main = Class.create(ossi.base,{
     }
 
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.changepassword(this, { 
+    this.sub1 = new naepsy.changepassword(this, { 
       'hostElement' : this.mainElement,
       'backCase' : this.stack[this.stack.length-2]
     });
@@ -1182,7 +1182,7 @@ ossi.main = Class.create(ossi.base,{
     }
 
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.search(this, {   'hostElement' : this.mainElement,
+    this.sub1 = new naepsy.search(this, {   'hostElement' : this.mainElement,
                                           'backCase' : this.stack[this.stack.length-2]});
     if (options.out) {
       this.utils.out(this.sub2.pane,this.sub1.pane,function() {
@@ -1230,7 +1230,7 @@ ossi.main = Class.create(ossi.base,{
     }
 
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.searchallresult(this, {
+    this.sub1 = new naepsy.searchallresult(this, {
       'hostElement' : this.mainElement,
       'search' : options.search,
       'backCase' : this.stack[this.stack.length-2]
@@ -1267,7 +1267,7 @@ ossi.main = Class.create(ossi.base,{
     }
 
     this.sub2 = this.sub1;
-    this.sub1 = new ossi.friendlist(this, {   
+    this.sub1 = new naepsy.friendlist(this, {   
       'userId' : options.userId,
       'hostElement' : this.mainElement,
       'backCase' : this.stack[this.stack.length-2]
@@ -1380,7 +1380,7 @@ ossi.main = Class.create(ossi.base,{
     if (this.sessionCookie) this.sessionCookie = false;
     this.hideLoading();
     this.case6({
-      message : "There has been an error within Aalto Social Interface, or Ossi has been unable to reach Aalto Social Interface. You may have lost network connectivity. Please try again later!",
+      message : "There has been an error within Aalto Social Interface, or naepsy has been unable to reach Aalto Social Interface. You may have lost network connectivity. Please try again later!",
       buttonText : "Restart application",
       backCase: function() { window.location.reload(); }.bind(self)
     });
@@ -1394,7 +1394,7 @@ ossi.main = Class.create(ossi.base,{
   _onXHRCreate: function(request) {
 //    if (client.is_Dashboard_widget && this.sessionCookie) request.options.requestHeaders = ['Cookie',this.sessionCookie]; // if client is Dashboard, then manually slap cookie onto every single request (due to Dashboard bug)
 //    if ((client.is_Dashboard_widget || client.is_phonegap) && this.sessionCookie) request.options.requestHeaders = ['Cookie',this.sessionCookie]; // if client is Dashboard, then manually slap cookie onto every single request (due to Dashboard bug)
-    request.options.requestHeaders = ['Cookie',this.sessionCookie]; // if client is Dashboard, then manually slap cookie onto every single request (due to Dashboard bug)
+//    request.options.requestHeaders = ['Cookie',this.sessionCookie]; // if client is Dashboard, then manually slap cookie onto every single request (due to Dashboard bug)
     this.XHRequests.push(request);
     this.tmp.push(setTimeout(function(request) {
       for (var i=0; i<this.XHRequests.length; i++) {

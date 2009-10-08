@@ -1,7 +1,7 @@
 /**
-* ossi dialog class
+* naepsy dialog class
 */
-ossi.dialog = Class.create(ossi.base,{
+naepsy.dialog = Class.create(naepsy.base,{
 	initialize: function(parent,options) {
     this.parent = parent;
 		this.options = Object.extend({
@@ -21,7 +21,7 @@ ossi.dialog = Class.create(ossi.base,{
       this._addListeners();
       this.pane = $('dialogpane');
     } else {
-      alert('ossi.dialog._draw() failed! this.options.hostElement not defined!');
+      alert('naepsy.dialog._draw() failed! this.options.hostElement not defined!');
     }
   },
   _getHTML: function() {

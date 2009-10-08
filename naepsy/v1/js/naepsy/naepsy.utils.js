@@ -1,7 +1,7 @@
 /**
-* ossi utils class
+* naepsy utils class
 */
-ossi.utils = Class.create(ossi.base,{
+naepsy.utils = Class.create(naepsy.base,{
 	initialize: function(parent) {
     this.parent = parent;
 	  this.loadertexts =  [ 'loadin.g',

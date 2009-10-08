@@ -1,7 +1,7 @@
 /**
-* ossi login class
+* naepsy login class
 */
-ossi.login = Class.create(ossi.base,{
+naepsy.login = Class.create(naepsy.base,{
 	initialize: function(parent,options) {
     this.parent = parent;
 		this.options = Object.extend({
@@ -19,7 +19,7 @@ ossi.login = Class.create(ossi.base,{
       this.pane = $('loginpane');
       setTimeout(function() { $('login_form').focusFirstElement() },500); // .delay() did not seem to work on Firefox
     } else {
-      alert('ossi.login._draw() failed! this.options.hostElement not defined!');
+      alert('naepsy.login._draw() failed! this.options.hostElement not defined!');
     }
   },
   _getHTML: function() {
@@ -88,36 +88,21 @@ ossi.login = Class.create(ossi.base,{
     		new Ajax.Request(BASE_URL+'/people/'+self.parent.userId+'/@self', {
     			method : 'get',
     			onSuccess : function(response) {
+    			  console.log(response);
     				var json = response.responseJSON;
-    				var name = (json.name != null) ? json.name['unstructured'] : json.username; // if name has not been set
+    				var name = (json.entry.name != null) ? json.entry.name['unstructured'] : json.username; // if name has not been set
     				self.parent.userName = name;
     				if (typeof(json.role)  != 'undefined' && json.role != null){
     					self.parent.userRole = json.role;
     				}
+        		self.parent.hideLoading();
+            self.parent.case3();
     			},
     			onFailure : function(response) {
     			  alert('failure, response code: '+response.status); // iphone & phonegap gives 401 :(
     				self.parent.hideLoading();
     			}
     		});
-
-    		self.parent.hideLoading();
-
-        if(!Object.isUndefined(self.options.channelId) && self.options.channelId){ // if channelId exists, go there
-        	self.parent.case20({
-        		out : true,
-        		channelId : self.options.channelId,
-        		backCase : self.parent.case18.bind(self.parent,{
-        			out : true,
-        			backCase : self.parent.case3.bind(self.parent,{
-        				out : true
-        			})
-        		})
-        	});
-
-        } else {
-	        self.parent.case3();
-        }
       },
       on403 : function() {
         self.parent.hideLoading();
@@ -132,91 +117,6 @@ ossi.login = Class.create(ossi.base,{
         self.parent.case6({
           backCase : function() { window.location.reload(); }.bind(self),
           message : "We could not reach Aalto Social Interface. Please try again later!",
-          buttonText : "Restart Application"
-        });
-      }
-    });
-    if(typeof(e) != 'undefined'){
-	    Event.stop(e); //Might be problem with Firefox
-    }
-  },
-  _wappuHandler: function(e) {
-    var self = this;
-    var u = 'wappu';
-    var p = 'wabus5';
-    var params =  { 'login[username]' : u,
-                    'login[password]' : p,
-                    'login[app_name]' : 'ossi',
-                    'login[app_password]' : 'Z0ks51r'
-                  };
-    self.parent.showLoading();
-    new Ajax.Request(BASE_URL+'/session', { 
-      method : 'post',
-      parameters : params,
-      on409 : function() { // found existing session, removing it first!
-        new Ajax.Request(BASE_URL+'/session', {
-          onSuccess : function() {
-            self.parent.sessionCookie = false;
-            self._wappuHandler();
-          },
-          onFailure : function() {
-            self.parent.hideLoading();
-            self.parent.case6({
-              backCase : self.parent.case2.bind(self.parent,{out:true}),
-              message : "Found an existing user session, removed it, but after that could not log you in with the credentials provided.",
-              buttonText : "Try again"
-            });
-          }
-        });
-      },
-      onSuccess : function(response) {
-        var json = response.responseJSON;
-        self.parent.sessionCookie = self.parent.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
-        self.parent.userId = json.entry.user_id;
-
-		// we also need name for that id
-		new Ajax.Request(BASE_URL+'/people/'+self.parent.userId+'/@self', {
-			method : 'get',
-			onSuccess : function(response) {
-				var json = response.responseJSON;
-				var name = (json.name != null) ? json.name['unstructured'] : json.username; // if name has not been set
-				self.parent.userName = name;
-			},
-			onFailure : function() {
-				self.parent.hideLoading();
-				self.parent.case3();
-			}
-		});
-
-		self.parent.hideLoading();
-        if(self.options.channelId){ // if channelId exists, go there
-        	self.parent.case20({
-        		out : true,
-        		channelId : self.options.channelId,
-        		backCase : self.parent.case18.bind(self.parent,{
-        			out : true,
-        			backCase : self.parent.case3.bind(self.parent,{
-        				out : true
-        			})
-        		})
-        	});
-        } else {
-	        self.parent.case3();
-        }
-      },
-      on403 : function() {
-        self.parent.hideLoading();
-        self.parent.case6({
-          backCase : self.parent.case2.bind(self.parent,{out:true}),
-          message : "Could not log you in with the credentials you provided. Please check your typing and try again.",
-          buttonText : "Back"
-        });
-      },
-      onFailure : function() {
-        self.parent.hideLoading();
-        self.parent.case6({
-          backCase : function() { window.location.reload(); }.bind(self),
-          message : "We could not reach Common Services. Please try again later!",
           buttonText : "Restart Application"
         });
       }

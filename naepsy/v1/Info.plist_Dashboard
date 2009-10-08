@@ -5,9 +5,9 @@
   <key>AllowNetworkAccess</key>
   <true/>
 	<key>CFBundleDisplayName</key>
-	<string>Ossi</string>
+	<string>Naepsy</string>
 	<key>CFBundleIdentifier</key>
-	<string>org.sizl.widget.ossi</string>
+	<string>org.sizl.widget.naepsy</string>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>CloseBoxInsetX</key>

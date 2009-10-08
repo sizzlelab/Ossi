@@ -1,7 +1,7 @@
 /**
-* ossi about class
+* naepsy about class
 */
-ossi.about = Class.create(ossi.base,{
+naepsy.about = Class.create(naepsy.base,{
 	initialize: function(parent,options) {
     this.parent = parent;
 		this.options = Object.extend({
@@ -17,13 +17,13 @@ ossi.about = Class.create(ossi.base,{
       this._addListeners();
       this.pane = $('aboutpane');
     } else {
-      alert('ossi.about._draw() failed! this.options.hostElement not defined!');
+      alert('naepsy.about._draw() failed! this.options.hostElement not defined!');
     }
   },
   _getHTML: function() {
     var h =   '\
           			<div id="aboutpane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
-          				<div id="about_Ossi" style="margin:20px 10px 20px 10px">\
+          				<div id="about_naepsy" style="margin:20px 10px 20px 10px">\
           				  <h2>About Naepsy</h2>\
                     <p>Naepsy is an experimental photography application developed specifically for Nokia Web Runtime v1.1+. Naepsy has been developed within the OtaSizzle framework and to use the application you have you have OtaSizzle username and password.</p>\
                     <p>With Naepsy you can take photos using your mobile phone\'s camera and save them to the Aalto Social Interface with location tagging. Please note that photos are visible to all OtaSizzle users.</p>\

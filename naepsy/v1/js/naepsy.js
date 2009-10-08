@@ -11,8 +11,7 @@ var naepsy = {
     libraries: [  '3rdParty/prototype-m.js',
                   '3rdParty/effects.js',
                   '3rdParty/dragdrop.js',
-                  '3rdParty/md5.js',
-                  'extras/prototype.extras.js',
+                  '3rdParty/platformservices.js', // nokia WRT platformservices 2.0
                   'naepsy/naepsy.base.js',
                   'naepsy/naepsy.main.js',
                   'naepsy/naepsy.login.js',

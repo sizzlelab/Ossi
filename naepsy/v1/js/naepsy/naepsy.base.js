@@ -1,2 +1,2 @@
 // placeholder for mixin
-ossi.base = {};
+naepsy.base = {};

@@ -11,7 +11,7 @@ Ajax.Request.prototype.abort = function() {
     Ajax.activeRequestCount--;
 };
 
-ossi.simulateEvent = function(element,event){
+naepsy.simulateEvent = function(element,event){
     if (document.createEventObject){
         // dispatch for IE
         var evt = document.createEventObject();

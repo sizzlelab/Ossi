@@ -1,7 +1,7 @@
 /**
-* ossi location class
+* naepsy location class
 */
-ossi.location = Class.create(ossi.base,{
+naepsy.location = Class.create(naepsy.base,{
 	initialize: function(parent,options) {
     this.parent = parent;
 		this.options = Object.extend({

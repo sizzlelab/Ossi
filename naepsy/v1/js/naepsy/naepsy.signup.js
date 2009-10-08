@@ -1,7 +1,7 @@
 /**
-* ossi signup class
+* naepsy signup class
 */
-ossi.signup = Class.create(ossi.base,{
+naepsy.signup = Class.create(naepsy.base,{
 	initialize: function(parent,options) {
     this.parent = parent;
 		this.options = Object.extend({
@@ -16,7 +16,7 @@ ossi.signup = Class.create(ossi.base,{
       this._addListeners();
       this.pane = $('signuppane');
     } else {
-      alert('ossi.signup._draw() failed! this.options.hostElement not defined!');
+      alert('naepsy.signup._draw() failed! this.options.hostElement not defined!');
     }
   },
   _getHTML: function() {

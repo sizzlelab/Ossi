@@ -1,7 +1,7 @@
 /**
-* ossi information class
+* naepsy information class
 */
-ossi.information = Class.create(ossi.base,{
+naepsy.information = Class.create(naepsy.base,{
 	initialize: function(parent,options) {
     this.parent = parent;
 		this.options = Object.extend({
@@ -17,13 +17,13 @@ ossi.information = Class.create(ossi.base,{
       this._addListeners();
       this.pane = $('informationpane');
     } else {
-      alert('ossi.information._draw() failed! this.options.hostElement not defined!');
+      alert('naepsy.information._draw() failed! this.options.hostElement not defined!');
     }
   },
   _getHTML: function() {
     var h =   '\
           			<div id="informationpane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
-          				<div id="information_Ossi" style="margin:20px 10px 20px 10px">\
+          				<div id="information_naepsy" style="margin:20px 10px 20px 10px">\
                     <h2>INFORMATION FOR PARTICIPANTS IN A SCIENTIFIC RESEARCH</h2>\
                     <p>This document describes the purpose, progress and other aspects of the study in question, as required by the ethical rules of research on human subjects, and as decreed by the HIIT Ethical Committee. The Ethical Committee has granted approval for human research to be carried out in the study for the purposes given in this document and for the methods listed in it.</p>\
                     <h3>Invitation</h3>\
@@ -35,7 +35,7 @@ ossi.information = Class.create(ossi.base,{
                     <h3>Benefits for Participants and the Community</h3>\
                     <p>We strive to make the tested services at least partially useful, so that participants in the study will receive some benefit from using them. There is no other particular benefit from participating in the study. Although you receive no personal gain from participating, we believe that by taking part you will help to produce information that will lead to better services being designed and offered in the future.</p>\
                     <h3>Confidentiality</h3>\
-                    <p>During the study, we will collect data on you and your use of services. Data is collected by asking you directly and observing your actions, but also by using unnoticeable programs installed on mobile phones and computers. All the data collected on you during the study is treated confidentially and is never disclosed to third parties without express consent from you, unless it is required by law. If you are using SP360 software, Nokia has access to the data collected by the software, as described in the SP360 consent document. Data related to you is only used in combination with other data. In the analysis, data will be collated using phone numbers, IMEI codes and other identifiers. All identifying data will be destroyed at the latest at the end of this five-year project; earlier, if possible in practice. Whenever the study’s outcomes are published or processed scientifically or otherwise, individual test subjects will not be mentioned, nor can they be identified from the data. HIIT holds a public data file description that determines how data is processed, stored and eventually destroyed.</p>\
+                    <p>During the study, we will collect data on you and your use of services. Data is collected by asking you directly and observing your actions, but also by using unnoticeable programs installed on mobile phones and computers. All the data collected on you during the study is treated confidentially and is never disclosed to third parties without express consent from you, unless it is required by law. If you are using SP360 software, Nokia has access to the data collected by the software, as described in the SP360 consent document. Data related to you is only used in combination with other data. In the analysis, data will be collated using phone numbers, IMEI codes and other identifiers. All identifying data will be destroyed at the latest at the end of this five-year project; earlier, if pnaepsyble in practice. Whenever the study’s outcomes are published or processed scientifically or otherwise, individual test subjects will not be mentioned, nor can they be identified from the data. HIIT holds a public data file description that determines how data is processed, stored and eventually destroyed.</p>\
                     <p>This research complies with the Finnish Personal Data Act (523/1999), which is based on EU legislation.</p>\
                     <h3>Participation and Cancellation</h3>\
                     <p>Participation in the study is completely voluntary. If you decide to take part in the study, you have the right to cancel your participation at any time, without any consequences. You also have the right not to answer any questions you don\'t want to answer, and still continue participating in the study. In the unlikely event that the circumstances should require it, the Research Director has the right to cancel your participation.</p>\
