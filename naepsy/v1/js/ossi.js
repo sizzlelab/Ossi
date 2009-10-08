@@ -1,4 +1,4 @@
-var ossi = {
+var naepsys = {
   Version: '1.0',
   bootstrap: {
     load: function(libraryName) {
@@ -6,76 +6,75 @@ var ossi = {
       document.write('<script type="text/javascript" src="'+libraryName+'"></script>');
     },
     CSS: [
-      'main.css',
-      'ossiWallStyles.css'
+      'main.css'
     ],
     libraries: [  '3rdParty/prototype-m.js',
                   '3rdParty/effects.js',
                   '3rdParty/dragdrop.js',
                   '3rdParty/md5.js',
                   'extras/prototype.extras.js',
-                  'ossi/ossi.base.js',
-                  'ossi/ossi.main.js',
-                  'ossi/ossi.login.js',
-                  'ossi/ossi.signup.js',
-                  'ossi/ossi.about.js',
-                  'ossi/ossi.mainmenu.js',
-                  'ossi/ossi.dialog.js',
-                  'ossi/ossi.sloganizer.js',
-                  'ossi/ossi.status.js',
-                  'ossi/ossi.myprofile.js',
-                  'ossi/ossi.profile.js',
-                  'ossi/ossi.friendlist.js',
-                  'ossi/ossi.findusers.js',
-                  'ossi/ossi.searchresults.js',
-                  'ossi/ossi.pendingfriends.js',
-                  'ossi/ossi.terms.js',
-                  'ossi/ossi.consent.js',
-                  'ossi/ossi.information.js',
-                  'ossi/ossi.channellist.js',
-                  'ossi/ossi.grouplist.js',
-                  'ossi/ossi.creategroup.js',
-                  'ossi/ossi.group.js',
-                  'ossi/ossi.groupmembers.js',
-                  'ossi/ossi.createchannel.js',
-                  'ossi/ossi.channel.js',
-                  'ossi/ossi.mypost.js',
-                  'ossi/ossi.post.js',
-                  'ossi/ossi.avatar.js',
-                  'ossi/ossi.utils.js',
-									'ossi/ossi.changepassword.js',
-		              'ossi/ossi.search.js',
-		              'ossi/ossi.location.js',
-									'ossi/ossi.searchallresult.js'
+                  'naepsys/naepsys.base.js',
+                  'naepsys/naepsys.main.js',
+                  'naepsys/naepsys.login.js',
+                  'naepsys/naepsys.signup.js',
+                  'naepsys/naepsys.about.js',
+                  'naepsys/naepsys.mainmenu.js',
+                  'naepsys/naepsys.dialog.js',
+                  'naepsys/naepsys.sloganizer.js',
+                  'naepsys/naepsys.status.js',
+                  'naepsys/naepsys.myprofile.js',
+                  'naepsys/naepsys.profile.js',
+                  'naepsys/naepsys.friendlist.js',
+                  'naepsys/naepsys.findusers.js',
+                  'naepsys/naepsys.searchresults.js',
+                  'naepsys/naepsys.pendingfriends.js',
+                  'naepsys/naepsys.terms.js',
+                  'naepsys/naepsys.consent.js',
+                  'naepsys/naepsys.information.js',
+                  'naepsys/naepsys.channellist.js',
+                  'naepsys/naepsys.grouplist.js',
+                  'naepsys/naepsys.creategroup.js',
+                  'naepsys/naepsys.group.js',
+                  'naepsys/naepsys.groupmembers.js',
+                  'naepsys/naepsys.createchannel.js',
+                  'naepsys/naepsys.channel.js',
+                  'naepsys/naepsys.mypost.js',
+                  'naepsys/naepsys.post.js',
+                  'naepsys/naepsys.avatar.js',
+                  'naepsys/naepsys.utils.js',
+									'naepsys/naepsys.changepassword.js',
+		              'naepsys/naepsys.search.js',
+		              'naepsys/naepsys.location.js',
+									'naepsys/naepsys.searchallresult.js'
                 ],
     loadLibraries: function() {
       var getBootScript = function () { 
         var s = document.getElementsByTagName("script"); 
         for (var i=0; i<s.length; i++) {
-          if (s[i].src && s[i].src.match(/ossi\.js(\?.*)?$/)){return s[i];}
+          if (s[i].src && s[i].src.match(/naepsys\.js(\?.*)?$/)){return s[i];}
         }
       };
       var bootScript = getBootScript();
       if (!bootScript)
-        return alert ('ossi boot script failed');
-      ossi.path = bootScript.src.replace(/ossi\.js(\?.*)?$/,'');
-      ossi.cssPath = bootScript.src.replace(/js\/ossi\.js(\?.*)?$/,'') + 'css/';
-      for (var i = 0; i < ossi.bootstrap.libraries.length; i++) {
-        ossi.bootstrap.load(ossi.path+ossi.bootstrap.libraries[i]);
+        return alert ('naepsys boot script failed');
+      naepsys.path = bootScript.src.replace(/naepsys\.js(\?.*)?$/,'');
+      naepsys.cssPath = bootScript.src.replace(/js\/naepsys\.js(\?.*)?$/,'') + 'css/';
+      for (var i = 0; i < naepsys.bootstrap.libraries.length; i++) {
+        naepsys.bootstrap.load(naepsys.path+naepsys.bootstrap.libraries[i]);
       }
-      ossi.bootstrap.loadCSS(); // load CSS too
+      naepsys.bootstrap.loadCSS(); // load CSS too
     },
     loadCSS: function() {
-      for (var i = 0; i < ossi.bootstrap.CSS.length; i++) {
-        document.write('<link type="text/css" rel="stylesheet" href="'+ossi.cssPath+ossi.bootstrap.CSS[i]+'" />');
+      for (var i = 0; i < naepsys.bootstrap.CSS.length; i++) {
+        document.write('<link type="text/css" rel="stylesheet" href="'+naepsys.cssPath+naepsys.bootstrap.CSS[i]+'" />');
       }
     }
   }
 }
-ossi.bootstrap.loadLibraries();
+naepsys.bootstrap.loadLibraries();
 if (typeof(wall) == 'undefined') {
   window.onload = function() {
-  //  new ossi.main({width:400, height:400, x:100, y:100});  
-    new ossi.main();  
+  //  new naepsys.main({width:400, height:400, x:100, y:100});  
+    new naepsys.main();  
   }
 }
