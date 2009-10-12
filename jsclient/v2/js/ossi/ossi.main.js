@@ -194,7 +194,7 @@ ossi.main = Class.create(ossi.base,{
     json.entry = Object.extend({
       user_id : null,
       app_id : null
-    },response.responseJSON);
+    },response.responseJSON.entry);
 	  if (json.entry.user_id != null) {
   		this.userId = json.entry.user_id;
   		this.appId = json.entry.app_id;
@@ -203,7 +203,7 @@ ossi.main = Class.create(ossi.base,{
   			method : 'get',
   			onSuccess : function(response) {
   				var json = response.responseJSON;
-  				self.userName = (json.name != null) ? json.name['unstructured'] : json.username;
+  				self.userName = (json.entry.name != null) ? json.entry.name['unstructured'] : json.entry.username;
   				if (typeof(json.role)  != 'undefined' && json.role != null) {
   					self.userRole = json.role;
   				}
