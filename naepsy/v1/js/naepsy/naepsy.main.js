@@ -18,6 +18,8 @@ naepsy.main = Class.create(naepsy.base,{
     // add main element
     this.mainElement = new Element('div', { id : 'content_area' });
     document.body.appendChild(this.mainElement);
+    this.mainElement.setStyle({height:'100%', width:'100%'});
+    this.mainElement.insert('<div style="width:100%; height:100%; position:absolute; top:0px; left:0px; z-index:1;"><img src="images/background.png" border="0" width="100%" height="100%" /></div>');
 
     this.sub1 = false; // pointers for case classes
     this.sub2 = false; // pointers for case classes
@@ -57,56 +59,56 @@ naepsy.main = Class.create(naepsy.base,{
 	* application start
 	*/
 	case1: function(options) {
+    // first check if we have a session ID saved via the widget interface
+//    var sessionID = widget.preferenceForKey('session-id');
+//    alert(widget.preferenceForKey('session-id'));
+//    if (! Object.isUndefined(widget.preferenceForKey('session-id'))) {
+//      this.sessionCookie = widget.preferenceForKey('session-id');
+//      alert(this.sessionCookie);
+//    }
+
 		var self = this;
 		var options = Object.extend({
 			out : false
 		},options);
 //    this.splash.hide();
-    this.mainElement.update('');
+//    this.mainElement.update('');
   	this.mainElement.show();
     this.showLoading();
-
-    // first do a POST to /session to get cookie info for widget
-    // i.e. logging in without user
-    var params =  { 'session[app_name]' : 'ossi',
-                    'session[app_password]' : 'Z0ks51r'
-                  };
     new Ajax.Request(BASE_URL+'/session', {
-      method : 'post',
-      parameters : params,
-      on409 : function(response) { // server returns 409 error, meaning session already exists
-        self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
-        self._case1b();
-      },
-      onSuccess : function(response) {
-        self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
-        self._case1b();
-      },
-      onFailure : function(response) {
-        self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
-        this.case2({start : true}); // call login
-      }
-		});
-	},
-	/**
-	* to remove duplication within closures
-	* this is to be called only from within case1
-	*/
-	_case1b: function() {
-	  var self = this;
-    new Ajax.Request(BASE_URL+'/session', { 
       method : 'get',
       onSuccess : function(response) {
+//        console.log(response.getAllHeaders());
+//        alert('200, '+response.responseJSON.entry.user_id);
+//        alert(response.getAllHeaders());
+//        var a = response.getAllHeaders();
+//        var b = a.split("\n");
+//        alert(a);
+//        b.each(function(c) {
+//          alert(c);
+//        });
+//        widget.setPreferenceForKey(self.utils.makeCookie(response.getResponseHeader('Set-Cookie')), 'session-id');
+//        self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
         self._case1c(response);
       },
       on409 : function(response) {
+//        alert('409, '+response.responseJSON.entry.user_id);
+//        alert(self.utils.makeCookie(response.getResponseHeader('Set-Cookie')));
+//        widget.setPreferenceForKey(self.utils.makeCookie(response.getResponseHeader('Set-Cookie')), 'session-id');
+//        self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
         self._case1c(response);
       },
       onFailure : function(response) {
+//        var a = response.getAllHeaders();
+//        var b = a.split("\n");
+//        alert(a);
+//        alert('no session');
+//        alert(self.utils.makeCookie(response.getResponseHeader('Set-Cookie')));
+//        self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
         self._case1c(response);
       }
     });
-  },
+	},
   /**
   * to remove duplication
   * called only from _case1b
@@ -118,7 +120,7 @@ naepsy.main = Class.create(naepsy.base,{
     json.entry = Object.extend({
       user_id : null,
       app_id : null
-    },response.responseJSON);
+    },response.responseJSON.entry);
 	  if (json.entry.user_id != null) {
   		this.userId = json.entry.user_id;
   		this.appId = json.entry.app_id;
@@ -127,30 +129,17 @@ naepsy.main = Class.create(naepsy.base,{
   			method : 'get',
   			onSuccess : function(response) {
   				var json = response.responseJSON;
-  				self.userName = (json.name != null) ? json.name['unstructured'] : json.username;
-  				if (typeof(json.role)  != 'undefined' && json.role != null) {
-  					self.userRole = json.role;
+  				self.userName = (json.entry.name != null) ? json.entry.name['unstructured'] : json.entry.username;
+  				if (typeof(json.entry.role)  != 'undefined' && json.role != null) {
+  					self.userRole = json.entry.role;
   				}
-      		if (self.options.channelId) { //go to specified channel // THESE BACKCASE WILL PROBABLY NOT WORK DUE TO NEW STACK SYSTEM / JT
-      			self.case20({start : true, channelId : self.options.channelId,
-      				backCase : self.case18.bind(self,{ out : true, backCase : self.case3.bind(self,{out:true})
-      				})
-      			});
-      		} else { // go to main
-      			self.case3({start : true});
-      		}
+    			self.case3({start : true});
   			}
   		});
     } else { // user not identified
       this.userId = false;
-      this.userName = 'Anonymous';
-  		if (this.options.channelId && this.options.wall) { 
-  			this.case24({channelId : this.options.channelId }); // go to wall
-  		} else if(this.options.channelId && !this.options.wall) {
-  			this.case2({start : true, channelId : this.options.channelId}); // go to login and then channel
-  		} else {
-  			this.case2({start : true }); // go to login
-  		}
+      this.userName = false;
+			this.case2({start : true }); // go to login
     }
   },
 
@@ -166,7 +155,7 @@ naepsy.main = Class.create(naepsy.base,{
 		  },options);
     
     // Add this item to stack
-    if (options.start) this.mainElement.update();
+//    if (options.start) this.mainElement.update();
     if (options.out) this.stack.pop();
     else {
       var opt = Object.clone(options);
@@ -177,7 +166,7 @@ naepsy.main = Class.create(naepsy.base,{
     
     if (options.start) { // login without effects (first time)
 			this.sub1 = new naepsy.login(this, {	'hostElement' : this.mainElement,
-                													'backCase' : options.backCase});
+                													  'backCase' : options.backCase});
 	    this.sub1.pane.show();
     } else { // login page emerges with fx
 		  this.sub2 = this.sub1;
@@ -1393,7 +1382,7 @@ naepsy.main = Class.create(naepsy.base,{
   */
   _onXHRCreate: function(request) {
 //    if (client.is_Dashboard_widget && this.sessionCookie) request.options.requestHeaders = ['Cookie',this.sessionCookie]; // if client is Dashboard, then manually slap cookie onto every single request (due to Dashboard bug)
-//    if ((client.is_Dashboard_widget || client.is_phonegap) && this.sessionCookie) request.options.requestHeaders = ['Cookie',this.sessionCookie]; // if client is Dashboard, then manually slap cookie onto every single request (due to Dashboard bug)
+    if (this.sessionCookie) request.options.requestHeaders = ['Cookie',this.sessionCookie]; // if client is Dashboard, then manually slap cookie onto every single request (due to Dashboard bug)
 //    request.options.requestHeaders = ['Cookie',this.sessionCookie]; // if client is Dashboard, then manually slap cookie onto every single request (due to Dashboard bug)
     this.XHRequests.push(request);
     this.tmp.push(setTimeout(function(request) {

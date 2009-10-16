@@ -22,7 +22,7 @@ naepsy.consent = Class.create(naepsy.base,{
   },
   _getHTML: function() {
     var h =   '\
-          			<div id="consentpane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
+          			<div id="consentpane" style="display:none; position:absolute; top:0px; left:0px; width:100%; height:100%; z-index:2">\
           				<div id="consent_naepsy" style="margin:20px 10px 20px 10px">\
                     <h2>WRITTEN CONSENT FOR RESEARCH STUDY (naepsy)</h2>\
                     <p>By giving my consent I confirm my voluntary participation in a study entitled phuksieksperimentti, belonging to the OtaSizzle project.</p>\

@@ -24,25 +24,24 @@ naepsy.login = Class.create(naepsy.base,{
   },
   _getHTML: function() {
     var h =   '\
-          			<div id="loginpane" style="position:absolute; top:0px; left:0px; width:100%; text-align:center;">\
-          			  <form id="login_form">\
-            				<div><img src="images/naepsy_logo.png" /></div>\
-            				<div style="margin-top:10px">\
+          			<div id="loginpane" style="display:none; position:absolute; top:0px; left:0px; width:100%; height:100%; z-index:2">\
+      			      <form id="login_form">\
+                    <div style="text-align:center; margin-top:55px;">\
+              				<div><img src="images/logo.png" /></div>\
+                    </div>\
+            				<div style="text-align:center; margin-top:20px;">\
             					<input id="uusernaame" value="OtaSizzle username" class="textinput" maxlength="30" name="uusernaame" type="text"/>\
             				</div>\
-            				<div style="margin-top:10px">\
+            				<div style="text-align:center; margin-top:15px;">\
             					<input id="paasswoord" value="OtaSizzle password" class="textinput" maxlength="30" name="paasswoord" type="text"/>\
             				</div>\
-            				<div class="nav_button" style="margin-top:12px;">\
-            					<a id="login_button" class="nav_button_text" href="javascript:void(null);">Login</a>\
+            				<div style="text-align:center; margin-top:10px;">\
+                      <a href="#" id="login_button"><img src="images/button_go.png" border="0" /></a>\
+                      <input type="image" src="images/button_go.png" style="display:none;" />\
+                    </div>\
+            				<div style="text-align:center; margin-top:10px;">\
+                      <span style="font-size:13px; color:#000;">Or <a style="font-size:13px; color:#000; font-style:italic;" href="#" id="signup_button">Sign Up</a></span>\
             				</div>\
-            				<div class="nav_button">\
-            					<a id="signup_button" class="nav_button_text" href="javascript:void(null);">Sign up</a>\
-            				</div>\
-            				<div class="nav_button">\
-            					<a id="about_button" class="nav_button_text" href="javascript:void(null);">About Naepsy</a>\
-            				</div>\
-                    <input type="submit" style="display:none" />\
                   </form>\
           			</div>\
           		';
@@ -54,8 +53,8 @@ naepsy.login = Class.create(naepsy.base,{
     var p = $F('paasswoord');
     var params =  { 'session[username]' : u,
                     'session[password]' : p,
-                    'session[app_name]' : 'ossi',
-                    'session[app_password]' : 'Z0ks51r'
+                    'session[app_name]' : 'naepsy',
+                    'session[app_password]' : 'Ax0E44II+eoLoe1oL'
                   };
     self.parent.showLoading();
     new Ajax.Request(BASE_URL+'/session', { 
@@ -79,16 +78,17 @@ naepsy.login = Class.create(naepsy.base,{
         });
       },
       onSuccess : function(response) {
+        console.log(response.getAllHeaders());
         var json = response.responseJSON;
         self.parent.sessionCookie = self.parent.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
         self.parent.userId = json.entry.user_id;
         self.parent.appId = json.entry.app_id;
+//        widget.setPreferenceForKey("hello"+self.parent.sessionCookie, 'session-id');
 
     		// we also need name for that id
     		new Ajax.Request(BASE_URL+'/people/'+self.parent.userId+'/@self', {
     			method : 'get',
     			onSuccess : function(response) {
-    			  console.log(response);
     				var json = response.responseJSON;
     				var name = (json.entry.name != null) ? json.entry.name['unstructured'] : json.username; // if name has not been set
     				self.parent.userName = name;
@@ -148,14 +148,12 @@ naepsy.login = Class.create(naepsy.base,{
     $('paasswoord').onfocus = this._passwordFieldOnFocus.bindAsEventListener(this);
     $('login_button').onclick = this._loginHandler.bindAsEventListener(this);
     $('signup_button').onclick = this._signupHandler.bindAsEventListener(this);
-    $('about_button').onclick = this._aboutHandler.bindAsEventListener(this);
   },
   _removeListeners: function() {
     $('paasswoord').onfocus = function() { return }
     $('paasswoord').onblur = function() { return }
     $('login_button').onclick = function() { return }
     $('signup_button').onclick = function() { return }
-    $('about_button').onclick = function() { return }
     $('login_form').onsubmit = function() { return }
   },
   destroy: function () {

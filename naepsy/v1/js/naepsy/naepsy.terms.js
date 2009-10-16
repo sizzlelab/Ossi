@@ -22,7 +22,7 @@ naepsy.terms = Class.create(naepsy.base,{
   },
   _getHTML: function() {
     var h =   '\
-          			<div id="termspane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
+          			<div id="termspane" style="display:none; position:absolute; top:0px; left:0px; width:100%; height:100%; z-index:2">\
           			  <div class="terms_div" style="margin:20px 10px 20px 10px">\
                     <h2>Terms of Use</h2>\
                     <p>naepsy is a social media service that allows its users to inter-communicate. It is a part of Helsinki University of Technology’s (HUT) OtaSizzle-research project, where the service is being tested and developed. The project is conducted by Helsinki Institute for Information Technology (HIIT), a joint research institute of HUT and University of Helsinki. The naepsy-service may only be used in accordance with these terms of use. HIIT reserves the right to change these terms of use if required. Valid terms of use can be found from naepsy’s website. \

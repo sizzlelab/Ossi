@@ -21,7 +21,7 @@ naepsy.signup = Class.create(naepsy.base,{
   },
   _getHTML: function() {
     var h =   '\
-          			<div id="signuppane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
+          			<div id="signuppane" style="display:none; position:absolute; top:0px; left:0px; width:100%; height:100%; z-index:2">\
                   <form>\
             				<div style="height:33px; text-align:center; padding-top:20px;">\
             					Please fill in the following:\
