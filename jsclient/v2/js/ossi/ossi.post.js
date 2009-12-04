@@ -46,7 +46,7 @@ ossi.post = Class.create(ossi.base, {
           $('post_avatar').update('<img src="' + avatar_src + '" width="50" height="50" border="0" />');
           $('post_author_text').update(author_string);
           $('post_updated_text').update(updated_text);
-          var k = '<b>' + json.entry.title + '</b><br /><br />' + self._parseBBCode(json.entry.body);
+          var k = '<b>' + json.entry.title + '</b><br /><br />' + self._parseBody(json.entry.body);
           $('post_content').update(k);
           // Show delete, if I'm the poster
           if (self.options.posterId == self.parent.userId) {
@@ -173,9 +173,17 @@ ossi.post = Class.create(ossi.base, {
     return h;
   },
   
-  _parseBBCode: function(value){
-    var search = new Array(/&lt;br \/&gt;/g, /\[quote\]/g, /\[\/quote\]/g);
-    var replace = new Array("<br />", '<span class="quoted_block">', '</span>');
+  _parseBody: function(value){
+    var search = new Array( /&lt;br \/&gt;/g,
+                            /\[quote\]/g,
+                            /\[\/quote\]/g,
+                            /(ftp|http|https|file):\/\/[\S]+(\b|$)/gim
+    );
+    var replace = new Array(  '<br />',
+                              '<span class="quoted_block">',
+                              '</span>',
+                              '<a href="$&" class="embedded_link" target="_blank">$&</a>'
+    );
     for (i = 0; i < search.length; i++) {
       var value = value.replace(search[i], replace[i]);
     }

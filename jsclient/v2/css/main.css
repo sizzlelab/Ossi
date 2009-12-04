@@ -537,3 +537,12 @@ p {
   font-size: 11px;
   margin-bottom:10px;
 }
+
+a.embedded_link {
+  text-decoration:underline;
+}
+
+a.embedded_link:hover {
+  text-decoration:none;
+  background:#000;
+}
