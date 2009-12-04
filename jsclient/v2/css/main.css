@@ -237,19 +237,6 @@ div:hover {
   cursor: pointer;
 }
 
-.subscription_button_text {
-  display:block;
-/*  #width:90%;*/
-  height:90%;
-  padding-top: 0px;
-  font-size:12px;
-  color:white;
-/*  #vertical-align: middle;*/
-  text-decoration:none;
-}
-
-
-
 .nav_button:hover { 
   background: #fc7e17 url(../images/button_bg_hover.png) repeat-x top;
   color:#122E2E;
