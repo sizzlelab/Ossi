@@ -1418,6 +1418,7 @@ ossi.main = Class.create(ossi.base,{
 
     } else if (client.is_WRT_widget) {
       var self = this;
+//      document.styleSheets[1].disabled = false;
       try {
         this.serviceInfo = device.getServiceObject("Service.SysInfo", "ISysInfo");
       } catch (ex) {

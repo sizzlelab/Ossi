@@ -182,7 +182,7 @@ ossi.post = Class.create(ossi.base, {
     var replace = new Array(  '<br />',
                               '<span class="quoted_block">',
                               '</span>',
-                              '<a href="$&" class="embedded_link" target="_blank">$&</a>'
+                              '<a href="javascript:ossi.open_link(\'$&\');" class="embedded_link">$&</a>'
     );
     for (i = 0; i < search.length; i++) {
       var value = value.replace(search[i], replace[i]);

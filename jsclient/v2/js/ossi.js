@@ -7,6 +7,7 @@ var ossi = {
     },
     CSS: [
       'main.css',
+//      'n97fonts.css',
       'ossiWallStyles.css'
     ],
     libraries: [  '3rdParty/prototype-m.js',
@@ -75,7 +76,8 @@ var ossi = {
 ossi.bootstrap.loadLibraries();
 if (typeof(wall) == 'undefined') {
   window.onload = function() {
-  //  new ossi.main({width:400, height:400, x:100, y:100});  
+  //  new ossi.main({width:400, height:400, x:100, y:100});
+    document.styleSheets[1].disabled = true;
     new ossi.main();  
   }
 }
