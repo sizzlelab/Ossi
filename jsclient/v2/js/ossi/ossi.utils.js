@@ -235,14 +235,8 @@ ossi.utils = Class.create(ossi.base,{
 });
 
 ossi.open_link = function(url) {
-  if (! Object.isUndefined(client)) {
-    if (client.is_WRT_widget) {
-      widget.openURL(encodeURI(url));
-      return;
-    } else {
-      document.location.href = url;
-      return;
-    }
+  if (client.is_WRT_widget) {
+    widget.openURL(encodeURI(url));
+    return false;
   }
-  document.location.href = url;
 }

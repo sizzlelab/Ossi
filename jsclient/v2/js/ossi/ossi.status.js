@@ -9,8 +9,9 @@ ossi.status = Class.create(ossi.base, {
     }, options);
     this.pane = false;
     this._draw();
-    if (Object.isUndefined(this.parent.locator) || this.parent.settings_auto_updates == false) $('location_input_container').show();
-    else $('location_input_container').hide();
+    //    if (Object.isUndefined(this.parent.locator) || this.parent.settings_auto_updates == false) $('location_input_container').show();
+    //    else $('location_input_container').hide();
+    if (Object.isUndefined(this.parent.locator) || this.parent.settings_auto_updates == false) $('location_input').value = 'Finding out...';
   },
   /**
    * _update
@@ -34,7 +35,7 @@ ossi.status = Class.create(ossi.base, {
             if (json.entry.status.message != null) {
               $('status_input').value = json.entry.status.message;
               // a bit convoluted, but works for the time being
-              setTimeout(function(){
+              setTimeout(function() {
                 $('status_form').focusFirstElement()
               }, 500); // .delay() did not seem to work on Firefox
             }
@@ -47,6 +48,9 @@ ossi.status = Class.create(ossi.base, {
             }
           }
         }
+        self.parent.locator.update(function() {
+          $('location_input').value = this.parent.location.label;
+        }.bind(self));
         self.parent.hideLoading();
       }
     });

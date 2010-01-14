@@ -14,7 +14,7 @@ ossi.mainmenu = Class.create(ossi.base, {
     this.pane = false;
     this.updateInterval = 20000;
     this._draw();
-    this._resetInterval(); // this resets the intervalled update call, if selfUpdate is enabled
+//    this._resetInterval(); // this resets the intervalled update call, if selfUpdate is enabled
   },
   /**
    * _update

@@ -17,7 +17,10 @@ ossi.location = Class.create(ossi.base,{
       }
     }
     this.criteria = {
-      LocationInformationClass : "BasicLocationInformation"
+      LocationInformationClass : "BasicLocationInformation",
+      UpdateOptions : {
+        PartialUpdates : false
+      }
     }
 	},
 	/**
@@ -25,7 +28,7 @@ ossi.location = Class.create(ossi.base,{
 	*
 	* update device location
 	*/
-	update: function() {
+	update: function(callback) {
 
     var self = this;
 	  if (this.unavailable) return false;
@@ -76,6 +79,11 @@ ossi.location = Class.create(ossi.base,{
             'location[longitude]' : self.parent.location.longitude
           };
         }
+
+        if (! Object.isUndefined(callback)) {
+          callback.apply();
+        }
+
         new Ajax.Request(URL, {
           method : 'put',
           parameters : params

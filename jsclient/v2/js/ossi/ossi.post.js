@@ -177,12 +177,12 @@ ossi.post = Class.create(ossi.base, {
     var search = new Array( /&lt;br \/&gt;/g,
                             /\[quote\]/g,
                             /\[\/quote\]/g,
-                            /(ftp|http|https|file):\/\/[\S]+(\b|$)/gim
+                            /(ftp|http|https|file):\/\/[^\s<]+/gim
     );
     var replace = new Array(  '<br />',
                               '<span class="quoted_block">',
                               '</span>',
-                              '<a href="javascript:ossi.open_link(\'$&\');" class="embedded_link">$&</a>'
+                              '<a href="$&" onclick="ossi.open_link(\'$&\');" class="embedded_link" target="_blank">$&</a>'
     );
     for (i = 0; i < search.length; i++) {
       var value = value.replace(search[i], replace[i]);
