@@ -60,6 +60,9 @@ ossi.location = Class.create(ossi.base,{
         json.geojson.features.each(function(feature) {
           if (feature.properties.name != null && feature.properties.name.length > 0) {
             self.parent.location.label = feature.properties.name;
+            if (! Object.isUndefined(callback)) {
+              callback.apply();
+            }
             throw $break;
           }
         });
@@ -78,10 +81,6 @@ ossi.location = Class.create(ossi.base,{
             'location[latitude]' : self.parent.location.latitude,
             'location[longitude]' : self.parent.location.longitude
           };
-        }
-
-        if (! Object.isUndefined(callback)) {
-          callback.apply();
         }
 
         new Ajax.Request(URL, {

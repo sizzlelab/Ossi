@@ -80,7 +80,6 @@ ossi.utils = Class.create(ossi.base,{
     return t;    
   },
   makeCookie: function(headerText) {
-//    if (! client.is_Dashboard_widget) return false;
     if (headerText == null) return headerText;
     var h = headerText;
     var o = []
@@ -103,14 +102,17 @@ ossi.utils = Class.create(ossi.base,{
     var d = UTC_string;
     var month = d.substring(5,6) == '0' ? d.substring(6,7) : d.substring(5,7);
     var day = d.substring(8,9) == '0' ? d.substring(9,10) : d.substring(8,10);
-//    console.log(d.substring(0,4)+', '+month+', '+day+', '+d.substring(11,13)+', '+d.substring(14,16)+', '+d.substring(17,19));
   	var a = Date.UTC(d.substring(0,4),(month-1),day,d.substring(11,13),d.substring(14,16),d.substring(17,19));
   	a = new Date(a);
   	var minutes = ''+a.getMinutes();
   	minutes = minutes.length == 1 ? "0"+minutes : minutes;
   	return a.getDate() + '.' + (a.getMonth()+1) + '.' + a.getFullYear() + ' ' + a.getHours() + ':' + minutes;
   },
-  
+  toEpoch: function(UTC_string) {
+    var d = UTC_string;
+    var a = Date.UTC(this.stripLeadingZeros(d.substring(0,4)),(this.stripLeadingZeros(d.substring(5,7))-1),this.stripLeadingZeros(d.substring(8,10)),this.stripLeadingZeros(d.substring(11,13)),this.stripLeadingZeros(d.substring(14,16)),this.stripLeadingZeros(d.substring(17,19)));
+    return a;
+  },
   agoString: function(UTC_string) {
     
     // return string
@@ -218,18 +220,104 @@ ossi.utils = Class.create(ossi.base,{
      }
      // add actions
      nextButton.onclick = function() {
-       self.updateOptions = {
-          page: ++self.updateOptions.page,
+       self.options.updateOptions = {
+          page: ++self.options.updateOptions.page,
           per_page: 8
        };
        self.update();
     };
     previousButton.onclick = function() {
-       self.updateOptions = {
-          page: --self.updateOptions.page,
+       self.options.updateOptions = {
+          page: --self.options.updateOptions.page,
           per_page: 8
        };
        self.update();
+    };
+  },
+  addLocalPagination: function(container, view, entries) {
+    view.nextButton = new Element( 'div' , { 'class' : 'nav_button next_button' } );
+    view.nextButtonText = new Element( 'a' , {'class' : 'nav_button_text' , 'href' : '#top'} ).update('Next Page');
+    view.nextButton.update(view.nextButtonText);
+    // IE8 fix
+    view.nextButton.addClassName('nav_button');
+    view.nextButton.addClassName('next_button');
+    view.nextButtonText.addClassName('nav_button_text');
+    // end of IE8 fix
+    view.previousButton = new Element( 'div' , { 'class' : 'nav_button previous_button' } );
+    view.previousButtonText = new Element( 'a' , {'class' : 'nav_button_text' , 'href' : '#top'} ).update('Previous Page');
+    view.previousButton.update(view.previousButtonText);
+    // IE8 fix
+    view.previousButton.addClassName('nav_button');
+    view.previousButton.addClassName('previous_button');
+    view.previousButtonText.addClassName('nav_button_text');
+    // end of IE8 fix
+
+    container.addClassName('paging-container');
+    container.update();
+    container.insert(view.nextButton);
+    container.insert(view.previousButton);
+
+    view.previousButton.hide();
+    view.nextButton.setStyle( { 'width' : '100%'} );
+    
+    // handle visibility
+    if (view.options.updateOptions.page != 1) { // not first page
+     view.previousButton.show();
+     view.nextButton.show();
+     view.previousButton.setStyle({'width' : '50%'});
+     view.nextButton.setStyle({'width' : '50%'});
+    }
+    if (view.options.updateOptions.page * view.options.updateOptions.per_page >= entries.length) { // last page
+     view.nextButton.hide();
+     view.previousButton.show();
+     view.nextButton.setStyle( { 'width' : '0%'} );
+     view.previousButton.setStyle( { 'width' : '100%'} );
+    }
+    
+
+    // if we can show things on one page, then hide the container
+    if (entries.length < view.options.updateOptions.per_page) {
+      container.hide();
+    }
+
+    // add actions
+    view.nextButton.onclick = function() {
+     view.options.updateOptions = {
+        page: ++view.options.updateOptions.page,
+        per_page: view.options.updateOptions.per_page
+     };
+
+     if (view.options.updateOptions.page != 1) { // not first page
+       view.previousButton.show();
+       view.nextButton.show();
+       view.previousButton.setStyle({'width' : '50%'});
+       view.nextButton.setStyle({'width' : '50%'});
+     }
+     if (view.options.updateOptions.page * view.options.updateOptions.per_page >= (entries.length-2)) { // last page
+       view.nextButton.hide();
+       view.previousButton.show();
+       view.nextButton.setStyle( { 'width' : '0%'} );
+       view.previousButton.setStyle( { 'width' : '100%'} );
+     }
+     view.drawContents(entries);
+    };
+    view.previousButton.onclick = function() {
+     view.options.updateOptions = {
+        page: --view.options.updateOptions.page,
+        per_page: view.options.updateOptions.per_page
+     };
+     if (view.options.updateOptions.page == 1) { // first page
+       view.previousButton.hide();
+       view.nextButton.show();
+       view.previousButton.setStyle({'width' : '0%'});
+       view.nextButton.setStyle({'width' : '100%'});
+     } else { // not first page
+       view.previousButton.show();
+       view.nextButton.show();
+       view.previousButton.setStyle({'width' : '50%'});
+       view.nextButton.setStyle({'width' : '50%'});
+     }
+     view.drawContents(entries);
     };
   }
 });

@@ -74,6 +74,7 @@ ossi.myprofile = Class.create(ossi.base,{
             method : 'get',
             onSuccess : function(response) {
               var json = response.responseJSON;
+/*
               if (json.entry.settings_auto_updates == 'true') {
                 self.parent.settings_auto_updates = true;
                 $('location_updates_button_container').show();
@@ -83,6 +84,7 @@ ossi.myprofile = Class.create(ossi.base,{
                 $('location_updates_button_container').show();
                 $('location_updates_button').update('Enable automatic location updates');
               }
+*/
             }
           });
         }

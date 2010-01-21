@@ -69,8 +69,8 @@ ossi.pendingfriends = Class.create(ossi.base,{
   },
   _getButtonHTML: function(user) {
     var name = (user.name != null) ? user.name['unstructured'] : user.username; // if name has not been set
-    var status_message = 'A';
-    var status_time = 'A';
+    var status_message = '';
+    var status_time = '';
     if (typeof(user.status) != 'undefined') {
       if (user.status.message != 'undefined') {
         if (user.status.message != null) {

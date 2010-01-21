@@ -62,10 +62,12 @@ ossi.mainmenu = Class.create(ossi.base, {
           if (json.status.changed != 'undefined') {
             if (json.status.changed != null) {
               $('mainmenu_status_time').update(self.parent.utils.agoString(json.status.changed));
+            } else {
+              $('mainmenu_status_time').update('');
             }
           }
         }
-        
+
         $('mainmenu_status_text').update(status_message + location);
         
         URL = BASE_URL + '/people/@me/@pending_friend_requests'
@@ -112,13 +114,13 @@ ossi.mainmenu = Class.create(ossi.base, {
           					<a id="feeds_button" class="nav_button_text" href="javascript:void(null);">Feeds</a>\
           				</div>\
           				<div class="nav_button">\
+          					<a id="channels_button" class="nav_button_text" href="javascript:void(null);">Sizzle</a>\
+          				</div>\
+          				<div class="nav_button">\
           				  <a id="friends_button" class="nav_button_text" href="javascript:void(null);">Friends <span id="pending_friends_container"></span></a>\
           				</div>\
           				<div class="nav_button">\
           					<a id="groups_button" class="nav_button_text" href="javascript:void(null);">Groups</a>\
-          				</div>\
-          				<div class="nav_button">\
-          					<a id="channels_button" class="nav_button_text" href="javascript:void(null);">Sizzle</a>\
           				</div>\
           				<div class="nav_button">\
           					<a id="search_button" class="nav_button_text" href="javascript:void(null);">Search</a>\

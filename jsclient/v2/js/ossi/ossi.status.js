@@ -48,9 +48,11 @@ ossi.status = Class.create(ossi.base, {
             }
           }
         }
-        self.parent.locator.update(function() {
-          $('location_input').value = this.parent.location.label;
-        }.bind(self));
+        if (! Object.isUndefined(self.parent.locator)) {
+          self.parent.locator.update(function() {
+            $('location_input').value = this.parent.location.label;
+          }.bind(self));
+        }
         self.parent.hideLoading();
       }
     });

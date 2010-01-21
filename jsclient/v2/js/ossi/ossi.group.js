@@ -177,6 +177,7 @@ ossi.group = Class.create(ossi.base, {
   _channelsHandler: function(){
     var self = this;
     self.parent.case18({
+      sizzleMode: false,
       groupId: self.options.groupId
     });
   },

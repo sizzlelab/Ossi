@@ -361,6 +361,13 @@ ossi.main = Class.create(ossi.base,{
     opt.out = true;
     opt.start = false;
     this.stack.push(this.case3.bind(this,opt));
+
+    // trial
+    if (!options.out) {
+      this.case18({});
+      return;
+    }
+		// end of trial code
 		
     if (options.start) {
       this.sub1 = new ossi.mainmenu(this, {
@@ -668,12 +675,23 @@ ossi.main = Class.create(ossi.base,{
       search : false,
       userId : false,
       out : false,
-      backCase : false
+      backCase : false,
+      channelListUpdateOptions : false
 	  },options);
 
     // manage stack
     if (options.out) this.stack.pop();
     else {
+      if (options.channelListUpdateOptions != false) { // modify the previous item by adding pagination references
+        this.stack.pop();
+        var o = {
+          out : true,
+          updateOptions : options.channelListUpdateOptions
+        };
+        this.stack.push(this.case18.bind(this,o));
+      }
+      
+      // now add this case
       var opt = Object.clone(options);
       opt.out = true;
       this.stack.push(this.case13.bind(this,opt));
@@ -685,7 +703,8 @@ ossi.main = Class.create(ossi.base,{
       'pendingNav' : options.pendingNav,
       'search' : options.search,
       'userId' : options.userId,
-      'backCase' : this.stack[this.stack.length-2]
+      'backCase' : this.stack[this.stack.length-2],
+      'channelListUpdateOptions' : options.channelListUpdateOptions
     });
 
     if (options.out) {
@@ -825,6 +844,11 @@ ossi.main = Class.create(ossi.base,{
 		var options = Object.extend({
       groupId : false,
       out : false,
+      sizzleMode : true,
+      updateOptions : {
+        per_page: 8,
+        page: 1
+      },
       backCase : false
 	  },options);
 
@@ -836,9 +860,12 @@ ossi.main = Class.create(ossi.base,{
       this.stack.push(this.case18.bind(this,opt));
     }
 		
+		if (Object.isUndefined(this.sub1)) this.sub1 = {};
     this.sub2 = this.sub1;
     this.sub1 = new ossi.channellist(this, {  'hostElement' : this.mainElement,
                                               'groupId' : options.groupId,
+                                              'sizzleMode' : options.sizzleMode,
+                                              'updateOptions' : options.updateOptions,
                                               'selfUpdate' : true,
                                               'backCase' : this.stack[this.stack.length-2]});
     if (options.out) {
@@ -847,10 +874,15 @@ ossi.main = Class.create(ossi.base,{
         this.sub1.update();
       }.bind(this));
     } else {
-      this.utils.into(this.sub2.pane,this.sub1.pane,function() {
-        this.sub2.destroy();
+      if (Object.isUndefined(this.sub2.destroy)) {
+        this.sub1.pane.show();
         this.sub1.update();
-      }.bind(this));
+      } else {
+        this.utils.into(this.sub2.pane,this.sub1.pane,function() {
+          this.sub2.destroy();
+          this.sub1.update();
+        }.bind(this));
+      }
     }
 	},
 	/**
@@ -904,6 +936,16 @@ ossi.main = Class.create(ossi.base,{
     // manage stack
     if (options.out) this.stack.pop();
     else {
+      if (options.channelListUpdateOptions != false) { // modify the previous item by adding pagination references
+        this.stack.pop();
+        var o = {
+          out : true,
+          updateOptions : options.channelListUpdateOptions
+        };
+        this.stack.push(this.case18.bind(this,o));
+      }
+
+      // now add this case
       var opt = Object.clone(options);
       opt.out = true;
       this.stack.push(this.case20.bind(this,opt));
