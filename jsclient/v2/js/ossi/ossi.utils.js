@@ -220,7 +220,6 @@ ossi.utils = Class.create(ossi.base,{
      }
      // add actions
      nextButton.onclick = function() {
-          console.log(self.options);
        self.updateOptions = {
           page: ++self.updateOptions.page,
           per_page: 8
