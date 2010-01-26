@@ -96,6 +96,7 @@ ossi.channellist = Class.create(ossi.base, {
 
     if (this.options.sizzleMode) {
       var stop = this.options.updateOptions.page * this.options.updateOptions.per_page;
+      stop = (entries.length >= stop) ? stop : entries.length;
       for (var cnt = (this.options.updateOptions.page-1) * this.options.updateOptions.per_page; cnt < stop; cnt++) {
         var entry = entries[cnt];
         if (Object.isUndefined(entry.channel_type) && this.options.sizzleMode) {
