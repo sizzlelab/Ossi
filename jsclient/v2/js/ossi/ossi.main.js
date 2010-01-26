@@ -152,15 +152,30 @@ ossi.main = Class.create(ossi.base,{
       method : 'post',
       parameters : params,
       on409 : function(response) { // server returns 409 error, meaning session already exists
-        self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
+        if (client.is_Dashboard_widget) {
+          self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
+        }
+        else {
+          self.sessionCookie = document.cookie;
+        }
         self._case1b();
       },
       onSuccess : function(response) {
-        self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
+        if (client.is_Dashboard_widget) {
+          self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
+        }
+        else {
+          self.sessionCookie = document.cookie;
+        }
         self._case1b();
       },
       onFailure : function(response) {
-        self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
+        if (client.is_Dashboard_widget) {
+          self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
+        }
+        else {
+          self.sessionCookie = document.cookie;
+        }
         this.case2({start : true}); // call login
       }
 		});
