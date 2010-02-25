@@ -22,7 +22,7 @@ ossi.status = Class.create(ossi.base, {
     if (typeof(this.parent.userId) == 'undefined') 
       return; // userId in the parent controller not set
     var self = this;
-    var URL = BASE_URL + '/people/@me/@self';
+    var URL = BASE_URL + '/people/'+this.parent.userId+'/@self';
     var params = { 'event_id' : 'Ossi::UpdateStatus/GetData'};
     self.parent.showLoading();
     new Ajax.Request(URL, {
@@ -61,7 +61,7 @@ ossi.status = Class.create(ossi.base, {
     Event.stop(e);
     var self = this;
     var s = $F('status_input');
-    var URL = BASE_URL + '/people/@me/@self';
+    var URL = BASE_URL + '/people/'+self.parent.userId+'/@self';
     var params = {
       'person[status_message]': s,
       'event_id' : 'Ossi::UpdateStatus/UpdateStatus'
@@ -71,7 +71,7 @@ ossi.status = Class.create(ossi.base, {
       method: 'put',
       parameters: params,
       onSuccess: function(response){
-        if (Object.isUndefined(self.parent.locator)) {
+        if (Object.isUndefined(self.parent.locator) || true) { // forced
           // also update the location
             self.parent.location = {
               label: $F('location_input'),
@@ -80,7 +80,7 @@ ossi.status = Class.create(ossi.base, {
               datetime: new Date().toUTCString()
             };
             // send location to server
-            var URL = BASE_URL + '/people/@me/@location';
+            var URL = BASE_URL + '/people/'+self.parent.userId+'/@location';
             var params = {
               'location[label]': self.parent.location.label,
               'location[latitude]': self.parent.location.latitude,
@@ -90,7 +90,7 @@ ossi.status = Class.create(ossi.base, {
             new Ajax.Request(URL, {
               method: 'put',
               parameters: params,
-              onSuccess: function(response){
+              onSuccess: function(response) {
                 self.parent.loadingpane.hide();
                 self.options.backCase.apply();
               }

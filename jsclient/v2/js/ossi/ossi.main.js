@@ -114,10 +114,13 @@ ossi.main = Class.create(ossi.base,{
     this._getClient(); // determine which client we are serving for
     this._setClientUI(); // on the basis of the client values make CSS changes
     if (client.is_WRT_widget) { // init location engine
-      this.locator = new ossi.location(this);
+//      this.locator = new ossi.location(this);
 //      this.locator.run();
     }
-    BASE_URL = (client.is_widget || client.is_phonegap) ? 'https://cos.sizl.org/' : '/cos'; // where to go asking for COS
+
+//    BASE_URL = (client.is_widget || client.is_phonegap) ? 'http://ke-hupnet245-25.hupnet.helsinki.fi:3000' : '/cos'; // where to go asking for COS
+//    BASE_URL = (client.is_widget || client.is_phonegap) ? 'https://ossi.alpha.sizl.org/cos' : '/cos'; // where to go asking for COS
+    BASE_URL = (client.is_widget || client.is_phonegap) ? 'https://ossi.sizl.org/cos' : '/cos'; // where to go asking for COS
 //    BASE_URL = (client.is_widget || client.is_phonegap) ? 'https://ossi.sizl.org/cos' : '/cos'; // where to go asking for COS
 //    BASE_URL = 'https://cos.sizl.org'; // where to go asking for COS
     MAX_REQUEST_LENGTH = 30; // in seconds
@@ -133,6 +136,7 @@ ossi.main = Class.create(ossi.base,{
 		/**
 	* application start
 	*/
+/*
 	case1: function(options) {
 		var self = this;
 		var options = Object.extend({
@@ -180,22 +184,41 @@ ossi.main = Class.create(ossi.base,{
       }
 		});
 	},
-	/**
-	* to remove duplication within closures
-	* this is to be called only from within case1
-	*/
-	_case1b: function() {
+*/
+	case1: function() {
 	  var self = this;
-    new Ajax.Request(BASE_URL+'/session', { 
+    this.mainElement.update('');
+  	this.mainElement.show();
+    this.showLoading();
+    new Ajax.Request(BASE_URL+'/session?'+ new Date().getTime(), { 
       method : 'get',
       onSuccess : function(response) {
+        if (client.is_Dashboard_widget) {
+          self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
+        }
+        else {
+          self.sessionCookie = document.cookie;
+        }
         self._case1c(response);
       },
       on409 : function(response) {
+        if (client.is_Dashboard_widget) {
+          self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
+        }
+        else {
+          self.sessionCookie = document.cookie;
+        }
         self._case1c(response);
       },
       onFailure : function(response) {
-        self._case1c(response);
+        if (client.is_Dashboard_widget) {
+          self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
+        }
+        else {
+          self.sessionCookie = document.cookie;
+        }
+        self.hideLoading();
+        self.case2({start : true}); // call login
       }
     });
   },
@@ -308,67 +331,6 @@ ossi.main = Class.create(ossi.base,{
       out : false,
       backCase : false
 	  },options);
-
-    // THIS IS NOT WELL WRITTEN SO PLEASE FIND TIME TO MODULARISE THIS INTO A SETTINGS CLASS
-    // check for automatic location updates
-    if (client.is_WRT_widget && false) { // disabled
-      if (Object.isUndefined(this.settings_auto_updates)) { // first time, we don't have a value for the parameter yet
-        if (Object.isUndefined(this.userId) || Object.isUndefined(this.appId)) { // force re login
-          new Ajax.Request(BASE_URL + '/session', {
-            method: 'delete',
-            onSuccess: function(){
-              self.sessionCookie = false;
-        
-              delete self.userId; //deleted so that attribute could be indicator of valid session.
-              delete self.userName;
-              delete self.userRole;
-              if (! Object.isUndefined(self.locator)) self.locator.stop();
-        
-              self.case1({
-                out: true
-              });
-              return;
-            }
-          });
-        }
-        var URL = BASE_URL + '/appdata/'+self.userId+'/@self/'+self.appId;
-        new Ajax.Request(URL, {
-          method : 'get',
-          onSuccess : function(response) {
-            var json = response.responseJSON;
-            if (Object.isUndefined(json.entry.settings_auto_updates)) {
-              // create the settings key with default value true
-              var params = {
-                'data[settings_auto_updates]' : true
-              };
-              new Ajax.Request(URL, {
-                method : 'put',
-                parameters : params
-              });
-              self.settings_auto_updates = true;
-            } else { // object exists
-
-              // ASI converts these into strings thus:
-              if (json.entry.settings_auto_updates == 'true') {
-                self.settings_auto_updates = true;
-              } else if (json.entry.settings_auto_updates == 'false') {
-                self.settings_auto_updates = false;
-              }
-            }
-
-            // act accordingly 
-            if (self.settings_auto_updates) {
-              if (client.is_WRT_widget) self.locator.run();
-            }
-          },
-          onFailure : function(response) {
-          }
-          
-        });
-      } else if (self.settings_auto_updates) {
-        if (client.is_WRT_widget && this.locator.unavailable == false) this.locator.run();
-      } // no else
-    }
 
     // stack stuff
     this.stackReset();
@@ -1536,7 +1498,10 @@ ossi.main = Class.create(ossi.base,{
   _onXHRCreate: function(request) {
 //    if (client.is_Dashboard_widget && this.sessionCookie) request.options.requestHeaders = ['Cookie',this.sessionCookie]; // if client is Dashboard, then manually slap cookie onto every single request (due to Dashboard bug)
 //    if ((client.is_Dashboard_widget || client.is_phonegap) && this.sessionCookie) request.options.requestHeaders = ['Cookie',this.sessionCookie]; // if client is Dashboard, then manually slap cookie onto every single request (due to Dashboard bug)
-    request.options.requestHeaders = ['Cookie',this.sessionCookie]; // if client is Dashboard, then manually slap cookie onto every single request (due to Dashboard bug)
+    if (client.is_Dashboard_widget) request.options.requestHeaders = ['Cookie',this.sessionCookie]; // if client is Dashboard, then manually slap cookie onto every single request (due to Dashboard lacking cookie support)
+//    if (request.method == 'get' && client.is_WRT_widget) {
+//      request.parameters.force_refresh = new Date().getTime();
+//    }
     this.XHRequests.push(request);
     this.tmp.push(setTimeout(function(request) {
       for (var i=0; i<this.XHRequests.length; i++) {
@@ -1586,6 +1551,13 @@ ossi.main = Class.create(ossi.base,{
       }
     }
   },
+  	/**
+	* reLogin
+	*
+	* hack for flaky WRT
+	* sometimes WRT just decides to drop cookies, if that happens then re-login
+	*/
+  
 	/**
 	* showLoading
 	*

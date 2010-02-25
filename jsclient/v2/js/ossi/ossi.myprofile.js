@@ -66,28 +66,6 @@ ossi.myprofile = Class.create(ossi.base,{
             } 
           }
         }
-
-        // get settings
-        if (client.is_WRT_widget) {
-          URL = BASE_URL + '/appdata/'+self.parent.userId+'/@self/'+self.parent.appId;
-          new Ajax.Request(URL,{
-            method : 'get',
-            onSuccess : function(response) {
-              var json = response.responseJSON;
-/*
-              if (json.entry.settings_auto_updates == 'true') {
-                self.parent.settings_auto_updates = true;
-                $('location_updates_button_container').show();
-                $('location_updates_button').update('Disable automatic location updates');
-              } else {
-                self.parent.settings_auto_updates = false;
-                $('location_updates_button_container').show();
-                $('location_updates_button').update('Enable automatic location updates');
-              }
-*/
-            }
-          });
-        }
         setTimeout(function() {
           self.parent.hideLoading();
         }, 600);

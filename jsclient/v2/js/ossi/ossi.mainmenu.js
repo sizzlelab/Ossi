@@ -25,7 +25,7 @@ ossi.mainmenu = Class.create(ossi.base, {
     if (typeof(this.parent.userId) == 'undefined') 
       return; // userId in the parent controller not set
     var self = this;
-    var URL = BASE_URL + '/people/@me/@self';
+    var URL = BASE_URL + '/people/'+this.parent.userId+'/@self';
 //    self.parent.showLoading();
     var params = { 'event_id' : 'Ossi::MainMenu' };
     new Ajax.Request(URL, {
@@ -70,7 +70,7 @@ ossi.mainmenu = Class.create(ossi.base, {
 
         $('mainmenu_status_text').update(status_message + location);
         
-        URL = BASE_URL + '/people/@me/@pending_friend_requests'
+        URL = BASE_URL + '/people/'+self.parent.userId+'/@pending_friend_requests'
         var params = { 'event_id' : 'Ossi::MainMenu/Friends' };
         new Ajax.Request(URL, {
           method: 'get',
@@ -137,7 +137,7 @@ ossi.mainmenu = Class.create(ossi.base, {
     clearInterval(this.interval);
     this.parent.loadingpane.show();
     var params = { 'event_id' : 'Ossi::MainMenu/LogOut' }; 
-    new Ajax.Request(BASE_URL + '/session', {
+    new Ajax.Request(BASE_URL + '/session?'+ (new Date()).getTime(), {
       method: 'delete',
       parameters: params,
       onSuccess: function(){

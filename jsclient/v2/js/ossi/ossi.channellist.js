@@ -78,7 +78,7 @@ ossi.channellist = Class.create(ossi.base, {
           self.drawContents(json.entry);
           self.parent.utils.addPagingFeature( $('channellist-paging-container') , json, self);
         }
-        setTimeout(function(){
+        setTimeout(function() {
           self.parent.hideLoading();
         }, 600);
       },
