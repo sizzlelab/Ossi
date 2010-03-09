@@ -119,8 +119,8 @@ ossi.main = Class.create(ossi.base,{
     }
 
 //    BASE_URL = (client.is_widget || client.is_phonegap) ? 'http://ke-hupnet245-25.hupnet.helsinki.fi:3000' : '/cos'; // where to go asking for COS
-    BASE_URL = (client.is_widget || client.is_phonegap) ? 'https://ossi.alpha.sizl.org/cos' : '/cos-alpha'; // where to go asking for COS
-//    BASE_URL = (client.is_widget || client.is_phonegap) ? 'https://ossi.sizl.org/cos' : '/cos'; // where to go asking for COS
+//    BASE_URL = (client.is_widget || client.is_phonegap) ? 'https://ossi.alpha.sizl.org/cos' : '/cos-alpha'; // where to go asking for COS
+    BASE_URL = (client.is_widget || client.is_phonegap) ? 'https://ossi.sizl.org/cos' : '/cos'; // where to go asking for COS
 //    BASE_URL = (client.is_widget || client.is_phonegap) ? 'https://ossi.sizl.org/cos' : '/cos'; // where to go asking for COS
 //    BASE_URL = 'https://cos.sizl.org'; // where to go asking for COS
     MAX_REQUEST_LENGTH = 30; // in seconds
