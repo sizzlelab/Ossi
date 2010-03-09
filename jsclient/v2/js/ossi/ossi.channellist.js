@@ -33,6 +33,7 @@ ossi.channellist = Class.create(ossi.base, {
     // get channels
     var URL = BASE_URL + '/channels';
     var params = {
+      include_private : true,
       event_id: 'Ossi::BrowseChannelList'
     };
     if (!self.options.sizzleMode) { // not in sizzle mode
@@ -211,10 +212,12 @@ ossi.channellist = Class.create(ossi.base, {
     if (!Object.isUndefined(channel.channel_type)) {
       if (channel.channel_type == 'public') {
         ident_class = 'public';
+      } else if (channel.channel_type == 'private') {
+        ident_class = 'private';
       } else if (channel.channel_type == 'group') {
         ident_class = 'group';
       } else {
-        ident_class = 'private';
+        ident_class = 'friends';
       }
     }
     

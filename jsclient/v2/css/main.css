@@ -440,6 +440,10 @@ div.channel_button_left_column.public {
 }
 
 div.channel_button_left_column.private {
+  background: #0018ff;
+}
+
+div.channel_button_left_column.friends {
   background: #bb3d3d;
 }
 

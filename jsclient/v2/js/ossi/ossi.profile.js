@@ -80,6 +80,9 @@ ossi.profile = Class.create(ossi.base, {
           				<div id="profile_add_as_friend_button_container" class="nav_button">\
           					<a id="profile_add_as_friend_button" class="nav_button_text" href="javascript:void(null);">Add as Friend</a>\
           				</div>\
+          				<div id="profile_send_message_button_container" class="nav_button">\
+          					<a id="profile_send_message_button" class="nav_button_text" href="javascript:void(null);">Send Private Message</a>\
+          				</div>\
 					        <div id="profile_remove_friend_button_container" style="display:none" class="nav_button">\
           					<a id="profile_remove_friend_button" class="nav_button_text" href="javascript:void(null);">Remove This Friend</a>\
           				</div>\
@@ -211,7 +214,12 @@ ossi.profile = Class.create(ossi.base, {
       }
     });
   },
-  
+  _sendPrivateMessageHandler: function() {
+    var self = this;
+    self.parent.case19({
+      personId : self.options.userId
+    });
+  },
   _removeFriendHandler: function() {
     if (typeof(this.options.userId) == 'undefined') 
       return; // userId in the parent controller not set
@@ -298,6 +306,7 @@ ossi.profile = Class.create(ossi.base, {
   },
   _addListeners: function() {
     $('profile_back_button').onclick = this._backHandler.bindAsEventListener(this);
+    $('profile_send_message_button').onclick = this._sendPrivateMessageHandler.bindAsEventListener(this);
     $('profile_accept_friendship_request_button').onclick = this._acceptRequestHandler.bindAsEventListener(this);
     $('profile_reject_friendship_request_button').onclick = this._rejectRequestHandler.bindAsEventListener(this);
     $('profile_add_as_friend_button').onclick = this._addFriendHandler.bindAsEventListener(this);
@@ -308,6 +317,7 @@ ossi.profile = Class.create(ossi.base, {
   },
   _removeListeners: function() {
     $('profile_back_button').onclick = function() { return };
+    $('profile_send_message_button').onclick = function() { return };
     $('profile_accept_friendship_request_button').onclick = function() { return };
     $('profile_reject_friendship_request_button').onclick = function() { return };
     $('profile_add_as_friend_button').onclick = function() { return };
