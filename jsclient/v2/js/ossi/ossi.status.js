@@ -19,6 +19,35 @@ ossi.status = Class.create(ossi.base, {
    * does not handle XHR failure yet!
    */
   update: function(){
+    if (geo_position_js.init()) {
+      this.parent.showLocating();
+      geo_position_js.getCurrentPosition(function(p) {
+        var self = this;
+        var ONM_API_URL = '/onm/';
+        var params = {
+          'operation' : 'get_osm',
+          'lat' : p.coords.latitude,
+          'lon' : p.coords.longitude
+        }
+        new Ajax.Request(ONM_API_URL, {
+          method : 'get',
+          parameters : params,
+          evalJSON : 'force',
+          onSuccess : function(response) {
+            var json = response.responseJSON;
+            json.geojson.features.each(function(feature) {
+              if (feature.properties.name != null && feature.properties.name.length > 0) {
+                $('location_input').value = feature.properties.name;
+                throw $break;
+              }
+            });
+            self.parent.hideLocating();
+          }
+        });
+      }.bind(this), function() {
+        alert('Geolocation error!');
+      });
+    }
     if (typeof(this.parent.userId) == 'undefined') 
       return; // userId in the parent controller not set
     var self = this;

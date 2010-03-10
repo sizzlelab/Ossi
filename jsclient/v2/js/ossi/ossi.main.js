@@ -104,13 +104,18 @@ ossi.main = Class.create(ossi.base,{
     Ajax.Responders.register({ onCreate:this._onXHRCreate.bind(this), onComplete:this._onXHRComplete.bind(this) }); // set handlers for managing requests
     this.utils = new ossi.utils(this);
     this.loadingpane = new Element('div', { id : 'loading' });
+    this.locatingpane = new Element('div', { id : 'loading' });
     if (this.options.wall) {
       this.window.appendChild(this.loadingpane);
+      this.window.appendChild(this.locatingpane);
     } else {
       document.body.appendChild(this.loadingpane);
+      document.body.appendChild(this.locatingpane);
     }
     this.loadingpane.hide();
+    this.locatingpane.hide();
     this.loadingpane.addClassName('loading');
+    this.locatingpane.addClassName('loading');
     this._getClient(); // determine which client we are serving for
     this._setClientUI(); // on the basis of the client values make CSS changes
     if (client.is_WRT_widget) { // init location engine
@@ -1437,6 +1442,7 @@ ossi.main = Class.create(ossi.base,{
       document.body.addClassName('widget');
       this.mainElement.addClassName('widget');
       this.loadingpane.addClassName('widget');
+      this.locatingpane.addClassName('widget');
 
     } else if (client.is_WRT_widget) {
       var self = this;
@@ -1465,12 +1471,16 @@ ossi.main = Class.create(ossi.base,{
       
     } else if (this.options.wall) {
       this.loadingpane.addClassName('wall');
+      this.locatingpane.addClassName('wall');
     } else if (this.options.width && this.options.height) {
       this.mainElement.setStyle({
         width: this.options.width+'px',
         height: this.options.height+'px'
       });
       this.loadingpane.setStyle({
+        width: this.options.width+'px'
+      });
+      this.locatingpane.setStyle({
         width: this.options.width+'px'
       });
     }
@@ -1578,6 +1588,26 @@ ossi.main = Class.create(ossi.base,{
 	*/
 	hideLoading: function() {
     this.loadingpane.hide();
+//	  this.utils.stopLoader();
+	},
+	/**
+	* showLocating
+	*
+	* shows locating animation on top the UI
+	*/
+	showLocating: function() {
+    this.locatingpane.show();
+    if (Object.isUndefined(this.utils.locatingspinning)) {
+	    this.utils.spinLocater();
+    }
+	},
+	/**
+	* hideLocating
+	*
+	* hides locating animation
+	*/
+	hideLocating: function() {
+    this.locatingpane.hide();
 //	  this.utils.stopLoader();
 	}
 });

@@ -47,7 +47,10 @@ var ossi = {
 									'ossi/ossi.changepassword.js',
 		              'ossi/ossi.search.js',
 		              'ossi/ossi.location.js',
-									'ossi/ossi.searchallresult.js'
+									'ossi/ossi.searchallresult.js',
+									'http://code.google.com/apis/gears/gears_init.js',
+                  '3rdParty/geo.js',
+
                 ],
     loadLibraries: function() {
       var getBootScript = function () { 

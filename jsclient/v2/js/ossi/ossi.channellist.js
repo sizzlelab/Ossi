@@ -26,7 +26,7 @@ ossi.channellist = Class.create(ossi.base, {
    *
    * does not handle XHR failure yet!
    */
-  update: function(options){
+  update: function(options) {
     if (typeof(this.parent.userId) == 'undefined') 
       return; // userId in the parent controller not set
     var self = this;

@@ -14,8 +14,22 @@ ossi.utils = Class.create(ossi.base,{
 	                        'loa.ding',
 	                        'load.ing',
 	                        'loadi.ng'];
+	  this.locatertexts =  [  'l.ocating user',
+  	                        'lo.cating user',
+  	                        'loc.ating user',
+  	                        'loca.ting user',
+  	                        'locat.ing user',
+  	                        'locati.ng user',
+  	                        'locatin.g user',
+  	                        'locating. user',
+  	                        'locating .user',
+  	                        'locating u.ser',
+  	                        'locating us.er',
+  	                        'locating use.r'];
 	  this.loadertimer = false;
 	  this.loadercounter = 0;
+	  this.locatingtimer = false;
+	  this.locatingcounter = 0;
 	},
   getSpeed: function(o,d,current,max_speed,f) {
   	if(o>d){var dist=o-d;var perc=Math.abs((o-current)/dist);}
@@ -73,6 +87,21 @@ ossi.utils = Class.create(ossi.base,{
   },
   stopLoader: function() {
     clearInterval(this.loadertimer);
+  },
+  spinLocater: function() {
+    this.locatingspinning = true;
+    this.locatertimer = setInterval(function() {
+      if (this.locatercounter < (this.locatertexts.length-1)) {
+        this.locatercounter++;
+        this.parent.locatingpane.update(this.locatertexts[this.locatercounter]);
+      } else {
+        this.locatercounter = 0;
+        this.parent.locatingpane.update(this.locatertexts[this.locatercounter]);
+      }
+    }.bind(this),100);
+  },
+  stopLocater: function() {
+    clearInterval(this.locatertimer);
   },
   localtimeFromUTC: function(utc) {
     var d = new Date(utc);
