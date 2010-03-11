@@ -46,6 +46,7 @@ var ossi = {
                   'ossi/ossi.utils.js',
 									'ossi/ossi.changepassword.js',
 		              'ossi/ossi.search.js',
+		              'ossi/ossi.map.js',
 		              'ossi/ossi.location.js',
 									'ossi/ossi.searchallresult.js',
 									'http://code.google.com/apis/gears/gears_init.js',

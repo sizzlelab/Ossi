@@ -1396,6 +1396,39 @@ ossi.main = Class.create(ossi.base,{
     }
 	},
 	/**
+	* view user on map
+	*/
+	case34: function(options) {
+		var options = Object.extend({
+      items : false
+	  },options);
+
+    // manage stack
+    if (options.out) this.stack.pop();
+    else {
+      var opt = Object.clone(options);
+      opt.out = true;
+      this.stack.push(this.case9.bind(this,opt));
+    }
+
+    this.sub2 = this.sub1;
+    this.sub1 = new ossi.map(this, {   
+      'items' : options.items,
+      'hostElement' : this.mainElement,
+      'backCase' : this.stack[this.stack.length-2]
+    });
+
+    if (options.out) {
+      this.utils.out(this.sub2.pane,this.sub1.pane,function() {
+        this.sub2.destroy();
+      }.bind(this));
+    } else {
+      this.utils.into(this.sub2.pane,this.sub1.pane,function() {
+        this.sub2.destroy();
+      }.bind(this));
+    }
+	},
+	/**
 	* _getClient
 	*
 	* sets values for a global client object

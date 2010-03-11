@@ -4,16 +4,12 @@
 ossi.utils = Class.create(ossi.base,{
 	initialize: function(parent) {
     this.parent = parent;
-	  this.loadertexts =  [ 'loadin.g',
+	  this.loadertexts =  [ 'l.oading',
+	                        'lo.ading',
+	                        'loa.ding',
+	                        'load.ing',
 	                        'loadi.ng',
-	                        'load.ing',
-	                        'loa.ding',
-	                        'lo.ading',
-	                        'l.oading',
-	                        'lo.ading',
-	                        'loa.ding',
-	                        'load.ing',
-	                        'loadi.ng'];
+	                        'loadin.g'];
 	  this.locatertexts =  [  'l.ocating user',
   	                        'lo.cating user',
   	                        'loc.ating user',

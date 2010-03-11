@@ -19,11 +19,12 @@ ossi.status = Class.create(ossi.base, {
    * does not handle XHR failure yet!
    */
   update: function(){
+    var self = this;
     if (geo_position_js.init()) {
       this.parent.showLocating();
       geo_position_js.getCurrentPosition(function(p) {
         var self = this;
-        var ONM_API_URL = '/onm/';
+        var ONM_API_URL = (client.is_widget || client.is_phonegap) ? 'http://fi.opennetmap.org/api/' : '/onm/';
         var params = {
           'operation' : 'get_osm',
           'lat' : p.coords.latitude,
@@ -38,6 +39,11 @@ ossi.status = Class.create(ossi.base, {
             json.geojson.features.each(function(feature) {
               if (feature.properties.name != null && feature.properties.name.length > 0) {
                 $('location_input').value = feature.properties.name;
+                self.parent.location = {
+                  latitude : p.coords.latitude,
+                  longitude : p.coords.longitude,
+                  latlonDatetime : new Date().toUTCString()
+                };          
                 throw $break;
               }
             });
@@ -102,12 +108,9 @@ ossi.status = Class.create(ossi.base, {
       onSuccess: function(response){
         if (Object.isUndefined(self.parent.locator) || true) { // forced
           // also update the location
-            self.parent.location = {
-              label: $F('location_input'),
-              latitude: '',
-              longitude: '',
-              datetime: new Date().toUTCString()
-            };
+            self.parent.location.label = $F('location_input');
+            self.parent.location.labelDatetime = new Date().toUTCString();
+
             // send location to server
             var URL = BASE_URL + '/people/'+self.parent.userId+'/@location';
             var params = {

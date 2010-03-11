@@ -55,6 +55,17 @@ ossi.profile = Class.create(ossi.base, {
             $('profile_add_as_friend_button_container').hide();
             break;
         }
+        
+        // if they are friends and this profile has an associated lat and lon then show map button
+        if (json.connection == 'friend' && Object.isNumber(json.location.latitude) && Object.isNumber(json.location.longitude)) { // show map button
+          self.location = {
+            latitude : json.location.latitude,
+            longitude : json.location.longitude,
+            label : (json.location.label != null) ? json.location.label : "",
+            datetime : json.location.updated_at
+          }
+          $('profile_show_map_button_container').show();
+        }
         self.parent.hideLoading();
       }
     });
@@ -79,6 +90,9 @@ ossi.profile = Class.create(ossi.base, {
           				</div>\
           				<div id="profile_add_as_friend_button_container" class="nav_button">\
           					<a id="profile_add_as_friend_button" class="nav_button_text" href="javascript:void(null);">Add as Friend</a>\
+          				</div>\
+          				<div id="profile_show_map_button_container" class="nav_button" style="display:none">\
+          					<a id="profile_show_map_button" class="nav_button_text" href="javascript:void(null);">New: Show on Map!</a>\
           				</div>\
           				<div id="profile_send_message_button_container" class="nav_button">\
           					<a id="profile_send_message_button" class="nav_button_text" href="javascript:void(null);">Send Private Message</a>\
@@ -304,8 +318,15 @@ ossi.profile = Class.create(ossi.base, {
   _backToMainMenuHandler: function() {
     this.parent.case3({out:true});
   },
+  _showOnMapHandler: function() {
+    var items = [this.location];
+    this.parent.case34({
+      'items' : items
+    });
+  },
   _addListeners: function() {
     $('profile_back_button').onclick = this._backHandler.bindAsEventListener(this);
+    $('profile_show_map_button').onclick = this._showOnMapHandler.bindAsEventListener(this);
     $('profile_send_message_button').onclick = this._sendPrivateMessageHandler.bindAsEventListener(this);
     $('profile_accept_friendship_request_button').onclick = this._acceptRequestHandler.bindAsEventListener(this);
     $('profile_reject_friendship_request_button').onclick = this._rejectRequestHandler.bindAsEventListener(this);
