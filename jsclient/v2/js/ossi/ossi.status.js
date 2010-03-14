@@ -147,8 +147,8 @@ ossi.status = Class.create(ossi.base, {
             var URL = BASE_URL + '/people/'+self.parent.userId+'/@location';
             var params = {
               'location[label]': self.parent.location.label,
-              'location[latitude]': self.parent.location.latitude,
-              'location[longitude]': self.parent.location.longitude,
+              'location[latitude]': (! Object.isUndefined(self.parent.location.latitude)) ? self.parent.location.latitude : '',
+              'location[longitude]': (! Object.isUndefined(self.parent.location.longitude)) ? self.parent.location.longitude : '',
               'event_id' : 'Ossi::UpdateStatus/UpdateLocation'
             };
             new Ajax.Request(URL, {
