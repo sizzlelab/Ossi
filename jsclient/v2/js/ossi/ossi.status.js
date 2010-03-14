@@ -18,12 +18,47 @@ ossi.status = Class.create(ossi.base, {
    *
    * does not handle XHR failure yet!
    */
-  update: function(){
+  update: function() {
     var self = this;
     if (geo_position_js.init()) {
       this.parent.showLocating();
       geo_position_js.getCurrentPosition(function(p) {
         var self = this;
+        var GOOGLE_REVERSE_GEOCODING_URL = '/maps.google.com/maps/api/geocode/json';
+        var params = {
+          sensor : 'true',
+          latlng : p.coords.latitude+','+p.coords.longitude
+        };
+        new Ajax.Request(GOOGLE_REVERSE_GEOCODING_URL, {
+          method : 'get',
+          parameters : params,
+          onSuccess : function(response) {
+            var json = response.responseJSON;
+            if (json.status == "OK") {
+              json.results.each(function(result) {
+                result.address_components.each(function(component) {
+                  if (component.types.indexOf("route") != -1) {
+                    $('location_input').value = component.long_name;
+                    self.parent.location = {
+                      latitude : p.coords.latitude,
+                      longitude : p.coords.longitude,
+                      latlonDatetime : new Date().toUTCString()
+                    };
+                    throw $break;
+                  }
+                });
+                throw $break;
+              });
+            }            
+            self.parent.hideLocating();
+          }
+        });
+      }.bind(this), function() {
+        alert('We could not locate you automatically! Please try again or input your location manually!');
+        self.parent.hideLocating();
+      });
+    }
+/*
         var ONM_API_URL = (client.is_widget || client.is_phonegap) ? 'http://fi.opennetmap.org/api/' : '/onm/';
         var params = {
           'operation' : 'get_osm',
@@ -50,10 +85,7 @@ ossi.status = Class.create(ossi.base, {
             self.parent.hideLocating();
           }
         });
-      }.bind(this), function() {
-        alert('Geolocation error!');
-      });
-    }
+*/
     if (typeof(this.parent.userId) == 'undefined') 
       return; // userId in the parent controller not set
     var self = this;
@@ -76,7 +108,7 @@ ossi.status = Class.create(ossi.base, {
             }
           }
         }
-        if (typeof(json.entry.location) != 'undefined') {
+        if (typeof(json.entry.location) != 'undefined' && false) { // disabled
           if (json.entry.location.label != 'undefined') {
             if (json.entry.location.label != null) {
               $('location_input').value = json.entry.location.label;

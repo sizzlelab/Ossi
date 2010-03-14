@@ -126,6 +126,7 @@ ossi.main = Class.create(ossi.base,{
 //    BASE_URL = (client.is_widget || client.is_phonegap) ? 'http://ke-hupnet245-25.hupnet.helsinki.fi:3000' : '/cos'; // where to go asking for COS
 //    BASE_URL = (client.is_widget || client.is_phonegap) ? 'https://ossi.alpha.sizl.org/cos' : '/cos-alpha'; // where to go asking for COS
     BASE_URL = (client.is_widget || client.is_phonegap) ? 'https://ossi.sizl.org/cos' : '/cos'; // where to go asking for COS
+    GOOGLE_API_KEY = 'ABQIAAAAb5W9C1rg1PQ9V8v9J83iBRS5JptRWcT-q32CJ-O8HE4hq0Hf5hSz_0dBGha5w80BLYWBr0JC6ldFgA';
 //    BASE_URL = (client.is_widget || client.is_phonegap) ? 'https://ossi.sizl.org/cos' : '/cos'; // where to go asking for COS
 //    BASE_URL = 'https://cos.sizl.org'; // where to go asking for COS
     MAX_REQUEST_LENGTH = 30; // in seconds

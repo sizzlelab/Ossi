@@ -32,7 +32,7 @@ ossi.map = Class.create(ossi.base,{
     params += '&mobile=true&sensor=false';
     var h =   '\
           			<div id="mappane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
-          				<div id="mapdiv" style="text-align: center; margin-bottom:10px;">\
+          				<div id="mapdiv" style="text-align: center; margin:10px;">\
                     <img src="http://maps.google.com/maps/api/staticmap?'+params+'" border="0" />\
                   </div>\
           				<div class="nav_button">\

@@ -55,7 +55,6 @@ ossi.profile = Class.create(ossi.base, {
             $('profile_add_as_friend_button_container').hide();
             break;
         }
-        
         // if they are friends and this profile has an associated lat and lon then show map button
         if (json.connection == 'friend' && Object.isNumber(json.location.latitude) && Object.isNumber(json.location.longitude)) { // show map button
           self.location = {
@@ -121,7 +120,7 @@ ossi.profile = Class.create(ossi.base, {
   _getProfileHTML: function(json) {
     var name = (json.name != null) ? json.name.unstructured : json.username;
     var gender = false;
-    if (typeof(json.gender) != 'undefined') {
+    if (typeof(json.gender) != 'undefined' && json.gender != null) {
       if (json.gender.displayvalue != null) {
         gender = json.gender.displayvalue.toLowerCase();
       }
