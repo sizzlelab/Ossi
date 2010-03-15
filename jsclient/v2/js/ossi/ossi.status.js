@@ -13,7 +13,7 @@ ossi.status = Class.create(ossi.base, {
     if (Object.isUndefined(this.parent.location)) this.parent.location = {};
     //    if (Object.isUndefined(this.parent.locator) || this.parent.settings_auto_updates == false) $('location_input_container').show();
     //    else $('location_input_container').hide();
-    if (Object.isUndefined(this.parent.locator) || this.parent.settings_auto_updates == false) $('location_input').value = 'Finding out...';
+    if (Object.isUndefined(this.parent.locator) || this.parent.settings_auto_updates == false) $('location_input').value = '';
   },
   /**
    * _update
