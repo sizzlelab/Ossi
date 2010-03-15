@@ -22,7 +22,6 @@ ossi.status = Class.create(ossi.base, {
    */
   update: function() {
     var self = this;
-      alert('hello');
     if (geo_position_js.init()) {
       this.parent.showLocating();
       geo_position_js.getCurrentPosition(function(p) {
