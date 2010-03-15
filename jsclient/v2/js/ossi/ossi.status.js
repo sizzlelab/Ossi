@@ -8,7 +8,9 @@ ossi.status = Class.create(ossi.base, {
       hostElement: false
     }, options);
     this.pane = false;
+    this.getOldLocation = true;
     this._draw();
+    if (Object.isUndefined(this.parent.location)) this.parent.location = {};
     //    if (Object.isUndefined(this.parent.locator) || this.parent.settings_auto_updates == false) $('location_input_container').show();
     //    else $('location_input_container').hide();
     if (Object.isUndefined(this.parent.locator) || this.parent.settings_auto_updates == false) $('location_input').value = 'Finding out...';
@@ -20,10 +22,12 @@ ossi.status = Class.create(ossi.base, {
    */
   update: function() {
     var self = this;
+      alert('hello');
     if (geo_position_js.init()) {
       this.parent.showLocating();
       geo_position_js.getCurrentPosition(function(p) {
         var self = this;
+        self.getOldLocation = false;
         var GOOGLE_REVERSE_GEOCODING_URL = '/maps.google.com/maps/api/geocode/json';
         var params = {
           sensor : 'true',
@@ -108,7 +112,7 @@ ossi.status = Class.create(ossi.base, {
             }
           }
         }
-        if (typeof(json.entry.location) != 'undefined' && false) { // disabled
+        if (typeof(json.entry.location) != 'undefined' && self.getOldLocation) { // disabled
           if (json.entry.location.label != 'undefined') {
             if (json.entry.location.label != null) {
               $('location_input').value = json.entry.location.label;

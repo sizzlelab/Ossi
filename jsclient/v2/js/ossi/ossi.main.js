@@ -434,10 +434,12 @@ ossi.main = Class.create(ossi.base,{
     if (options.out) {
       this.utils.out(this.sub2.pane,this.sub1.pane,function() {
         this.sub2.destroy();
+        this.sub1.update();
       }.bind(this));
     } else {
       this.utils.into(this.sub2.pane,this.sub1.pane,function() {
         this.sub2.destroy();
+        this.sub1.update();
       }.bind(this));
     }
 	},

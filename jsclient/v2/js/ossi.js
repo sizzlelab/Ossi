@@ -15,6 +15,8 @@ var ossi = {
                   '3rdParty/dragdrop.js',
                   '3rdParty/md5.js',
                   'extras/prototype.extras.js',
+									'http://code.google.com/apis/gears/gears_init.js',
+                  '3rdParty/geo.js',
                   'ossi/ossi.base.js',
                   'ossi/ossi.main.js',
                   'ossi/ossi.login.js',
@@ -48,10 +50,7 @@ var ossi = {
 		              'ossi/ossi.search.js',
 		              'ossi/ossi.map.js',
 		              'ossi/ossi.location.js',
-									'ossi/ossi.searchallresult.js',
-									'http://code.google.com/apis/gears/gears_init.js',
-                  '3rdParty/geo.js',
-
+									'ossi/ossi.searchallresult.js'
                 ],
     loadLibraries: function() {
       var getBootScript = function () { 
