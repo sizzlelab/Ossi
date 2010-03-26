@@ -106,6 +106,9 @@ ossi.signup = Class.create(ossi.base,{
     return h;
   },
   _doneHandler: function(e) {
+    if (typeof(e) != 'undefined'){
+	    Event.stop(e);
+    }
     var self = this;
     var u = $F('signup_username');
     var e = $F('signup_email');
@@ -155,9 +158,6 @@ ossi.signup = Class.create(ossi.base,{
         });
       }
     });
-    if (typeof(e) != 'undefined'){
-	    Event.stop(e); //Might be problem with Firefox
-    }
   },
   _cancelHandler: function() {
     this.options.backCase.apply();
