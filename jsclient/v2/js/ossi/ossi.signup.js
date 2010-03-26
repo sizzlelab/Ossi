@@ -72,7 +72,7 @@ ossi.signup = Class.create(ossi.base,{
   _getHTML: function() {
     var h =   '\
           			<div id="signuppane" style="display:none; position:absolute; top:0px; left:0px; width:100%">\
-                  <form>\
+                  <form id="signup_form">\
             				<div style="height:33px; text-align:center; padding-top:20px;">\
             					Please fill in the following:\
             				</div>\
@@ -99,6 +99,7 @@ ossi.signup = Class.create(ossi.base,{
             				<div class="nav_button">\
             					<a id="cancel_button" class="nav_button_text" href="javascript:void(null);">Back</a>\
             				</div>\
+                    <input type="submit" style="display:none" />\
                   </form>\
           			</div>\
           		';
@@ -164,10 +165,12 @@ ossi.signup = Class.create(ossi.base,{
   _addListeners: function() {
     $('done_button').onclick = this._doneHandler.bindAsEventListener(this);
     $('cancel_button').onclick = this._cancelHandler.bindAsEventListener(this);
+    $('signup_form').observe('submit',this._doneHandler.bindAsEventListener(this));
   },
   _removeListeners: function() {
     $('done_button').onclick = function() { return }
     $('cancel_button').onclick = function() { return }
+    $('signup_form').onsubmit = function() { return }
   },
   destroy: function () {
     this._removeListeners();
