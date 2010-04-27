@@ -45,6 +45,9 @@ ossi.login = Class.create(ossi.base,{
             					<a id="login_button" class="nav_button_text" href="javascript:void(null);">Login</a>\
             				</div>\
             				<div class="nav_button">\
+            					<a id="fb_login_button" class="nav_button_text" href="javascript:void(null);">Login with Facebook!</a>\
+            				</div>\
+            				<div class="nav_button">\
             					<a id="signup_button" class="nav_button_text" href="javascript:void(null);">Sign up</a>\
             				</div>\
             				<div class="nav_button" style="display:none">\
@@ -242,15 +245,26 @@ ossi.login = Class.create(ossi.base,{
   _aboutHandler: function() {
     this.parent.case4();
   },
+  _fbLoginHandler: function() {
+    FB.login(function(response) {
+      if (response.session) {
+        alert('user successfully logged in');
+      } else {
+        alert('user cancelled login');
+      }
+    });
+  },
   _addListeners: function() {
     $('login_form').observe('submit',this._loginHandler.bindAsEventListener(this));
     $('login_button').onclick = this._loginHandler.bindAsEventListener(this);
+    $('fb_login_button').onclick = this._fbLoginHandler.bindAsEventListener(this);
     $('signup_button').onclick = this._signupHandler.bindAsEventListener(this);
     $('about_button').onclick = this._aboutHandler.bindAsEventListener(this);
     $('wappu_button').onclick = this._wappuHandler.bindAsEventListener(this);
   },
   _removeListeners: function() {
     $('login_button').onclick = function() { return }
+    $('fb_login_button').onclick = function() { return }
     $('signup_button').onclick = function() { return }
     $('about_button').onclick = function() { return }
     $('wappu_button').onclick = function() { return }
