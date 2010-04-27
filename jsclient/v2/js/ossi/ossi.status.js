@@ -22,7 +22,7 @@ ossi.status = Class.create(ossi.base, {
    */
   update: function() {
     var self = this;
-    if (geo_position_js.init()) {
+    if (geo_position_js.init() && client.is_WRT_widget == false) {
       this.parent.showLocating();
       geo_position_js.getCurrentPosition(function(p) {
         var self = this;

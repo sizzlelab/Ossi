@@ -1440,7 +1440,11 @@ ossi.main = Class.create(ossi.base,{
     var agent = navigator.userAgent;
 	  client = {};
 	  client.is_widget = (typeof(window.widget) != 'undefined') ? true : false;
-    client.is_iphone, client.is_WRT_widget, client.is_Dashboard_widget, client.is_phonegap, client.is_safari = false;
+    client.is_iphone = false
+    client.is_WRT_widget = false
+    client.is_Dashboard_widget = false
+    client.is_phonegap = false
+    client.is_safari = false;
 	  if (client.is_widget) {
       if (agent.include('Series60')) { // if we're running inside Nokia WRT
         client.is_WRT_widget = true;
