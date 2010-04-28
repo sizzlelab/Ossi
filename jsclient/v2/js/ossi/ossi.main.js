@@ -201,8 +201,7 @@ ossi.main = Class.create(ossi.base,{
       onSuccess : function(response) {
         if (client.is_Dashboard_widget) {
           self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
-        }
-        else {
+        } else {
           self.sessionCookie = document.cookie;
         }
         self._case1c(response);
@@ -210,8 +209,7 @@ ossi.main = Class.create(ossi.base,{
       on409 : function(response) {
         if (client.is_Dashboard_widget) {
           self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
-        }
-        else {
+        } else {
           self.sessionCookie = document.cookie;
         }
         self._case1c(response);
@@ -219,12 +217,19 @@ ossi.main = Class.create(ossi.base,{
       onFailure : function(response) {
         if (client.is_Dashboard_widget) {
           self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
-        }
-        else {
+        } else {
           self.sessionCookie = document.cookie;
         }
         self.hideLoading();
-        self.case2({start : true}); // call login
+
+        // here check whether user is logged into facebook
+        FB.getLoginStatus(function(response) {
+          if (response.session) {
+            self.case3(); // user is logged into FB ... HANDLE WITH CASE35 IN FUTURE
+          } else {
+            self.case2({start : true}); // user is not logged into FB
+          }
+        });        
       }
     });
   },
@@ -252,7 +257,7 @@ ossi.main = Class.create(ossi.base,{
   				if (typeof(json.role)  != 'undefined' && json.role != null) {
   					self.userRole = json.role;
   				}
-      		if (self.options.channelId) { //go to specified channel // THESE BACKCASE WILL PROBABLY NOT WORK DUE TO NEW STACK SYSTEM / JT
+      		if (self.options.channelId) { //go to specified channel // THIS BACKCASE WILL PROBABLY NOT WORK DUE TO NEW STACK SYSTEM / JT
       			self.case20({start : true, channelId : self.options.channelId,
       				backCase : self.case18.bind(self,{ out : true, backCase : self.case3.bind(self,{out:true})
       				})
@@ -1430,6 +1435,16 @@ ossi.main = Class.create(ossi.base,{
         this.sub2.destroy();
       }.bind(this));
     }
+	},
+	/**
+	* handle FB connect stuff
+	*/
+	case35: function(options) {
+		var options = Object.extend({
+      items : false
+	  },options);
+
+
 	},
 	/**
 	* _getClient

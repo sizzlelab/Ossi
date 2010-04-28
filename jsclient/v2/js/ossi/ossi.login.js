@@ -247,8 +247,8 @@ ossi.login = Class.create(ossi.base,{
   },
   _appLogin: function() {
     var self = this;
-    var params =  { 'login[app_name]' : 'ossi',
-                    'login[app_password]' : 'Z0ks51r'
+    var params =  { 'session[app_name]' : 'ossi',
+                    'session[app_password]' : 'Z0ks51r'
                   };
     self.parent.showLoading();
     new Ajax.Request(BASE_URL+'/session', { 
