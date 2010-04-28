@@ -270,6 +270,17 @@ ossi.main = Class.create(ossi.base,{
     } else { // user not identified
       this.userId = false;
       this.userName = 'Anonymous';
+
+      // here check whether user is logged into facebook
+      FB.getLoginStatus(function(response) {
+        if (response.session) {
+          self.case35(); // user is logged into FB
+        } else {
+          self.case2({start : true}); // user is not logged into FB
+        }
+      });        
+
+      /*
   		if (this.options.channelId && this.options.wall) { 
   			this.case24({channelId : this.options.channelId }); // go to wall
   		} else if(this.options.channelId && !this.options.wall) {
@@ -277,6 +288,7 @@ ossi.main = Class.create(ossi.base,{
   		} else {
   			this.case2({start : true }); // go to login
   		}
+  		*/
     }
   },
 
