@@ -281,7 +281,7 @@ ossi.login = Class.create(ossi.base,{
     var self = this;
     FB.login(function(response) {
       if (response.session) {
-        this._appLogin();
+        self._appLogin();
       } else {
         self.parent.case6({
           backCase : self.parent.case2.bind(self.parent,{out:true}),
