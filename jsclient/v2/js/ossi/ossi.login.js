@@ -10,9 +10,6 @@ ossi.login = Class.create(ossi.base,{
       hostElement : false
 	  },options);
 	  this.pane = false;
-    new Ajax.Request(BASE_URL+'/session', {
-      method : 'delete'
-    });
     this._draw();
 	},
   _draw: function() {

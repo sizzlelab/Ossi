@@ -1452,7 +1452,13 @@ ossi.main = Class.create(ossi.base,{
 	* handle FB connect stuff
 	*/
 	case35: function() {
-    this._appLogin(this.case3.bind(this));
+    var self = this;
+    new Ajax.Request(BASE_URL+'/session', {
+      method : 'delete',
+      onComplete : function() {
+        self._appLogin(self.case3.bind(self));
+      }
+    });
 	},
 	/**
 	* login as application only
