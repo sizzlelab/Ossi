@@ -1440,9 +1440,7 @@ ossi.main = Class.create(ossi.base,{
 	* handle FB connect stuff
 	*/
 	case35: function() {
-    this._appLogin(function() { 
-      this.case3() }.bind(this);
-    );
+    this._appLogin(this.case3.bind(this));
 	},
 	/**
 	* login as application only
