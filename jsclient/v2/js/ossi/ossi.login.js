@@ -245,12 +245,49 @@ ossi.login = Class.create(ossi.base,{
   _aboutHandler: function() {
     this.parent.case4();
   },
+  _appLogin: function() {
+    var self = this;
+    var params =  { 'login[app_name]' : 'ossi',
+                    'login[app_password]' : 'Z0ks51r'
+                  };
+    self.parent.showLoading();
+    new Ajax.Request(BASE_URL+'/session', { 
+      method : 'post',
+      parameters : params,
+      on409 : function() { // found existing session, removing it first!
+        new Ajax.Request(BASE_URL+'/session', {
+          onSuccess : function() {
+            self.parent.sessionCookie = false;
+            self._appLogin();
+          },
+          onFailure : function() {
+            self.parent.hideLoading();
+            self.parent.case6({
+              backCase : self.parent.case2.bind(self.parent,{out:true}),
+              message : "Found an existing user session, removed it, but after that could not proceed to login with Ossi.",
+              buttonText : "Try again"
+            });
+          }
+        });
+      },
+      onSuccess : function(response) {
+        var json = response.responseJSON;
+        self.parent.sessionCookie = self.parent.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
+        self.parent.case3();
+      }
+    });
+  },
   _fbLoginHandler: function() {
+    var self = this;
     FB.login(function(response) {
       if (response.session) {
-        alert('user successfully logged in');
+        this._appLogin();
       } else {
-        alert('user cancelled login');
+        self.parent.case6({
+          backCase : self.parent.case2.bind(self.parent,{out:true}),
+          message : "Cancelled login!",
+          buttonText : "Try again"
+        });
       }
     });
   },
