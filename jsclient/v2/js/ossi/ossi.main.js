@@ -1440,6 +1440,7 @@ ossi.main = Class.create(ossi.base,{
 	* handle FB connect stuff
 	*/
 	case35: function() {
+    alert('case35');
     this._appLogin(this.case3.bind(this));
 	},
 	/**
@@ -1447,6 +1448,7 @@ ossi.main = Class.create(ossi.base,{
 	* for FB use
 	*/
   _appLogin: function(callback) {
+    alert('appLogin');
     var self = this;
     var params =  { 'session[app_name]' : 'ossi',
                     'session[app_password]' : 'Z0ks51r'
