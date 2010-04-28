@@ -1440,7 +1440,6 @@ ossi.main = Class.create(ossi.base,{
 	* handle FB connect stuff
 	*/
 	case35: function() {
-    alert('case35');
     this._appLogin(this.case3.bind(this));
 	},
 	/**
@@ -1448,25 +1447,24 @@ ossi.main = Class.create(ossi.base,{
 	* for FB use
 	*/
   _appLogin: function(callback) {
-    alert('appLogin');
     var self = this;
     var params =  { 'session[app_name]' : 'ossi',
                     'session[app_password]' : 'Z0ks51r'
                   };
-    self.parent.showLoading();
+    self.showLoading();
     new Ajax.Request(BASE_URL+'/session', { 
       method : 'post',
       parameters : params,
       on409 : function() { // found existing session, removing it first!
         new Ajax.Request(BASE_URL+'/session', {
           onSuccess : function() {
-            self.parent.sessionCookie = false;
+            self.sessionCookie = false;
             self._appLogin();
           },
           onFailure : function() {
-            self.parent.hideLoading();
-            self.parent.case6({
-              backCase : self.parent.case2.bind(self.parent,{out:true}),
+            self.hideLoading();
+            self.case6({
+              backCase : self.case2.bind(self,{out:true}),
               message : "Found an existing user session, removed it, but after that could not proceed to login with Ossi.",
               buttonText : "Try again"
             });
@@ -1475,7 +1473,7 @@ ossi.main = Class.create(ossi.base,{
       },
       onSuccess : function(response) {
         var json = response.responseJSON;
-        self.parent.sessionCookie = self.parent.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
+        self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
         callback.apply();
       }
     });
