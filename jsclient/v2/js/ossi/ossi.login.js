@@ -44,9 +44,9 @@ ossi.login = Class.create(ossi.base,{
             				<div class="nav_button" style="margin-top:12px;">\
             					<a id="login_button" class="nav_button_text" href="javascript:void(null);">Login</a>\
             				</div>\
-            				<div class="nav_button">\
+            				<!--div class="nav_button">\
             					<a id="fb_login_button" class="nav_button_text" href="javascript:void(null);">Login with Facebook!</a>\
-            				</div>\
+            				</div-->\
             				<div class="nav_button">\
             					<a id="signup_button" class="nav_button_text" href="javascript:void(null);">Sign up</a>\
             				</div>\
