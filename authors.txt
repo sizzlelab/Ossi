@@ -1,4 +1,4 @@
-(no author) = randomm <turunen.jani@gmail.com>
-mnelimar = mnelimar <matti.nelimarkka@hiit.fi>
-turunen = randomm <turunen.jani@gmail.com>
+(no author) = Anonymous <foo@bar.org>
+mnelimar = Matti Nelimarkka <matti.nelimarkka@hiit.fi>
+turunen = Jani Turunen <turunen.jani@gmail.com>
 
