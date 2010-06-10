@@ -1,4 +1,4 @@
-(no author) = NAME <USER@DOMAIN>
+(no author) = randomm <turunen.jani@gmail.com>
 mnelimar = mnelimar <matti.nelimarkka@hiit.fi>
 turunen = randomm <turunen.jani@gmail.com>
 
