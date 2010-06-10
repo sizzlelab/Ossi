@@ -223,13 +223,16 @@ ossi.main = Class.create(ossi.base,{
         self.hideLoading();
 
         // here check whether user is logged into facebook
+        /*
         FB.getLoginStatus(function(response) {
+          console.log(response);
           if (response.session) {
             self.case35(); // user is logged into FB
           } else {
             self.case2({start : true}); // user is not logged into FB
           }
         });        
+        */
       }
     });
   },
