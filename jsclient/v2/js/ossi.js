@@ -50,7 +50,8 @@ var ossi = {
 		              'ossi/ossi.search.js',
 		              'ossi/ossi.map.js',
 		              'ossi/ossi.location.js',
-									'ossi/ossi.searchallresult.js'
+									'ossi/ossi.searchallresult.js',
+									'ossi/ossi.config.js'
                 ],
     loadLibraries: function() {
       var getBootScript = function () { 

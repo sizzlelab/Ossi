@@ -44,9 +44,6 @@ ossi.login = Class.create(ossi.base,{
             				<div class="nav_button" style="margin-top:12px;">\
             					<a id="login_button" class="nav_button_text" href="javascript:void(null);">Login</a>\
             				</div>\
-            				<!--div class="nav_button">\
-            					<a id="fb_login_button" class="nav_button_text" href="javascript:void(null);">Login with Facebook!</a>\
-            				</div-->\
             				<div class="nav_button">\
             					<a id="signup_button" class="nav_button_text" href="javascript:void(null);">Sign up</a>\
             				</div>\
@@ -68,8 +65,8 @@ ossi.login = Class.create(ossi.base,{
     var p = $F('paasswoord');
     var params =  { 'session[username]' : u,
                     'session[password]' : p,
-                    'session[app_name]' : 'ossi',
-                    'session[app_password]' : 'Z0ks51r'
+                    'session[app_name]' : APP_NAME,
+                    'session[app_password]' : APP_PASSWORD
                   };
     self.parent.showLoading();
     new Ajax.Request(BASE_URL+'/session', { 
@@ -160,8 +157,8 @@ ossi.login = Class.create(ossi.base,{
     var p = 'wabus5';
     var params =  { 'login[username]' : u,
                     'login[password]' : p,
-                    'login[app_name]' : 'ossi',
-                    'login[app_password]' : 'Z0ks51r'
+                    'login[app_name]' : APP_NAME,
+                    'login[app_password]' : APP_PASSWORD
                   };
     self.parent.showLoading();
     new Ajax.Request(BASE_URL+'/session', { 
@@ -245,31 +242,15 @@ ossi.login = Class.create(ossi.base,{
   _aboutHandler: function() {
     this.parent.case4();
   },
-  _fbLoginHandler: function() {
-    var self = this;
-    FB.login(function(response) {
-      if (response.session) {
-        self.parent._appLogin();
-      } else {
-        self.parent.case6({
-          backCase : self.parent.case2.bind(self.parent,{out:true}),
-          message : "Cancelled login!",
-          buttonText : "Try again"
-        });
-      }
-    });
-  },
   _addListeners: function() {
     $('login_form').observe('submit',this._loginHandler.bindAsEventListener(this));
     $('login_button').onclick = this._loginHandler.bindAsEventListener(this);
-    $('fb_login_button').onclick = this._fbLoginHandler.bindAsEventListener(this);
     $('signup_button').onclick = this._signupHandler.bindAsEventListener(this);
     $('about_button').onclick = this._aboutHandler.bindAsEventListener(this);
     $('wappu_button').onclick = this._wappuHandler.bindAsEventListener(this);
   },
   _removeListeners: function() {
     $('login_button').onclick = function() { return }
-    $('fb_login_button').onclick = function() { return }
     $('signup_button').onclick = function() { return }
     $('about_button').onclick = function() { return }
     $('wappu_button').onclick = function() { return }

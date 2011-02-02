@@ -155,8 +155,8 @@ ossi.main = Class.create(ossi.base,{
 
     // first do a POST to /session to get cookie info for widget
     // i.e. logging in without user
-    var params =  { 'session[app_name]' : 'ossi',
-                    'session[app_password]' : 'Z0ks51r'
+    var params =  { 'session[app_name]' : APP_NAME,
+                    'session[app_password]' : APP_PASSWORD
                   };
     new Ajax.Request(BASE_URL+'/session', {
       method : 'post',
@@ -201,7 +201,8 @@ ossi.main = Class.create(ossi.base,{
       onSuccess : function(response) {
         if (client.is_Dashboard_widget) {
           self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
-        } else {
+        }
+        else {
           self.sessionCookie = document.cookie;
         }
         self._case1c(response);
@@ -209,7 +210,8 @@ ossi.main = Class.create(ossi.base,{
       on409 : function(response) {
         if (client.is_Dashboard_widget) {
           self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
-        } else {
+        }
+        else {
           self.sessionCookie = document.cookie;
         }
         self._case1c(response);
@@ -217,22 +219,12 @@ ossi.main = Class.create(ossi.base,{
       onFailure : function(response) {
         if (client.is_Dashboard_widget) {
           self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
-        } else {
+        }
+        else {
           self.sessionCookie = document.cookie;
         }
         self.hideLoading();
-
-        // here check whether user is logged into facebook
-        /*
-        FB.getLoginStatus(function(response) {
-          console.log(response);
-          if (response.session) {
-            self.case35(); // user is logged into FB
-          } else {
-            self.case2({start : true}); // user is not logged into FB
-          }
-        });        
-        */
+        self.case2({start : true}); // call login
       }
     });
   },
@@ -260,7 +252,7 @@ ossi.main = Class.create(ossi.base,{
   				if (typeof(json.role)  != 'undefined' && json.role != null) {
   					self.userRole = json.role;
   				}
-      		if (self.options.channelId) { //go to specified channel // THIS BACKCASE WILL PROBABLY NOT WORK DUE TO NEW STACK SYSTEM / JT
+      		if (self.options.channelId) { //go to specified channel // THESE BACKCASE WILL PROBABLY NOT WORK DUE TO NEW STACK SYSTEM / JT
       			self.case20({start : true, channelId : self.options.channelId,
       				backCase : self.case18.bind(self,{ out : true, backCase : self.case3.bind(self,{out:true})
       				})
@@ -273,17 +265,6 @@ ossi.main = Class.create(ossi.base,{
     } else { // user not identified
       this.userId = false;
       this.userName = 'Anonymous';
-
-      // here check whether user is logged into facebook
-      FB.getLoginStatus(function(response) {
-        if (response.session) {
-          self.case35(); // user is logged into FB
-        } else {
-          self.case2({start : true}); // user is not logged into FB
-        }
-      });        
-
-      /*
   		if (this.options.channelId && this.options.wall) { 
   			this.case24({channelId : this.options.channelId }); // go to wall
   		} else if(this.options.channelId && !this.options.wall) {
@@ -291,7 +272,6 @@ ossi.main = Class.create(ossi.base,{
   		} else {
   			this.case2({start : true }); // go to login
   		}
-  		*/
     }
   },
 
@@ -1452,54 +1432,6 @@ ossi.main = Class.create(ossi.base,{
     }
 	},
 	/**
-	* handle FB connect stuff
-	*/
-	case35: function() {
-    var self = this;
-    new Ajax.Request(BASE_URL+'/session', {
-      method : 'delete',
-      onComplete : function() {
-        self._appLogin(self.case3.bind(self));
-      }
-    });
-	},
-	/**
-	* login as application only
-	* for FB use
-	*/
-  _appLogin: function(callback) {
-    var self = this;
-    var params =  { 'session[app_name]' : 'ossi',
-                    'session[app_password]' : 'Z0ks51r'
-                  };
-    self.showLoading();
-    new Ajax.Request(BASE_URL+'/session', { 
-      method : 'post',
-      parameters : params,
-      on409 : function() { // found existing session, removing it first!
-        new Ajax.Request(BASE_URL+'/session', {
-          onSuccess : function() {
-            self.sessionCookie = false;
-            self._appLogin();
-          },
-          onFailure : function() {
-            self.hideLoading();
-            self.case6({
-              backCase : self.case2.bind(self,{out:true}),
-              message : "Found an existing user session, removed it, but after that could not proceed to login with Ossi.",
-              buttonText : "Try again"
-            });
-          }
-        });
-      },
-      onSuccess : function(response) {
-        var json = response.responseJSON;
-        self.sessionCookie = self.utils.makeCookie(response.getResponseHeader('Set-Cookie'));
-        callback.apply();
-      }
-    });
-  },
-	/**
 	* _getClient
 	*
 	* sets values for a global client object
@@ -1508,11 +1440,7 @@ ossi.main = Class.create(ossi.base,{
     var agent = navigator.userAgent;
 	  client = {};
 	  client.is_widget = (typeof(window.widget) != 'undefined') ? true : false;
-    client.is_iphone = false
-    client.is_WRT_widget = false
-    client.is_Dashboard_widget = false
-    client.is_phonegap = false
-    client.is_safari = false;
+    client.is_iphone, client.is_WRT_widget, client.is_Dashboard_widget, client.is_phonegap, client.is_safari = false;
 	  if (client.is_widget) {
       if (agent.include('Series60')) { // if we're running inside Nokia WRT
         client.is_WRT_widget = true;

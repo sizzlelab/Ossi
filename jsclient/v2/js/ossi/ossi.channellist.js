@@ -16,7 +16,6 @@ ossi.channellist = Class.create(ossi.base, {
     }, options);
     this.updateInterval = 60000;
     this.pane = false;
-    if (this.parent.userId == false) this.options.sizzleMode = false;
     this._draw();
 //    if (this.options.groupId != false) 
 //      $('create_channel_button_container').hide();

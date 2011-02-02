@@ -12,8 +12,8 @@ ossi.signup = Class.create(ossi.base,{
 	},
 	update: function() {
     var self = this;
-    var params =  { 'session[app_name]' : 'ossi',
-                    'session[app_password]' : 'Z0ks51r'
+    var params =  { 'session[app_name]' : APP_NAME,
+                    'session[app_password]' : APP_PASSWORD
                   };
     self.parent.showLoading();
     new Ajax.Request(BASE_URL+'/session', { 
