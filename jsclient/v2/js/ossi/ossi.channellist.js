@@ -67,6 +67,11 @@ ossi.channellist = Class.create(ossi.base, {
               json.entry.each(function(entry) {
                 self.entries.push(entry);
               });
+/*              self.entries.each(function(e) {
+                console.log(self.parent.utils.toEpoch(e.updated_at));
+              });*/
+//              console.log(self.entries.sortBy(function(e){ return self.parent.utils.toEpoch(e.updated_at)}))
+              self.entries = self.entries.slice(0,50);
               self.entries = self.entries.sortBy(function(e){ return -self.parent.utils.toEpoch(e.updated_at)}); // sort the merged array
               self.drawContents(self.entries);
               self.parent.utils.addLocalPagination($('channellist-paging-container'), self, self.entries);
