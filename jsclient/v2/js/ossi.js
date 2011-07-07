@@ -15,7 +15,6 @@ var ossi = {
                   '3rdParty/dragdrop.js',
                   '3rdParty/md5.js',
                   'extras/prototype.extras.js',
-									'http://code.google.com/apis/gears/gears_init.js',
                   '3rdParty/geo.js',
                   'ossi/ossi.base.js',
                   'ossi/ossi.main.js',
